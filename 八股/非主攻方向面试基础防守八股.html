@@ -1,0 +1,2491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f6f8">
+<title>非主攻方向面试基础防守八股</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%230891b2'/%3E%3C/svg%3E">
+<style>
+:root{
+  --accent:#0891b2;
+  --bg:#f5f6f8; --panel:#ffffff; --panel-trans:rgba(255,255,255,.85);
+  --fg:#1e2430; --muted:#69707d; --border:#e4e7ec; --hover:#eef1f5;
+  --accent-soft:color-mix(in srgb, var(--accent) 10%, transparent);
+  --code-bg:#f2f4f7; --quote-bg:color-mix(in srgb, var(--accent) 6%, var(--panel));
+  --shadow:0 1px 3px rgba(16,24,40,.07);
+}
+html[data-theme="dark"]{
+  --bg:#0e1116; --panel:#151a22; --panel-trans:rgba(21,26,34,.85);
+  --fg:#d6dae2; --muted:#8a93a2; --border:#252c39; --hover:#1c2330;
+  --code-bg:#1a202b; --quote-bg:color-mix(in srgb, var(--accent) 12%, var(--panel));
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  overflow-wrap:break-word}
+.skip-link{position:fixed;left:14px;top:8px;z-index:100;transform:translateY(-160%);
+  padding:7px 12px;border-radius:6px;background:var(--panel);color:var(--fg);
+  border:2px solid var(--accent);text-decoration:none;transition:transform .15s}
+.skip-link:focus-visible{transform:none}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:60;transition:width .1s}
+/* ---------- 侧边栏 ---------- */
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:min(302px,86vw);background:var(--panel);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50}
+.sb-head{padding:16px 14px 10px;border-bottom:1px solid var(--border)}
+.sb-title{font-weight:700;font-size:1.02rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sb-title a{color:var(--fg);text-decoration:none}
+.sb-title .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);flex:none}
+#search{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg);color:var(--fg);font-size:.88rem}
+#search:focus-visible{border-color:var(--accent)}
+.search-empty{display:none;padding:16px 10px;color:var(--muted);font-size:.86rem;text-align:center}
+.search-empty.show{display:block}
+.sb-hint{font-size:.74rem;color:var(--muted);margin-top:6px}
+.sb-siblinks{display:none;margin-top:9px}
+.sb-siblinks a{color:var(--accent);text-decoration:none;font-size:.85rem;margin-right:14px;white-space:nowrap}
+#sidebar-scroll{overflow-y:auto;flex:1;padding:8px 6px 30px;scrollbar-width:thin}
+details.part>summary{list-style:none;cursor:pointer;user-select:none;padding:9px 10px 4px;
+  font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.03em}
+details.part>summary::-webkit-details-marker{display:none}
+details.part>summary::before{content:"\25B8";display:inline-block;margin-right:6px;
+  transition:transform .15s;font-size:.7rem}
+details.part[open]>summary::before{transform:rotate(90deg)}
+.chap{display:flex;align-items:center;border-radius:8px;margin:1px 4px}
+.chap:hover{background:var(--hover)}
+.chap.active{background:var(--accent-soft)}
+.chap.active .chap-title{color:var(--accent);font-weight:600}
+.chap-link{flex:1;display:flex;gap:8px;padding:6px 2px 6px 10px;color:var(--fg);
+  text-decoration:none;font-size:.9rem;line-height:1.4;min-width:0}
+.chap-num{color:var(--muted);font-size:.82em;min-width:1.5em;text-align:right;
+  font-variant-numeric:tabular-nums;padding-top:.15em;flex:none}
+.chap-title{overflow-wrap:anywhere}
+.twisty{width:36px;height:36px;border:none;background:none;color:var(--muted);cursor:pointer;
+  padding:0;font-size:.78rem;transition:transform .15s;flex:none}
+.twisty.open{transform:rotate(90deg)}
+.secs{display:none;margin:0 4px 5px 0;padding:0 0 0 32px;list-style:none}
+.secs.open{display:block}
+.secs a{display:block;padding:3.5px 8px;font-size:.84rem;color:var(--muted);
+  text-decoration:none;border-left:2px solid var(--border);line-height:1.45;overflow-wrap:anywhere}
+.secs a:hover{color:var(--fg);border-left-color:var(--muted)}
+.secs a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.hide{display:none!important}
+/* ---------- 顶栏与正文 ---------- */
+.main{margin-left:302px}
+.topbar{position:fixed;top:0;left:302px;right:0;height:52px;z-index:40;
+  display:flex;align-items:center;gap:14px;padding:0 22px;
+  background:var(--panel-trans);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+#menuBtn{display:none;border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 10px;font-size:1rem;cursor:pointer}
+.tb-title{font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-spacer{flex:1}
+.tb-link{color:var(--accent);text-decoration:none;font-size:.88rem;white-space:nowrap}
+.tb-link:hover{text-decoration:underline}
+#themeBtn{border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 12px;font-size:.85rem;cursor:pointer;white-space:nowrap}
+#themeBtn:hover{border-color:var(--accent);color:var(--accent)}
+.content{max-width:900px;margin:0 auto;padding:84px 44px 140px}
+/* 标题层级 */
+.content h1{font-size:1.9rem;line-height:1.35;margin:.4rem 0 1.2rem}
+.content h1:not(:first-child){margin-top:3.6rem;padding-top:2.4rem;border-top:3px solid var(--accent-soft)}
+.content h2{font-size:1.55rem;line-height:1.4;margin:3rem 0 1.1rem;padding-top:2.4rem;
+  border-top:2px solid var(--border)}
+.content h3{font-size:1.22rem;margin:2.3rem 0 .8rem;padding-left:.72rem;
+  border-left:4px solid var(--accent);line-height:1.45}
+.content h4{display:inline-block;font-size:.98rem;margin:1.7rem 0 .55rem;
+  background:var(--accent-soft);border-radius:7px;padding:.28rem .7rem;line-height:1.5}
+h1,h2,h3,h4{scroll-margin-top:76px;text-wrap:balance}
+a.alias{scroll-margin-top:76px}
+.content a{color:var(--accent)}
+.content hr{border:none;border-top:1px solid var(--border);margin:2.4rem 0}
+.content strong{font-weight:650}
+/* 引用块（核心结论 / 回答模板 / 前置说明） */
+.content blockquote{margin:1.1rem 0;padding:.85rem 1.1rem;background:var(--quote-bg);
+  border-left:4px solid var(--accent);border-radius:0 10px 10px 0}
+.content blockquote p{margin:.3rem 0}
+/* 行内代码与代码块 */
+.content code{font-family:Consolas,"JetBrains Mono","Cascadia Code",Menlo,monospace;
+  background:var(--code-bg);padding:.14em .42em;border-radius:5px;font-size:.88em}
+.codehilite{border:1px solid var(--border);border-radius:10px;overflow:auto;
+  margin:1.1rem 0;box-shadow:var(--shadow)}
+.codehilite pre{margin:0;padding:14px 17px;line-height:1.62;font-size:.86rem}
+.codehilite code{background:none;padding:0;font-size:inherit;border-radius:0}
+/* Mermaid 图 */
+.mermaid{margin:1.2rem 0;padding:18px;overflow-x:auto;border:1px solid var(--border);
+  border-radius:8px;background:#fff;color:#1f2937;text-align:center;box-shadow:var(--shadow);
+  white-space:normal;overflow-wrap:normal}
+.mermaid svg{display:block;max-width:100%;height:auto;margin:0 auto}
+/* 表格 */
+.tblwrap{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--border);
+  border-radius:10px;box-shadow:var(--shadow)}
+.content table{border-collapse:collapse;width:100%;font-size:.92rem;line-height:1.6}
+.content th{background:var(--hover);text-align:left;font-weight:650;white-space:nowrap}
+.content th,.content td{padding:8px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+.content tr:last-child td{border-bottom:none}
+.content tbody tr:nth-child(even){background:color-mix(in srgb, var(--hover) 55%, transparent)}
+/* 列表 */
+.content ul,.content ol{padding-left:1.5em}
+.content li{margin:.28rem 0}
+/* 返回顶部 */
+#topBtn{position:fixed;right:28px;bottom:30px;width:42px;height:42px;border-radius:12px;
+  border:1px solid var(--border);background:var(--panel);color:var(--muted);font-size:1.1rem;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s,color .2s,border-color .2s;box-shadow:var(--shadow);z-index:45}
+#topBtn.show{opacity:1;pointer-events:auto}
+#topBtn:hover{color:var(--accent);border-color:var(--accent)}
+#backdrop{display:none;border:0;padding:0}
+/* 移动端 */
+@media (max-width:960px){
+  #sidebar{transform:translateX(-100%);transition:transform .22s}
+  body.nav-open #sidebar{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  body.nav-open #backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:49}
+  .main{margin-left:0}
+  .topbar{left:0;padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:max(14px,env(safe-area-inset-right));gap:10px}
+  #menuBtn{display:block}
+  .topbar .tb-link{display:none}
+  .sb-siblinks{display:block}
+  .content{padding:76px max(18px,env(safe-area-inset-right)) 110px max(18px,env(safe-area-inset-left))}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+::selection{background:var(--accent-soft)}
+/* pygments */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #ffffff; }
+.codehilite .c { color: #177500 } /* Comment */
+.codehilite .err { color: #000 } /* Error */
+.codehilite .k { color: #A90D91 } /* Keyword */
+.codehilite .l { color: #1C01CE } /* Literal */
+.codehilite .n { color: #000 } /* Name */
+.codehilite .o { color: #000 } /* Operator */
+.codehilite .ch { color: #177500 } /* Comment.Hashbang */
+.codehilite .cm { color: #177500 } /* Comment.Multiline */
+.codehilite .cp { color: #633820 } /* Comment.Preproc */
+.codehilite .cpf { color: #177500 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #177500 } /* Comment.Single */
+.codehilite .cs { color: #177500 } /* Comment.Special */
+.codehilite .kc { color: #A90D91 } /* Keyword.Constant */
+.codehilite .kd { color: #A90D91 } /* Keyword.Declaration */
+.codehilite .kn { color: #A90D91 } /* Keyword.Namespace */
+.codehilite .kp { color: #A90D91 } /* Keyword.Pseudo */
+.codehilite .kr { color: #A90D91 } /* Keyword.Reserved */
+.codehilite .kt { color: #A90D91 } /* Keyword.Type */
+.codehilite .ld { color: #1C01CE } /* Literal.Date */
+.codehilite .m { color: #1C01CE } /* Literal.Number */
+.codehilite .s { color: #C41A16 } /* Literal.String */
+.codehilite .na { color: #836C28 } /* Name.Attribute */
+.codehilite .nb { color: #A90D91 } /* Name.Builtin */
+.codehilite .nc { color: #3F6E75 } /* Name.Class */
+.codehilite .no { color: #000 } /* Name.Constant */
+.codehilite .nd { color: #000 } /* Name.Decorator */
+.codehilite .ni { color: #000 } /* Name.Entity */
+.codehilite .ne { color: #000 } /* Name.Exception */
+.codehilite .nf { color: #000 } /* Name.Function */
+.codehilite .nl { color: #000 } /* Name.Label */
+.codehilite .nn { color: #000 } /* Name.Namespace */
+.codehilite .nx { color: #000 } /* Name.Other */
+.codehilite .py { color: #000 } /* Name.Property */
+.codehilite .nt { color: #000 } /* Name.Tag */
+.codehilite .nv { color: #000 } /* Name.Variable */
+.codehilite .ow { color: #000 } /* Operator.Word */
+.codehilite .mb { color: #1C01CE } /* Literal.Number.Bin */
+.codehilite .mf { color: #1C01CE } /* Literal.Number.Float */
+.codehilite .mh { color: #1C01CE } /* Literal.Number.Hex */
+.codehilite .mi { color: #1C01CE } /* Literal.Number.Integer */
+.codehilite .mo { color: #1C01CE } /* Literal.Number.Oct */
+.codehilite .sa { color: #C41A16 } /* Literal.String.Affix */
+.codehilite .sb { color: #C41A16 } /* Literal.String.Backtick */
+.codehilite .sc { color: #2300CE } /* Literal.String.Char */
+.codehilite .dl { color: #C41A16 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #C41A16 } /* Literal.String.Doc */
+.codehilite .s2 { color: #C41A16 } /* Literal.String.Double */
+.codehilite .se { color: #C41A16 } /* Literal.String.Escape */
+.codehilite .sh { color: #C41A16 } /* Literal.String.Heredoc */
+.codehilite .si { color: #C41A16 } /* Literal.String.Interpol */
+.codehilite .sx { color: #C41A16 } /* Literal.String.Other */
+.codehilite .sr { color: #C41A16 } /* Literal.String.Regex */
+.codehilite .s1 { color: #C41A16 } /* Literal.String.Single */
+.codehilite .ss { color: #C41A16 } /* Literal.String.Symbol */
+.codehilite .bp { color: #5B269A } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #000 } /* Name.Function.Magic */
+.codehilite .vc { color: #000 } /* Name.Variable.Class */
+.codehilite .vg { color: #000 } /* Name.Variable.Global */
+.codehilite .vi { color: #000 } /* Name.Variable.Instance */
+.codehilite .vm { color: #000 } /* Name.Variable.Magic */
+.codehilite .il { color: #1C01CE } /* Literal.Number.Integer.Long */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+html[data-theme="dark"] .codehilite .hll { background-color: #49483e }
+html[data-theme="dark"] .codehilite { background: #272822; color: #F8F8F2 }
+html[data-theme="dark"] .codehilite .c { color: #959077 } /* Comment */
+html[data-theme="dark"] .codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+html[data-theme="dark"] .codehilite .esc { color: #F8F8F2 } /* Escape */
+html[data-theme="dark"] .codehilite .g { color: #F8F8F2 } /* Generic */
+html[data-theme="dark"] .codehilite .k { color: #66D9EF } /* Keyword */
+html[data-theme="dark"] .codehilite .l { color: #AE81FF } /* Literal */
+html[data-theme="dark"] .codehilite .n { color: #F8F8F2 } /* Name */
+html[data-theme="dark"] .codehilite .o { color: #FF4689 } /* Operator */
+html[data-theme="dark"] .codehilite .x { color: #F8F8F2 } /* Other */
+html[data-theme="dark"] .codehilite .p { color: #F8F8F2 } /* Punctuation */
+html[data-theme="dark"] .codehilite .ch { color: #959077 } /* Comment.Hashbang */
+html[data-theme="dark"] .codehilite .cm { color: #959077 } /* Comment.Multiline */
+html[data-theme="dark"] .codehilite .cp { color: #959077 } /* Comment.Preproc */
+html[data-theme="dark"] .codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+html[data-theme="dark"] .codehilite .c1 { color: #959077 } /* Comment.Single */
+html[data-theme="dark"] .codehilite .cs { color: #959077 } /* Comment.Special */
+html[data-theme="dark"] .codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+html[data-theme="dark"] .codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+html[data-theme="dark"] .codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+html[data-theme="dark"] .codehilite .gr { color: #F8F8F2 } /* Generic.Error */
+html[data-theme="dark"] .codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+html[data-theme="dark"] .codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+html[data-theme="dark"] .codehilite .go { color: #66D9EF } /* Generic.Output */
+html[data-theme="dark"] .codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+html[data-theme="dark"] .codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+html[data-theme="dark"] .codehilite .gu { color: #959077 } /* Generic.Subheading */
+html[data-theme="dark"] .codehilite .gt { color: #F8F8F2 } /* Generic.Traceback */
+html[data-theme="dark"] .codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+html[data-theme="dark"] .codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+html[data-theme="dark"] .codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+html[data-theme="dark"] .codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+html[data-theme="dark"] .codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+html[data-theme="dark"] .codehilite .kt { color: #66D9EF } /* Keyword.Type */
+html[data-theme="dark"] .codehilite .ld { color: #E6DB74 } /* Literal.Date */
+html[data-theme="dark"] .codehilite .m { color: #AE81FF } /* Literal.Number */
+html[data-theme="dark"] .codehilite .s { color: #E6DB74 } /* Literal.String */
+html[data-theme="dark"] .codehilite .na { color: #A6E22E } /* Name.Attribute */
+html[data-theme="dark"] .codehilite .nb { color: #F8F8F2 } /* Name.Builtin */
+html[data-theme="dark"] .codehilite .nc { color: #A6E22E } /* Name.Class */
+html[data-theme="dark"] .codehilite .no { color: #66D9EF } /* Name.Constant */
+html[data-theme="dark"] .codehilite .nd { color: #A6E22E } /* Name.Decorator */
+html[data-theme="dark"] .codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+html[data-theme="dark"] .codehilite .ne { color: #A6E22E } /* Name.Exception */
+html[data-theme="dark"] .codehilite .nf { color: #A6E22E } /* Name.Function */
+html[data-theme="dark"] .codehilite .nl { color: #F8F8F2 } /* Name.Label */
+html[data-theme="dark"] .codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+html[data-theme="dark"] .codehilite .nx { color: #A6E22E } /* Name.Other */
+html[data-theme="dark"] .codehilite .py { color: #F8F8F2 } /* Name.Property */
+html[data-theme="dark"] .codehilite .nt { color: #FF4689 } /* Name.Tag */
+html[data-theme="dark"] .codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+html[data-theme="dark"] .codehilite .ow { color: #FF4689 } /* Operator.Word */
+html[data-theme="dark"] .codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+html[data-theme="dark"] .codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+html[data-theme="dark"] .codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+html[data-theme="dark"] .codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+html[data-theme="dark"] .codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+html[data-theme="dark"] .codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+html[data-theme="dark"] .codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+html[data-theme="dark"] .codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+html[data-theme="dark"] .codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+html[data-theme="dark"] .codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+html[data-theme="dark"] .codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+html[data-theme="dark"] .codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+html[data-theme="dark"] .codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+html[data-theme="dark"] .codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+html[data-theme="dark"] .codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+html[data-theme="dark"] .codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+html[data-theme="dark"] .codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+html[data-theme="dark"] .codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+html[data-theme="dark"] .codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+html[data-theme="dark"] .codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+html[data-theme="dark"] .codehilite .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+html[data-theme="dark"] .codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+html[data-theme="dark"] .codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+html[data-theme="dark"] .codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+html[data-theme="dark"] .codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+html[data-theme="dark"] .codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+html[data-theme="dark"] .codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */
+.codehilite{background:var(--code-bg)}
+html[data-theme="dark"] .codehilite{background:var(--code-bg)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<div id="progress"></div>
+<nav id="sidebar" aria-label="章节目录">
+  <div class="sb-head">
+    <div class="sb-title"><span class="dot" aria-hidden="true"></span><a href="#top">非主攻方向面试基础防守八股</a></div>
+    <input id="search" name="chapter-search" type="search" aria-label="搜索章节和小节"
+      placeholder="搜索章节 / 小节…" autocomplete="off" spellcheck="false">
+    <div class="sb-hint">共 18 章 · 按 / 快速聚焦搜索</div>
+    <div class="sb-siblinks"><a class="tb-link" href="面试八股自测.html">速记手册 →</a><a class="tb-link" href="C++面试八股笔记.html">C++ 篇 →</a><a class="tb-link" href="计算机网络面试八股笔记.html">计算机网络篇 →</a><a class="tb-link" href="操作系统与设计模式面试八股笔记.html">OS·设计模式篇 →</a><a class="tb-link" href="大模型面试八股笔记.html">LLM 篇 →</a><a class="tb-link" href="智能体面试八股笔记.html">Agent 篇 →</a></div>
+  </div>
+  <div id="sidebar-scroll"><details class="part" open><summary>第一部分 数据库与数据组件基础</summary><div class="plist"><div class="chap" data-ch="ch1" data-text="数据库最小知识地图"><a class="chap-link" href="#ch1"><span class="chap-num">1</span><span class="chap-title">数据库最小知识地图</span></a><button class="twisty" aria-label="展开第 1 章小节" aria-controls="secs-ch1" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch1" data-for="ch1" aria-hidden="true"><li data-text="题目"><a href="#ch1-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch1-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch1-3">面试核心结论</a></li><li data-text="数据库、dbms、表和 sql"><a href="#ch1-4">数据库、DBMS、表和 SQL</a></li><li data-text="数据库和文件有什么区别"><a href="#ch1-5">数据库和文件有什么区别</a></li><li data-text="关系型数据库和 nosql 的基本区别"><a href="#ch1-6">关系型数据库和 NoSQL 的基本区别</a></li><li data-text="高频追问"><a href="#ch1-7">高频追问</a></li><li data-text="易错点"><a href="#ch1-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch1-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch1-10">学习停止线</a></li></ul><div class="chap" data-ch="ch2" data-text="sql 基础与表结构设计"><a class="chap-link" href="#ch2"><span class="chap-num">2</span><span class="chap-title">SQL 基础与表结构设计</span></a><button class="twisty" aria-label="展开第 2 章小节" aria-controls="secs-ch2" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch2" data-for="ch2" aria-hidden="true"><li data-text="题目"><a href="#ch2-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch2-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch2-3">面试核心结论</a></li><li data-text="crud 和 sql 分类"><a href="#ch2-4">CRUD 和 SQL 分类</a></li><li data-text="join 的最低限度理解"><a href="#ch2-5">JOIN 的最低限度理解</a></li><li data-text="三大范式和反范式"><a href="#ch2-6">三大范式和反范式</a></li><li data-text="高频追问"><a href="#ch2-7">高频追问</a></li><li data-text="易错点"><a href="#ch2-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch2-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch2-10">学习停止线</a></li></ul><div class="chap" data-ch="ch3" data-text="索引与查询性能基础"><a class="chap-link" href="#ch3"><span class="chap-num">3</span><span class="chap-title">索引与查询性能基础</span></a><button class="twisty" aria-label="展开第 3 章小节" aria-controls="secs-ch3" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch3" data-for="ch3" aria-hidden="true"><li data-text="题目"><a href="#ch3-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch3-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch3-3">面试核心结论</a></li><li data-text="为什么 b+ 树适合数据库索引"><a href="#ch3-4">为什么 B+ 树适合数据库索引</a></li><li data-text="常见索引概念"><a href="#ch3-5">常见索引概念</a></li><li data-text="最左匹配的直观例子"><a href="#ch3-6">最左匹配的直观例子</a></li><li data-text="`explain` 看什么"><a href="#ch3-7">`EXPLAIN` 看什么</a></li><li data-text="高频追问"><a href="#ch3-8">高频追问</a></li><li data-text="易错点"><a href="#ch3-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch3-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch3-11">学习停止线</a></li></ul><div class="chap" data-ch="ch4" data-text="事务与并发控制基础"><a class="chap-link" href="#ch4"><span class="chap-num">4</span><span class="chap-title">事务与并发控制基础</span></a><button class="twisty" aria-label="展开第 4 章小节" aria-controls="secs-ch4" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch4" data-for="ch4" aria-hidden="true"><li data-text="题目"><a href="#ch4-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch4-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch4-3">面试核心结论</a></li><li data-text="acid 怎么解释"><a href="#ch4-4">ACID 怎么解释</a></li><li data-text="三类并发读问题"><a href="#ch4-5">三类并发读问题</a></li><li data-text="隔离级别的基本光谱"><a href="#ch4-6">隔离级别的基本光谱</a></li><li data-text="锁、乐观锁和 mvcc"><a href="#ch4-7">锁、乐观锁和 MVCC</a></li><li data-text="事务边界和幂等"><a href="#ch4-8">事务边界和幂等</a></li><li data-text="高频追问"><a href="#ch4-9">高频追问</a></li><li data-text="易错点"><a href="#ch4-10">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch4-11">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch4-12">学习停止线</a></li></ul><div class="chap" data-ch="ch5" data-text="缓存与 redis 基础"><a class="chap-link" href="#ch5"><span class="chap-num">5</span><span class="chap-title">缓存与 Redis 基础</span></a><button class="twisty" aria-label="展开第 5 章小节" aria-controls="secs-ch5" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch5" data-for="ch5" aria-hidden="true"><li data-text="题目"><a href="#ch5-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch5-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch5-3">面试核心结论</a></li><li data-text="redis 数据类型只记用途"><a href="#ch5-4">Redis 数据类型只记用途</a></li><li data-text="cache aside 的基本流程"><a href="#ch5-5">Cache Aside 的基本流程</a></li><li data-text="三类缓存问题"><a href="#ch5-6">三类缓存问题</a></li><li data-text="过期、淘汰和容量"><a href="#ch5-7">过期、淘汰和容量</a></li><li data-text="redis 分布式锁的最低限度"><a href="#ch5-8">Redis 分布式锁的最低限度</a></li><li data-text="高频追问"><a href="#ch5-9">高频追问</a></li><li data-text="易错点"><a href="#ch5-10">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch5-11">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch5-12">学习停止线</a></li></ul><div class="chap" data-ch="ch6" data-text="消息队列基础"><a class="chap-link" href="#ch6"><span class="chap-num">6</span><span class="chap-title">消息队列基础</span></a><button class="twisty" aria-label="展开第 6 章小节" aria-controls="secs-ch6" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch6" data-for="ch6" aria-hidden="true"><li data-text="题目"><a href="#ch6-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch6-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch6-3">面试核心结论</a></li><li data-text="基本角色"><a href="#ch6-4">基本角色</a></li><li data-text="消息可靠性的基本链路"><a href="#ch6-5">消息可靠性的基本链路</a></li><li data-text="重复消费与幂等"><a href="#ch6-6">重复消费与幂等</a></li><li data-text="顺序和积压"><a href="#ch6-7">顺序和积压</a></li><li data-text="三类产品的定位级理解"><a href="#ch6-8">三类产品的定位级理解</a></li><li data-text="高频追问"><a href="#ch6-9">高频追问</a></li><li data-text="易错点"><a href="#ch6-10">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch6-11">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch6-12">学习停止线</a></li></ul></div></details><details class="part" open><summary>第二部分 后端系统与分布式基础</summary><div class="plist"><div class="chap" data-ch="ch7" data-text="一个 web 请求的完整路径"><a class="chap-link" href="#ch7"><span class="chap-num">7</span><span class="chap-title">一个 Web 请求的完整路径</span></a><button class="twisty" aria-label="展开第 7 章小节" aria-controls="secs-ch7" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch7" data-for="ch7" aria-hidden="true"><li data-text="题目"><a href="#ch7-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch7-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch7-3">面试核心结论</a></li><li data-text="一条请求链路"><a href="#ch7-4">一条请求链路</a></li><li data-text="各层只记最小职责"><a href="#ch7-5">各层只记最小职责</a></li><li data-text="同步主链路和异步副作用"><a href="#ch7-6">同步主链路和异步副作用</a></li><li data-text="高频追问"><a href="#ch7-7">高频追问</a></li><li data-text="易错点"><a href="#ch7-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch7-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch7-10">学习停止线</a></li></ul><div class="chap" data-ch="ch8" data-text="分布式系统最小知识地图"><a class="chap-link" href="#ch8"><span class="chap-num">8</span><span class="chap-title">分布式系统最小知识地图</span></a><button class="twisty" aria-label="展开第 8 章小节" aria-controls="secs-ch8" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch8" data-for="ch8" aria-hidden="true"><li data-text="题目"><a href="#ch8-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch8-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch8-3">面试核心结论</a></li><li data-text="分布式复杂性的来源"><a href="#ch8-4">分布式复杂性的来源</a></li><li data-text="cap 的最低限度理解"><a href="#ch8-5">CAP 的最低限度理解</a></li><li data-text="强一致、最终一致和业务一致"><a href="#ch8-6">强一致、最终一致和业务一致</a></li><li data-text="分片、副本和分布式 id"><a href="#ch8-7">分片、副本和分布式 ID</a></li><li data-text="高频追问"><a href="#ch8-8">高频追问</a></li><li data-text="易错点"><a href="#ch8-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch8-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch8-11">学习停止线</a></li></ul><div class="chap" data-ch="ch9" data-text="高可用与服务治理基础"><a class="chap-link" href="#ch9"><span class="chap-num">9</span><span class="chap-title">高可用与服务治理基础</span></a><button class="twisty" aria-label="展开第 9 章小节" aria-controls="secs-ch9" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch9" data-for="ch9" aria-hidden="true"><li data-text="题目"><a href="#ch9-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch9-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch9-3">面试核心结论</a></li><li data-text="保护链路的基本工具"><a href="#ch9-4">保护链路的基本工具</a></li><li data-text="超时、重试和熔断要一起设计"><a href="#ch9-5">超时、重试和熔断要一起设计</a></li><li data-text="可用性和数据安全不是同一个指标"><a href="#ch9-6">可用性和数据安全不是同一个指标</a></li><li data-text="高频追问"><a href="#ch9-7">高频追问</a></li><li data-text="易错点"><a href="#ch9-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch9-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch9-10">学习停止线</a></li></ul><div class="chap" data-ch="ch10" data-text="容器、云计算与 devops 基础"><a class="chap-link" href="#ch10"><span class="chap-num">10</span><span class="chap-title">容器、云计算与 DevOps 基础</span></a><button class="twisty" aria-label="展开第 10 章小节" aria-controls="secs-ch10" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch10" data-for="ch10" aria-hidden="true"><li data-text="题目"><a href="#ch10-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch10-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch10-3">面试核心结论</a></li><li data-text="只记这些对象"><a href="#ch10-4">只记这些对象</a></li><li data-text="ci/cd 的基本流水线"><a href="#ch10-5">CI/CD 的基本流水线</a></li><li data-text="发布策略只记定位"><a href="#ch10-6">发布策略只记定位</a></li><li data-text="高频追问"><a href="#ch10-7">高频追问</a></li><li data-text="易错点"><a href="#ch10-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch10-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch10-10">学习停止线</a></li></ul><div class="chap" data-ch="ch11" data-text="监控、日志与故障排查基础"><a class="chap-link" href="#ch11"><span class="chap-num">11</span><span class="chap-title">监控、日志与故障排查基础</span></a><button class="twisty" aria-label="展开第 11 章小节" aria-controls="secs-ch11" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch11" data-for="ch11" aria-hidden="true"><li data-text="题目"><a href="#ch11-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch11-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch11-3">面试核心结论</a></li><li data-text="三类信号的分工"><a href="#ch11-4">三类信号的分工</a></li><li data-text="最低限度的指标集合"><a href="#ch11-5">最低限度的指标集合</a></li><li data-text="故障排查的基本顺序"><a href="#ch11-6">故障排查的基本顺序</a></li><li data-text="日志至少要有的字段"><a href="#ch11-7">日志至少要有的字段</a></li><li data-text="高频追问"><a href="#ch11-8">高频追问</a></li><li data-text="易错点"><a href="#ch11-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch11-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch11-11">学习停止线</a></li></ul></div></details><details class="part" open><summary>第三部分 编程语言与计算机基础防守</summary><div class="plist"><div class="chap" data-ch="ch12" data-text="程序从源码到运行"><a class="chap-link" href="#ch12"><span class="chap-num">12</span><span class="chap-title">程序从源码到运行</span></a><button class="twisty" aria-label="展开第 12 章小节" aria-controls="secs-ch12" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch12" data-for="ch12" aria-hidden="true"><li data-text="题目"><a href="#ch12-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch12-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch12-3">面试核心结论</a></li><li data-text="一条最低限度的编译链"><a href="#ch12-4">一条最低限度的编译链</a></li><li data-text="四类错误放在哪一层"><a href="#ch12-5">四类错误放在哪一层</a></li><li data-text="栈、堆和虚拟地址空间只记用途"><a href="#ch12-6">栈、堆和虚拟地址空间只记用途</a></li><li data-text="高频追问"><a href="#ch12-7">高频追问</a></li><li data-text="易错点"><a href="#ch12-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch12-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch12-10">学习停止线</a></li></ul><div class="chap" data-ch="ch13" data-text="数据结构与算法最低限度"><a class="chap-link" href="#ch13"><span class="chap-num">13</span><span class="chap-title">数据结构与算法最低限度</span></a><button class="twisty" aria-label="展开第 13 章小节" aria-controls="secs-ch13" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch13" data-for="ch13" aria-hidden="true"><li data-text="题目"><a href="#ch13-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch13-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch13-3">面试核心结论</a></li><li data-text="最低限度对照表"><a href="#ch13-4">最低限度对照表</a></li><li data-text="高频模式只记用途"><a href="#ch13-5">高频模式只记用途</a></li><li data-text="复杂度回答的正确姿势"><a href="#ch13-6">复杂度回答的正确姿势</a></li><li data-text="高频追问"><a href="#ch13-7">高频追问</a></li><li data-text="易错点"><a href="#ch13-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch13-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch13-10">学习停止线</a></li></ul><div class="chap" data-ch="ch14" data-text="软件工程与代码质量基础"><a class="chap-link" href="#ch14"><span class="chap-num">14</span><span class="chap-title">软件工程与代码质量基础</span></a><button class="twisty" aria-label="展开第 14 章小节" aria-controls="secs-ch14" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch14" data-for="ch14" aria-hidden="true"><li data-text="题目"><a href="#ch14-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch14-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch14-3">面试核心结论</a></li><li data-text="四个最实用的工程问题"><a href="#ch14-4">四个最实用的工程问题</a></li><li data-text="测试层次"><a href="#ch14-5">测试层次</a></li><li data-text="抽象和重构的边界"><a href="#ch14-6">抽象和重构的边界</a></li><li data-text="高频追问"><a href="#ch14-7">高频追问</a></li><li data-text="易错点"><a href="#ch14-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch14-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch14-10">学习停止线</a></li></ul></div></details><details class="part" open><summary>第四部分 安全基础</summary><div class="plist"><div class="chap" data-ch="ch15" data-text="安全与密码学最低限度"><a class="chap-link" href="#ch15"><span class="chap-num">15</span><span class="chap-title">安全与密码学最低限度</span></a><button class="twisty" aria-label="展开第 15 章小节" aria-controls="secs-ch15" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch15" data-for="ch15" aria-hidden="true"><li data-text="题目"><a href="#ch15-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch15-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch15-3">面试核心结论</a></li><li data-text="认证、授权和会话"><a href="#ch15-4">认证、授权和会话</a></li><li data-text="四个密码学概念"><a href="#ch15-5">四个密码学概念</a></li><li data-text="常见 web 风险的最低限度"><a href="#ch15-6">常见 Web 风险的最低限度</a></li><li data-text="https 只记握手目标"><a href="#ch15-7">HTTPS 只记握手目标</a></li><li data-text="高频追问"><a href="#ch15-8">高频追问</a></li><li data-text="易错点"><a href="#ch15-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch15-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch15-11">学习停止线</a></li></ul></div></details><details class="part" open><summary>第五部分 选读主题</summary><div class="plist"><div class="chap" data-ch="ch16" data-text="大数据与搜索基础"><a class="chap-link" href="#ch16"><span class="chap-num">16</span><span class="chap-title">大数据与搜索基础</span></a><button class="twisty" aria-label="展开第 16 章小节" aria-controls="secs-ch16" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch16" data-for="ch16" aria-hidden="true"><li data-text="题目"><a href="#ch16-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch16-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch16-3">面试核心结论</a></li><li data-text="oltp 和 olap 的直观区别"><a href="#ch16-4">OLTP 和 OLAP 的直观区别</a></li><li data-text="倒排索引怎么理解"><a href="#ch16-5">倒排索引怎么理解</a></li><li data-text="批处理和流处理"><a href="#ch16-6">批处理和流处理</a></li><li data-text="elasticsearch 的定位"><a href="#ch16-7">Elasticsearch 的定位</a></li><li data-text="高频追问"><a href="#ch16-8">高频追问</a></li><li data-text="易错点"><a href="#ch16-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch16-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch16-11">学习停止线</a></li></ul><div class="chap" data-ch="ch17" data-text="ai、llm 与 agent 最小地图"><a class="chap-link" href="#ch17"><span class="chap-num">17</span><span class="chap-title">AI、LLM 与 Agent 最小地图</span></a><button class="twisty" aria-label="展开第 17 章小节" aria-controls="secs-ch17" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch17" data-for="ch17" aria-hidden="true"><li data-text="题目"><a href="#ch17-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch17-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch17-3">面试核心结论</a></li><li data-text="这些概念不要混淆"><a href="#ch17-4">这些概念不要混淆</a></li><li data-text="为什么会幻觉"><a href="#ch17-5">为什么会幻觉</a></li><li data-text="llm 应用的基本链路"><a href="#ch17-6">LLM 应用的基本链路</a></li><li data-text="高频追问"><a href="#ch17-7">高频追问</a></li><li data-text="易错点"><a href="#ch17-8">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch17-9">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch17-10">学习停止线</a></li></ul><div class="chap" data-ch="ch18" data-text="技术选型速查表"><a class="chap-link" href="#ch18"><span class="chap-num">18</span><span class="chap-title">技术选型速查表</span></a><button class="twisty" aria-label="展开第 18 章小节" aria-controls="secs-ch18" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch18" data-for="ch18" aria-hidden="true"><li data-text="题目"><a href="#ch18-1">题目</a></li><li data-text="这道题在考什么"><a href="#ch18-2">这道题在考什么</a></li><li data-text="面试核心结论"><a href="#ch18-3">面试核心结论</a></li><li data-text="常见场景的最低限度选择"><a href="#ch18-4">常见场景的最低限度选择</a></li><li data-text="一套通用的选型顺序"><a href="#ch18-5">一套通用的选型顺序</a></li><li data-text="“为什么不用 x” 的回答方式"><a href="#ch18-6">“为什么不用 X” 的回答方式</a></li><li data-text="面试防守的五层回答法"><a href="#ch18-7">面试防守的五层回答法</a></li><li data-text="高频追问"><a href="#ch18-8">高频追问</a></li><li data-text="易错点"><a href="#ch18-9">易错点</a></li><li data-text="30 秒回答模板"><a href="#ch18-10">30 秒回答模板</a></li><li data-text="学习停止线"><a href="#ch18-11">学习停止线</a></li></ul></div></details><div id="emptySearch" class="search-empty" aria-live="polite">未找到匹配内容</div></div>
+</nav>
+<button id="backdrop" type="button" aria-label="关闭目录" tabindex="-1"></button>
+<div class="main">
+  <header class="topbar">
+    <button id="menuBtn" type="button" aria-label="打开目录" aria-controls="sidebar"
+      aria-expanded="false">&#9776;</button>
+    <span class="tb-title">非主攻方向面试基础防守八股</span>
+    <span class="tb-spacer"></span>
+    <a class="tb-link" href="面试八股自测.html">速记手册 →</a><a class="tb-link" href="C++面试八股笔记.html">C++ 篇 →</a><a class="tb-link" href="计算机网络面试八股笔记.html">计算机网络篇 →</a><a class="tb-link" href="操作系统与设计模式面试八股笔记.html">OS·设计模式篇 →</a><a class="tb-link" href="大模型面试八股笔记.html">LLM 篇 →</a><a class="tb-link" href="智能体面试八股笔记.html">Agent 篇 →</a>
+    <button id="themeBtn" type="button">&#9681; 深色</button>
+  </header>
+  <main id="main-content" class="content"><h1 id="top">非主攻方向面试基础防守八股</h1>
+<p><em>面向已经确定主攻方向、但希望对其他常见技术领域具备最低限度面试防守能力的学习笔记。</em></p>
+<blockquote>
+<p><strong>核心定位：</strong> 这不是第二份深入的数据库、分布式或安全专题笔记，而是一张“面试官突然问到时，我至少知道它是什么、为什么存在、常见坑在哪里”的知识地图。</p>
+<p><strong>学习目标：</strong> 每个主题至少做到能用 30 秒说清定义和作用，能回答 2～5 个基础追问，知道什么时候需要继续深入、什么时候可以明确说明“这不是我的主攻方向”。</p>
+<p><strong>配套阅读：</strong> 操作系统与设计模式见 <a href="./操作系统与设计模式面试八股笔记.md">原笔记</a>，网络见 <a href="./计算机网络面试八股笔记.md">网络笔记</a>，C++ 见 <a href="./C++面试八股笔记.md">C++ 笔记</a>，LLM 与 Agent 见对应专题笔记。本文只补齐它们之间的基础连接，不重复展开主线内容。</p>
+</blockquote>
+<h2>目录</h2>
+<p><strong>第一部分 数据库与数据组件基础</strong></p>
+<ol>
+<li>数据库最小知识地图</li>
+<li>SQL 基础与表结构设计</li>
+<li>索引与查询性能基础</li>
+<li>事务与并发控制基础</li>
+<li>缓存与 Redis 基础</li>
+<li>消息队列基础</li>
+</ol>
+<p><strong>第二部分 后端系统与分布式基础</strong></p>
+<ol start="7">
+<li>一个 Web 请求的完整路径</li>
+<li>分布式系统最小知识地图</li>
+<li>高可用与服务治理基础</li>
+<li>容器、云计算与 DevOps 基础</li>
+<li>监控、日志与故障排查基础</li>
+</ol>
+<p><strong>第三部分 编程语言与计算机基础防守</strong></p>
+<ol start="12">
+<li>程序从源码到运行</li>
+<li>数据结构与算法最低限度</li>
+<li>软件工程与代码质量基础</li>
+</ol>
+<p><strong>第四部分 安全基础</strong></p>
+<ol start="15">
+<li>安全与密码学最低限度</li>
+</ol>
+<p><strong>第五部分 选读主题</strong></p>
+<ol start="16">
+<li>大数据与搜索基础</li>
+<li>AI、LLM 与 Agent 最小地图</li>
+<li>技术选型速查表</li>
+</ol>
+<hr />
+<h2>使用说明</h2>
+<h3>这份笔记应该怎么读</h3>
+<p>不要把 18 章当成 18 门新课。建议分三轮学习：</p>
+<ol>
+<li><strong>第一轮扫地图</strong>：只读每章的“面试核心结论”和“30 秒回答模板”，先知道各组件在系统中的位置。</li>
+<li><strong>第二轮补追问</strong>：针对目标岗位，学习数据库、缓存、消息队列、分布式和安全的高频追问。</li>
+<li><strong>第三轮做连接</strong>：把一个请求从客户端、网关、服务、缓存、数据库、消息队列一直串到日志和监控。</li>
+</ol>
+<h3>每章的深度标记</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>标记</th>
+<th>目标</th>
+<th>学到什么程度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>必会</strong></td>
+<td>防止完全失分</td>
+<td>能定义、能说作用、能举一个例子</td>
+</tr>
+<tr>
+<td><strong>应会</strong></td>
+<td>应对基础追问</td>
+<td>能讲基本流程、比较相近概念、说一个常见坑</td>
+</tr>
+<tr>
+<td><strong>知道即可</strong></td>
+<td>开拓视野</td>
+<td>知道名词和使用场景，不背实现细节</td>
+</tr>
+<tr>
+<td><strong>停止线</strong></td>
+<td>控制投入</td>
+<td>明确本笔记不继续展开的内容</td>
+</tr>
+</tbody>
+</table></div>
+<h3>一张总地图</h3>
+<p>下面的结构不是某种固定架构，而是帮助你把不同主题放到同一个请求生命周期里。真实系统可能没有其中某些组件，也可能把一个组件拆成很多服务。</p>
+<div class="mermaid mermaid-static">
+<svg id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="flowchart" style="max-width: 1250.18px; background-color: transparent;" viewBox="0 0 1250.18310546875 402" role="img" aria-roledescription="flowchart-v2" aria-describedby="mermaid-interview_defensive_foundations-1-chart-desc-mermaid-interview_defensive_foundations-1" aria-labelledby="mermaid-interview_defensive_foundations-1-chart-title-mermaid-interview_defensive_foundations-1" focusable="false"><title id="mermaid-interview_defensive_foundations-1-chart-title-mermaid-interview_defensive_foundations-1">Backend Interview Knowledge Map</title><desc id="mermaid-interview_defensive_foundations-1-chart-desc-mermaid-interview_defensive_foundations-1">A high-level map connecting a user request with edge services, application logic, data components, asynchronous processing, and observability.</desc><style>#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .error-icon{fill:#552222;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .error-text{fill:#552222;stroke:#552222;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .marker{fill:#666;stroke:#666;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .marker.cross{stroke:#666;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 p{margin:0;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#000000;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster-label text{fill:#333;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster-label span{color:#333;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster-label span p{background-color:transparent;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .label text,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 span{fill:#000000;color:#000000;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node rect,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node circle,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node ellipse,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node polygon,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node path{fill:#eee;stroke:#999;stroke-width:1px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .rough-node .label text,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node .label text,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .image-shape .label,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .icon-shape .label{text-anchor:middle;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .rough-node .label,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node .label,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .image-shape .label,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .icon-shape .label{text-align:center;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node.clickable{cursor:pointer;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .root .anchor path{fill:#666!important;stroke-width:0;stroke:#666;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .arrowheadPath{fill:#333333;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edgePath .path{stroke:#666;stroke-width:2.0px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .flowchart-link{stroke:#666;fill:none;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edgeLabel{background-color:white;text-align:center;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edgeLabel p{background-color:white;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .edgeLabel rect{opacity:0.5;background-color:white;fill:white;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .labelBkg{background-color:rgba(255, 255, 255, 0.5);}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster rect{fill:hsl(0, 0%, 98.9215686275%);stroke:#707070;stroke-width:1px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster text{fill:#333;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .cluster span{color:#333;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(-160, 0%, 93.3333333333%);border:1px solid #707070;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#000000;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 rect.text{fill:none;stroke-width:0;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .icon-shape,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .image-shape{background-color:white;text-align:center;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .icon-shape p,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .image-shape p{background-color:white;padding:2px;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .icon-shape rect,#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .image-shape rect{opacity:0.5;background-color:white;fill:white;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .entry&gt;*{fill:#ede9fe!important;stroke:#7c3aed!important;stroke-width:2px!important;color:#3b0764!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .entry span{fill:#ede9fe!important;stroke:#7c3aed!important;stroke-width:2px!important;color:#3b0764!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .entry tspan{fill:#3b0764!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .compute&gt;*{fill:#dbeafe!important;stroke:#2563eb!important;stroke-width:2px!important;color:#1e3a5f!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .compute span{fill:#dbeafe!important;stroke:#2563eb!important;stroke-width:2px!important;color:#1e3a5f!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .compute tspan{fill:#1e3a5f!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .data&gt;*{fill:#dcfce7!important;stroke:#16a34a!important;stroke-width:2px!important;color:#14532d!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .data span{fill:#dcfce7!important;stroke:#16a34a!important;stroke-width:2px!important;color:#14532d!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .data tspan{fill:#14532d!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .support&gt;*{fill:#fef3c7!important;stroke:#d97706!important;stroke-width:2px!important;color:#78350f!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .support span{fill:#fef3c7!important;stroke:#d97706!important;stroke-width:2px!important;color:#78350f!important;}#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1 .support tspan{fill:#78350f!important;}</style><g><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><marker id="mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"/></marker><g class="root"><g class="clusters"/><g class="edgePaths"><path d="M75.902,201.5L79.985,201.417C84.069,201.333,92.235,201.167,99.819,201.083C107.402,201,114.402,201,117.902,201L121.402,201" id="mermaid-interview_defensive_foundations-1-L_client_edge_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_client_edge_0" data-points="W3sieCI6NzUuOTAxODM3NDMxODI3NDYsInkiOjIwMS40OTk5OTk5OTk5OTk5N30seyJ4IjoxMDAuNDAxODQwMjA5OTYwOTQsInkiOjIwMX0seyJ4IjoxMjUuNDAxODQwMjA5OTYwOTQsInkiOjIwMX1d" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M314.855,201L319.022,201C323.188,201,331.522,201,339.188,201C346.855,201,353.855,201,357.355,201L360.855,201" id="mermaid-interview_defensive_foundations-1-L_edge_service_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_edge_service_0" data-points="W3sieCI6MzE0Ljg1NDk2NTIwOTk2MDk0LCJ5IjoyMDF9LHsieCI6MzM5Ljg1NDk2NTIwOTk2MDk0LCJ5IjoyMDF9LHsieCI6MzY0Ljg1NDk2NTIwOTk2MDk0LCJ5IjoyMDF9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M483.806,174L501.085,150.833C518.364,127.667,552.922,81.333,579.774,58.167C606.626,35,625.772,35,635.345,35L644.917,35" id="mermaid-interview_defensive_foundations-1-L_service_cache_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_service_cache_0" data-points="W3sieCI6NDgzLjgwNTY0MjkyMDgwNDMsInkiOjE3NH0seyJ4Ijo1ODcuNDc5OTY1MjA5OTYwOSwieSI6MzV9LHsieCI6NjQ4LjkxNzQ2NTIwOTk2MDksInkiOjM1fV0=" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M517.586,174L529.235,168.167C540.884,162.333,564.182,150.667,583.56,144.833C602.938,139,618.397,139,626.126,139L633.855,139" id="mermaid-interview_defensive_foundations-1-L_service_database_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_service_database_0" data-points="W3sieCI6NTE3LjU4NTgxMTk4NDE1NDUsInkiOjE3NH0seyJ4Ijo1ODcuNDc5OTY1MjA5OTYwOSwieSI6MTM5fSx7IngiOjYzNy44NTQ5NjUyMDk5NjA5LCJ5IjoxMzl9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M483.806,228L501.085,251.167C518.364,274.333,552.922,320.667,574.325,343.833C595.727,367,603.975,367,608.098,367L612.222,367" id="mermaid-interview_defensive_foundations-1-L_service_queue_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_service_queue_0" data-points="W3sieCI6NDgzLjgwNTY0MjkyMDgwNDMsInkiOjIyOH0seyJ4Ijo1ODcuNDc5OTY1MjA5OTYwOSwieSI6MzY3fSx7IngiOjYxNi4yMjIxNTI3MDk5NjA5LCJ5IjozNjd9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M784.988,367L789.778,367C794.569,367,804.149,367,812.44,367C820.73,367,827.73,367,831.23,367L834.73,367" id="mermaid-interview_defensive_foundations-1-L_queue_worker_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_queue_worker_0" data-points="W3sieCI6Nzg0Ljk4Nzc3NzcwOTk2MDksInkiOjM2N30seyJ4Ijo4MTMuNzI5OTY1MjA5OTYwOSwieSI6MzY3fSx7IngiOjgzOC43Mjk5NjUyMDk5NjA5LCJ5IjozNjd9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M517.586,228L529.235,233.833C540.884,239.667,564.182,251.333,579.331,257.167C594.48,263,601.48,263,604.98,263L608.48,263" id="mermaid-interview_defensive_foundations-1-L_service_external_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_service_external_0" data-points="W3sieCI6NTE3LjU4NTgxMTk4NDE1NDUsInkiOjIyOH0seyJ4Ijo1ODcuNDc5OTY1MjA5OTYwOSwieSI6MjYzfSx7IngiOjYxMi40Nzk5NjUyMDk5NjA5LCJ5IjoyNjN9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M562.48,201L566.647,201C570.813,201,579.147,201,602.167,201C625.188,201,662.897,201,700.605,201C738.313,201,776.022,201,812.044,201C848.066,201,882.402,201,916.738,201C951.074,201,985.41,201,1015.936,209.962C1046.463,218.924,1073.18,236.848,1086.538,245.81L1099.897,254.772" id="mermaid-interview_defensive_foundations-1-L_service_observe_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_service_observe_0" data-points="W3sieCI6NTYyLjQ3OTk2NTIwOTk2MDksInkiOjIwMX0seyJ4Ijo1ODcuNDc5OTY1MjA5OTYwOSwieSI6MjAxfSx7IngiOjcwMC42MDQ5NjUyMDk5NjA5LCJ5IjoyMDF9LHsieCI6ODEzLjcyOTk2NTIwOTk2MDksInkiOjIwMX0seyJ4Ijo5MTYuNzM3Nzc3NzA5OTYwOSwieSI6MjAxfSx7IngiOjEwMTkuNzQ1NTkwMjA5OTYwOSwieSI6MjAxfSx7IngiOjExMDMuMjE4NDgxNzc2MjI2LCJ5IjoyNTd9XQ==" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/><path d="M994.746,367L998.912,367C1003.079,367,1011.412,367,1028.937,358.038C1046.463,349.076,1073.18,331.152,1086.538,322.19L1099.897,313.228" id="mermaid-interview_defensive_foundations-1-L_worker_observe_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="mermaid-interview_defensive_foundations-1-L_worker_observe_0" data-points="W3sieCI6OTk0Ljc0NTU5MDIwOTk2MDksInkiOjM2N30seyJ4IjoxMDE5Ljc0NTU5MDIwOTk2MDksInkiOjM2N30seyJ4IjoxMTAzLjIxODQ4MTc3NjIyNiwieSI6MzExfV0=" marker-end="url(#mermaid-interview_defensive_foundations-1-mermaid-interview_defensive_foundations-1_flowchart-v2-pointEnd)"/></g><g class="edgeLabels"><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_client_edge_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_edge_service_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_service_cache_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_service_database_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_service_queue_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_queue_worker_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_service_external_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_service_observe_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="mermaid-interview_defensive_foundations-1-L_worker_observe_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default entry" id="mermaid-interview_defensive_foundations-1-flowchart-client-0" transform="translate(41.70092010498047, 201)"><g class="basic label-container outer-path"><path d="M-14.2109375 -19.5 C-6.198060055618988 -19.5, 1.8148173887620231 -19.5, 14.2109375 -19.5 C14.2109375 -19.5, 14.210937499999998 -19.5, 14.210937499999998 -19.5 C14.503143201157874 -19.49062953190776, 14.79534890231575 -19.48125906381552, 15.4603067896239 -19.45993515863156 C15.756430363846423 -19.431368473567016, 16.052553938068947 -19.402801788502472, 16.704542152847864 -19.3399052695533 C17.026775873077494 -19.287809020626394, 17.34900959330712 -19.235712771699493, 17.93853075967676 -19.140403561325776 C18.402552009669435 -19.034493739036588, 18.866573259662115 -18.928583916747396, 19.15720188623539 -18.862249829261074 C19.61008584878107 -18.727836246413947, 20.06296981132674 -18.593422663566823, 20.355547751460602 -18.50658706670804 C20.704000695785137 -18.378353162132903, 21.052453640109672 -18.250119257557767, 21.528644095147794 -18.074876768247425 C21.894753526197846 -17.912810983371973, 22.260862957247898 -17.750745198496524, 22.67167041279238 -17.568892924097174 C22.966197327714326 -17.415238421235888, 23.260724242636268 -17.261583918374605, 23.779929764076783 -16.990714730406097 C23.99546030474329 -16.860058850056014, 24.210990845409796 -16.72940296970593, 24.848868073605697 -16.342718045390892 C25.235484162443313 -16.073031398158513, 25.622100251280933 -15.803344750926136, 25.874092844578712 -15.627565626425154 C26.24577356885533 -15.331160139654012, 26.617454293131953 -15.034754652882869, 26.85139120850187 -14.848196188198123 C27.087400764259357 -14.633858554129834, 27.32341032001684 -14.419520920061544, 27.776747236767985 -14.007812326905688 C27.998779439706656 -13.77854584818863, 28.22081164264533 -13.549279369471574, 28.646358442968648 -13.10986736009568 C28.81028797360414 -12.917306405556692, 28.974217504239636 -12.724745451017702, 29.456651408126582 -12.158051136245305 C29.72335056447374 -11.800698563533087, 29.990049720820895 -11.443345990820871, 30.204296464640635 -11.156274872382312 C30.37098309074787 -10.90019945305527, 30.537669716855106 -10.644124033728227, 30.886221378604247 -10.108655082055241 C31.035020343195576 -9.844447452894308, 31.1838193077869 -9.580239823733375, 31.4996239742735 -9.019496659696287 C31.68634182716455 -8.631773043045978, 31.873059680055597 -8.24404942639567, 32.04198364880834 -7.893275190886684 C32.20791614344203 -7.483418721054946, 32.37384863807571 -7.0735622512232075, 32.511071729970325 -6.734618561215508 C32.63691616710083 -6.355595167166567, 32.76276060423133 -5.976571773117625, 32.90496063421488 -5.548287939305138 C33.027279013964396 -5.081834944199122, 33.149597393713904 -4.6153819490931065, 33.22203178754556 -4.339158212148133 C33.2860308318482 -4.010536645856888, 33.350029876150835 -3.6819150795656426, 33.460982276581774 -3.1121979531509023 C33.50696157230207 -2.755591615183232, 33.55294086802236 -2.3989852772155613, 33.62083020250937 -1.872449005199798 C33.63915125367828 -1.5870838447577074, 33.65747230484719 -1.3017186843156168, 33.70091871591342 -0.6250057626472757 C33.70091871591342 -0.25831692289739533, 33.70091871591342 0.10837191685248504, 33.70091871591342 0.625005762647271 C33.670992417915166 1.0911320100430277, 33.64106611991691 1.5572582574387845, 33.62083020250937 1.8724490051997846 C33.574461185586436 2.2320779438559755, 33.5280921686635 2.5917068825121663, 33.460982276581774 3.1121979531508885 C33.40462326791732 3.401589551162141, 33.34826425925288 3.690981149173393, 33.22203178754556 4.339158212148129 C33.11270053323546 4.756085669297906, 33.00336927892536 5.1730131264476835, 32.90496063421489 5.548287939305125 C32.74889184287781 6.018342272627379, 32.59282305154074 6.488396605949632, 32.511071729970325 6.734618561215495 C32.36042395890306 7.106721468328151, 32.2097761878358 7.478824375440807, 32.04198364880834 7.893275190886679 C31.912770368264223 8.161589332657847, 31.7835570877201 8.429903474429016, 31.499623974273504 9.019496659696284 C31.35446512688497 9.277240892161817, 31.20930627949644 9.53498512462735, 30.88622137860425 10.108655082055236 C30.7080532691792 10.382369142968404, 30.529885159754148 10.656083203881574, 30.20429646464064 11.156274872382301 C29.977527374621232 11.460124793919212, 29.750758284601822 11.763974715456124, 29.456651408126582 12.158051136245302 C29.269484144364178 12.377908454379636, 29.08231688060177 12.597765772513972, 28.64635844296866 13.10986736009567 C28.30152053425522 13.465940812561128, 27.95668262554178 13.822014265026583, 27.77674723676799 14.007812326905684 C27.53379166290925 14.228458150831965, 27.29083608905051 14.449103974758247, 26.851391208501887 14.848196188198111 C26.650218598794364 15.008625991011886, 26.449045989086844 15.16905579382566, 25.874092844578715 15.627565626425152 C25.568142028982837 15.840983670987493, 25.262191213386956 16.054401715549833, 24.848868073605708 16.34271804539089 C24.60300810584216 16.491759802682697, 24.35714813807861 16.640801559974502, 23.779929764076787 16.990714730406093 C23.549242425357374 17.11106416725372, 23.31855508663796 17.231413604101345, 22.671670412792388 17.56889292409717 C22.438871296754034 17.671946187026933, 22.20607218071568 17.7749994499567, 21.528644095147804 18.07487676824742 C21.169882441661137 18.206904373086886, 20.811120788174467 18.33893197792635, 20.355547751460616 18.506587066708033 C20.089267879259282 18.585617535045817, 19.822988007057948 18.664648003383604, 19.157201886235413 18.86224982926107 C18.850984651033784 18.932141914941635, 18.54476741583216 19.0020340006222, 17.938530759676766 19.140403561325773 C17.580314856639134 19.19831713052308, 17.222098953601503 19.256230699720387, 16.70454215284788 19.3399052695533 C16.234365156029778 19.38526267896577, 15.764188159211677 19.430620088378245, 15.4603067896239 19.45993515863156 C15.174935604813667 19.46908645708711, 14.889564420003433 19.478237755542658, 14.210937500000004 19.5 C14.210937500000002 19.5, 14.2109375 19.5, 14.2109375 19.5 C4.282943892460075 19.5, -5.64504971507985 19.5, -14.210937499999996 19.5 C-14.561397701523164 19.488761423466553, -14.911857903046332 19.477522846933105, -15.460306789623893 19.45993515863156 C-15.784154626947885 19.42869394724892, -16.108002464271877 19.397452735866285, -16.70454215284787 19.3399052695533 C-17.155064261515125 19.26706834887511, -17.60558637018238 19.19423142819692, -17.93853075967676 19.140403561325773 C-18.2455600216534 19.07032613583278, -18.552589283630038 19.00024871033979, -19.157201886235388 18.862249829261074 C-19.50685421019833 18.758474854871373, -19.856506534161273 18.654699880481676, -20.35554775146059 18.506587066708043 C-20.692258060794014 18.382674560357366, -21.028968370127437 18.258762054006684, -21.528644095147797 18.074876768247425 C-21.95275691124848 17.887134605419345, -22.376869727349156 17.699392442591265, -22.67167041279238 17.568892924097174 C-23.11348707375304 17.338397455071078, -23.555303734713696 17.10790198604498, -23.77992976407678 16.990714730406097 C-24.052543443797024 16.825454715703877, -24.325157123517265 16.660194701001657, -24.848868073605686 16.3427180453909 C-25.223991033803188 16.081048507168347, -25.59911399400069 15.819378968945797, -25.874092844578712 15.627565626425156 C-26.17873743882017 15.384619669450712, -26.483382033061634 15.141673712476269, -26.85139120850187 14.848196188198125 C-27.107712385133816 14.615412077467688, -27.364033561765762 14.382627966737251, -27.776747236767974 14.007812326905697 C-28.010120631520298 13.766835136511883, -28.243494026272618 13.52585794611807, -28.646358442968655 13.109867360095677 C-28.94938768385457 12.753911970898804, -29.25241692474049 12.39795658170193, -29.45665140812658 12.158051136245307 C-29.69686742378013 11.836183559398773, -29.937083439433685 11.514315982552237, -30.204296464640635 11.156274872382316 C-30.42856732594541 10.811734604259605, -30.652838187250183 10.467194336136897, -30.886221378604244 10.108655082055249 C-31.016717233945005 9.876946476759482, -31.147213089285767 9.645237871463715, -31.4996239742735 9.019496659696289 C-31.714058150768917 8.574219504047191, -31.92849232726433 8.128942348398093, -32.04198364880834 7.893275190886686 C-32.22649743219166 7.437522578598585, -32.411011215574966 6.981769966310482, -32.511071729970325 6.73461856121551 C-32.666475999898125 6.2665656605008655, -32.821880269825925 5.798512759786222, -32.90496063421488 5.5482879393051325 C-32.97082606886256 5.297114490733604, -33.03669150351023 5.045941042162074, -33.22203178754556 4.339158212148136 C-33.297077475080755 3.953814467566601, -33.37212316261594 3.5684707229850665, -33.460982276581774 3.112197953150904 C-33.50254666838248 2.789832738162174, -33.544111060183184 2.4674675231734446, -33.62083020250937 1.872449005199809 C-33.643977969997565 1.5119038420295303, -33.66712573748576 1.1513586788592516, -33.70091871591342 0.6250057626472781 C-33.70091871591342 0.35329969419760404, -33.70091871591342 0.08159362574792994, -33.70091871591342 -0.6250057626472687 C-33.673594317097205 -1.0506053300675335, -33.64626991828099 -1.4762048974877984, -33.62083020250937 -1.8724490051997822 C-33.56870174226671 -2.276747048913016, -33.516573282024055 -2.68104509262625, -33.460982276581774 -3.112197953150895 C-33.409474516603886 -3.3766794144684353, -33.35796675662599 -3.6411608757859755, -33.22203178754556 -4.339158212148126 C-33.142288153608334 -4.643255249460343, -33.06254451967111 -4.947352286772559, -32.90496063421489 -5.548287939305123 C-32.78962158318443 -5.8956707842266916, -32.674282532153974 -6.2430536291482595, -32.51107172997033 -6.734618561215485 C-32.3379521503186 -7.162227269994645, -32.16483257066686 -7.589835978773804, -32.04198364880834 -7.893275190886676 C-31.884715537101968 -8.219845789843488, -31.7274474253956 -8.5464163888003, -31.499623974273504 -9.019496659696282 C-31.30504715270933 -9.364987509423178, -31.11047033114516 -9.710478359150073, -30.886221378604247 -10.108655082055243 C-30.72472434604038 -10.356757892098683, -30.563227313476514 -10.604860702142124, -30.20429646464064 -11.156274872382308 C-30.04798656818775 -11.365715893504671, -29.891676671734857 -11.575156914627032, -29.456651408126586 -12.158051136245302 C-29.222387377007024 -12.433230997199331, -28.988123345887463 -12.70841085815336, -28.646358442968662 -13.10986736009567 C-28.391298052510088 -13.373238154091652, -28.13623766205151 -13.636608948087634, -27.776747236767996 -14.007812326905677 C-27.516123642703597 -14.24450377931254, -27.255500048639195 -14.481195231719402, -26.851391208501887 -14.848196188198107 C-26.571379574255 -15.071498015087474, -26.291367940008115 -15.29479984197684, -25.87409284457872 -15.627565626425149 C-25.63881185941528 -15.791687456525471, -25.403530874251846 -15.955809286625794, -24.84886807360571 -16.342718045390885 C-24.582901265595776 -16.50394868740096, -24.31693445758584 -16.665179329411036, -23.77992976407679 -16.99071473040609 C-23.357499486780068 -17.211096335492282, -22.93506920948335 -17.43147794057848, -22.671670412792388 -17.56889292409717 C-22.37970014257208 -17.698139501733362, -22.08772987235177 -17.82738607936955, -21.528644095147804 -18.07487676824742 C-21.086804273931943 -18.237477906777393, -20.644964452716085 -18.40007904530736, -20.35554775146062 -18.506587066708033 C-20.08050870656944 -18.588217211522327, -19.805469661678256 -18.669847356336625, -19.157201886235413 -18.862249829261067 C-18.81698907066986 -18.939901184317804, -18.4767762551043 -19.01755253937454, -17.938530759676766 -19.140403561325773 C-17.650311619235442 -19.18700059677951, -17.36209247879412 -19.233597632233245, -16.704542152847882 -19.3399052695533 C-16.24147934042417 -19.384576382153302, -15.778416528000458 -19.42924749475331, -15.460306789623903 -19.45993515863156 C-15.002543225167154 -19.474614745160963, -14.544779660710406 -19.489294331690363, -14.210937500000005 -19.5 C-14.210937500000004 -19.5, -14.210937500000002 -19.5, -14.2109375 -19.5" stroke="none" stroke-width="0" fill="#ede9fe" style="fill:#ede9fe !important;stroke:#7c3aed !important;stroke-width:2px !important"/><path d="M-14.2109375 -19.5 C-4.083338359778956 -19.5, 6.044260780442087 -19.5, 14.2109375 -19.5 M-14.2109375 -19.5 C-5.777053081909635 -19.5, 2.65683133618073 -19.5, 14.2109375 -19.5 M14.2109375 -19.5 C14.2109375 -19.5, 14.210937499999998 -19.5, 14.210937499999998 -19.5 M14.2109375 -19.5 C14.2109375 -19.5, 14.210937499999998 -19.5, 14.210937499999998 -19.5 M14.210937499999998 -19.5 C14.650511591675869 -19.48590371445902, 15.090085683351738 -19.47180742891804, 15.4603067896239 -19.45993515863156 M14.210937499999998 -19.5 C14.542678765309727 -19.489361703316717, 14.874420030619454 -19.478723406633435, 15.4603067896239 -19.45993515863156 M15.4603067896239 -19.45993515863156 C15.948804778726704 -19.412810345127596, 16.437302767829507 -19.365685531623637, 16.704542152847864 -19.3399052695533 M15.4603067896239 -19.45993515863156 C15.954577585353581 -19.412253449415118, 16.448848381083263 -19.364571740198677, 16.704542152847864 -19.3399052695533 M16.704542152847864 -19.3399052695533 C17.155492207603476 -19.266999161870316, 17.60644226235909 -19.194093054187338, 17.93853075967676 -19.140403561325776 M16.704542152847864 -19.3399052695533 C16.975068273968727 -19.29616870425188, 17.245594395089594 -19.25243213895046, 17.93853075967676 -19.140403561325776 M17.93853075967676 -19.140403561325776 C18.23381475566479 -19.073006916149662, 18.529098751652818 -19.005610270973545, 19.15720188623539 -18.862249829261074 M17.93853075967676 -19.140403561325776 C18.21513454801012 -19.077270551647093, 18.49173833634348 -19.014137541968406, 19.15720188623539 -18.862249829261074 M19.15720188623539 -18.862249829261074 C19.42336266252015 -18.783254707966183, 19.68952343880491 -18.70425958667129, 20.355547751460602 -18.50658706670804 M19.15720188623539 -18.862249829261074 C19.532418727148574 -18.75088744043143, 19.907635568061753 -18.63952505160179, 20.355547751460602 -18.50658706670804 M20.355547751460602 -18.50658706670804 C20.63743429630057 -18.402850212476277, 20.919320841140536 -18.29911335824451, 21.528644095147794 -18.074876768247425 M20.355547751460602 -18.50658706670804 C20.70873238757412 -18.376611855815277, 21.061917023687638 -18.246636644922518, 21.528644095147794 -18.074876768247425 M21.528644095147794 -18.074876768247425 C21.83524947666469 -17.939151660975387, 22.141854858181585 -17.80342655370335, 22.67167041279238 -17.568892924097174 M21.528644095147794 -18.074876768247425 C21.909417188524703 -17.90631981504196, 22.290190281901616 -17.737762861836497, 22.67167041279238 -17.568892924097174 M22.67167041279238 -17.568892924097174 C22.895433863724282 -17.45215567507333, 23.119197314656184 -17.33541842604949, 23.779929764076783 -16.990714730406097 M22.67167041279238 -17.568892924097174 C23.046325755764475 -17.373435471646832, 23.42098109873657 -17.177978019196495, 23.779929764076783 -16.990714730406097 M23.779929764076783 -16.990714730406097 C24.090354316772622 -16.802533542304715, 24.400778869468464 -16.614352354203337, 24.848868073605697 -16.342718045390892 M23.779929764076783 -16.990714730406097 C24.186315016586384 -16.744361602149947, 24.592700269095985 -16.498008473893798, 24.848868073605697 -16.342718045390892 M24.848868073605697 -16.342718045390892 C25.244995444579537 -16.066396739477053, 25.641122815553377 -15.790075433563215, 25.874092844578712 -15.627565626425154 M24.848868073605697 -16.342718045390892 C25.127219000892282 -16.14855248813321, 25.405569928178863 -15.954386930875526, 25.874092844578712 -15.627565626425154 M25.874092844578712 -15.627565626425154 C26.15725103628199 -15.401754503697726, 26.440409227985274 -15.175943380970295, 26.85139120850187 -14.848196188198123 M25.874092844578712 -15.627565626425154 C26.146115746129095 -15.410634601272147, 26.418138647679474 -15.19370357611914, 26.85139120850187 -14.848196188198123 M26.85139120850187 -14.848196188198123 C27.168081931364448 -14.560586052871692, 27.484772654227026 -14.27297591754526, 27.776747236767985 -14.007812326905688 M26.85139120850187 -14.848196188198123 C27.052603049601228 -14.66546091788527, 27.253814890700582 -14.482725647572416, 27.776747236767985 -14.007812326905688 M27.776747236767985 -14.007812326905688 C28.109267834824 -13.664457508964034, 28.44178843288001 -13.32110269102238, 28.646358442968648 -13.10986736009568 M27.776747236767985 -14.007812326905688 C28.06042821769367 -13.714888423458236, 28.344109198619353 -13.421964520010786, 28.646358442968648 -13.10986736009568 M28.646358442968648 -13.10986736009568 C28.808821595803376 -12.919028896360732, 28.9712847486381 -12.728190432625782, 29.456651408126582 -12.158051136245305 M28.646358442968648 -13.10986736009568 C28.882080788369706 -12.832974480206172, 29.117803133770767 -12.556081600316663, 29.456651408126582 -12.158051136245305 M29.456651408126582 -12.158051136245305 C29.606958135976914 -11.956653814150465, 29.757264863827242 -11.755256492055624, 30.204296464640635 -11.156274872382312 M29.456651408126582 -12.158051136245305 C29.650414810039432 -11.898425829891139, 29.844178211952286 -11.63880052353697, 30.204296464640635 -11.156274872382312 M30.204296464640635 -11.156274872382312 C30.385638243683502 -10.877685202686562, 30.56698002272637 -10.59909553299081, 30.886221378604247 -10.108655082055241 M30.204296464640635 -11.156274872382312 C30.40371993389759 -10.849906870904045, 30.60314340315455 -10.54353886942578, 30.886221378604247 -10.108655082055241 M30.886221378604247 -10.108655082055241 C31.01494975398726 -9.88008481640121, 31.143678129370276 -9.651514550747176, 31.4996239742735 -9.019496659696287 M30.886221378604247 -10.108655082055241 C31.125897541237503 -9.6830857854567, 31.365573703870755 -9.257516488858158, 31.4996239742735 -9.019496659696287 M31.4996239742735 -9.019496659696287 C31.690156294897047 -8.623852219182911, 31.880688615520594 -8.228207778669535, 32.04198364880834 -7.893275190886684 M31.4996239742735 -9.019496659696287 C31.712537271062022 -8.577377643300164, 31.925450567850547 -8.13525862690404, 32.04198364880834 -7.893275190886684 M32.04198364880834 -7.893275190886684 C32.13669348978819 -7.659340052576246, 32.23140333076804 -7.425404914265807, 32.511071729970325 -6.734618561215508 M32.04198364880834 -7.893275190886684 C32.16230810127528 -7.596071466978321, 32.28263255374221 -7.298867743069959, 32.511071729970325 -6.734618561215508 M32.511071729970325 -6.734618561215508 C32.59236887096796 -6.489764525471012, 32.673666011965594 -6.244910489726514, 32.90496063421488 -5.548287939305138 M32.511071729970325 -6.734618561215508 C32.60150344787489 -6.462252635224515, 32.691935165779455 -6.189886709233523, 32.90496063421488 -5.548287939305138 M32.90496063421488 -5.548287939305138 C33.02526412772888 -5.089518578672344, 33.14556762124288 -4.630749218039549, 33.22203178754556 -4.339158212148133 M32.90496063421488 -5.548287939305138 C32.99498465547843 -5.2049873295695885, 33.085008676741985 -4.861686719834038, 33.22203178754556 -4.339158212148133 M33.22203178754556 -4.339158212148133 C33.305112569154495 -3.912555957715642, 33.38819335076344 -3.4859537032831507, 33.460982276581774 -3.1121979531509023 M33.22203178754556 -4.339158212148133 C33.29074806801538 -3.9863146351266185, 33.359464348485204 -3.633471058105104, 33.460982276581774 -3.1121979531509023 M33.460982276581774 -3.1121979531509023 C33.506375244959486 -2.7601390542688593, 33.5517682133372 -2.408080155386816, 33.62083020250937 -1.872449005199798 M33.460982276581774 -3.1121979531509023 C33.51181172896923 -2.7179747578444955, 33.56264118135668 -2.3237515625380887, 33.62083020250937 -1.872449005199798 M33.62083020250937 -1.872449005199798 C33.63876208115935 -1.5931455208743537, 33.65669395980934 -1.3138420365489094, 33.70091871591342 -0.6250057626472757 M33.62083020250937 -1.872449005199798 C33.63901433338936 -1.5892164887776263, 33.65719846426936 -1.3059839723554545, 33.70091871591342 -0.6250057626472757 M33.70091871591342 -0.6250057626472757 C33.70091871591342 -0.3235988839446718, 33.70091871591342 -0.02219200524206788, 33.70091871591342 0.625005762647271 M33.70091871591342 -0.6250057626472757 C33.70091871591342 -0.20691147867368442, 33.70091871591342 0.21118280529990685, 33.70091871591342 0.625005762647271 M33.70091871591342 0.625005762647271 C33.683703679389176 0.8931438522396711, 33.66648864286494 1.1612819418320712, 33.62083020250937 1.8724490051997846 M33.70091871591342 0.625005762647271 C33.67523540400037 1.0250440768892246, 33.64955209208732 1.4250823911311783, 33.62083020250937 1.8724490051997846 M33.62083020250937 1.8724490051997846 C33.58427748493655 2.155944664544065, 33.547724767363725 2.4394403238883453, 33.460982276581774 3.1121979531508885 M33.62083020250937 1.8724490051997846 C33.58697709648713 2.1350070104563077, 33.5531239904649 2.3975650157128303, 33.460982276581774 3.1121979531508885 M33.460982276581774 3.1121979531508885 C33.40821020350924 3.3831713949967583, 33.35543813043671 3.654144836842628, 33.22203178754556 4.339158212148129 M33.460982276581774 3.1121979531508885 C33.41086149690774 3.3695575637464934, 33.36074071723372 3.6269171743420987, 33.22203178754556 4.339158212148129 M33.22203178754556 4.339158212148129 C33.09523010215972 4.822707994722439, 32.968428416773875 5.30625777729675, 32.90496063421489 5.548287939305125 M33.22203178754556 4.339158212148129 C33.142014663658486 4.644298185170403, 33.06199753977142 4.9494381581926765, 32.90496063421489 5.548287939305125 M32.90496063421489 5.548287939305125 C32.79442551225961 5.881202115254414, 32.68389039030433 6.214116291203703, 32.511071729970325 6.734618561215495 M32.90496063421489 5.548287939305125 C32.75008654570452 6.014744018063377, 32.59521245719416 6.4812000968216275, 32.511071729970325 6.734618561215495 M32.511071729970325 6.734618561215495 C32.37993058395408 7.058539727317195, 32.24878943793784 7.382460893418895, 32.04198364880834 7.893275190886679 M32.511071729970325 6.734618561215495 C32.410712037044064 6.982508943066031, 32.310352344117796 7.230399324916567, 32.04198364880834 7.893275190886679 M32.04198364880834 7.893275190886679 C31.871791178724123 8.246683496552059, 31.701598708639903 8.600091802217438, 31.499623974273504 9.019496659696284 M32.04198364880834 7.893275190886679 C31.86477634045243 8.261249958316725, 31.687569032096516 8.62922472574677, 31.499623974273504 9.019496659696284 M31.499623974273504 9.019496659696284 C31.273008585597015 9.42187522958781, 31.046393196920526 9.824253799479338, 30.88622137860425 10.108655082055236 M31.499623974273504 9.019496659696284 C31.261933065904934 9.441540936319084, 31.024242157536364 9.863585212941885, 30.88622137860425 10.108655082055236 M30.88622137860425 10.108655082055236 C30.740761841351276 10.332119992630663, 30.5953023040983 10.555584903206089, 30.20429646464064 11.156274872382301 M30.88622137860425 10.108655082055236 C30.63070825065835 10.50119186146198, 30.37519512271245 10.893728640868725, 30.20429646464064 11.156274872382301 M30.20429646464064 11.156274872382301 C30.006418298323915 11.421413588174913, 29.808540132007188 11.686552303967522, 29.456651408126582 12.158051136245302 M30.20429646464064 11.156274872382301 C29.928267529042 11.526128499331133, 29.652238593443354 11.895982126279966, 29.456651408126582 12.158051136245302 M29.456651408126582 12.158051136245302 C29.283069401079576 12.36195043881872, 29.109487394032573 12.565849741392139, 28.64635844296866 13.10986736009567 M29.456651408126582 12.158051136245302 C29.249964539545843 12.400837292896227, 29.043277670965107 12.643623449547153, 28.64635844296866 13.10986736009567 M28.64635844296866 13.10986736009567 C28.406561492683373 13.357477398960986, 28.166764542398088 13.605087437826304, 27.77674723676799 14.007812326905684 M28.64635844296866 13.10986736009567 C28.332856854257912 13.43358348939863, 28.019355265547162 13.75729961870159, 27.77674723676799 14.007812326905684 M27.77674723676799 14.007812326905684 C27.46533216385282 14.290631256535928, 27.153917090937654 14.57345018616617, 26.851391208501887 14.848196188198111 M27.77674723676799 14.007812326905684 C27.48778563218937 14.270239610678889, 27.198824027610755 14.532666894452092, 26.851391208501887 14.848196188198111 M26.851391208501887 14.848196188198111 C26.65110146690355 15.007921927188917, 26.450811725305215 15.167647666179725, 25.874092844578715 15.627565626425152 M26.851391208501887 14.848196188198111 C26.636736246424846 15.019377808246114, 26.4220812843478 15.190559428294117, 25.874092844578715 15.627565626425152 M25.874092844578715 15.627565626425152 C25.497638380471617 15.890163964135166, 25.12118391636452 16.15276230184518, 24.848868073605708 16.34271804539089 M25.874092844578715 15.627565626425152 C25.62065942705831 15.804349807531565, 25.3672260095379 15.981133988637977, 24.848868073605708 16.34271804539089 M24.848868073605708 16.34271804539089 C24.438624841600053 16.59140990348955, 24.028381609594394 16.840101761588212, 23.779929764076787 16.990714730406093 M24.848868073605708 16.34271804539089 C24.515789521556776 16.54463222102979, 24.18271096950784 16.74654639666869, 23.779929764076787 16.990714730406093 M23.779929764076787 16.990714730406093 C23.500478212495054 17.136504425869024, 23.221026660913317 17.28229412133195, 22.671670412792388 17.56889292409717 M23.779929764076787 16.990714730406093 C23.546616713485612 17.11243399945537, 23.313303662894437 17.23415326850464, 22.671670412792388 17.56889292409717 M22.671670412792388 17.56889292409717 C22.419473612405127 17.68053296647633, 22.16727681201787 17.792173008855492, 21.528644095147804 18.07487676824742 M22.671670412792388 17.56889292409717 C22.31405777696816 17.727197429774627, 21.956445141143927 17.88550193545208, 21.528644095147804 18.07487676824742 M21.528644095147804 18.07487676824742 C21.204714313652367 18.194085922211816, 20.88078453215693 18.313295076176214, 20.355547751460616 18.506587066708033 M21.528644095147804 18.07487676824742 C21.099389238329945 18.23284652354479, 20.67013438151209 18.390816278842163, 20.355547751460616 18.506587066708033 M20.355547751460616 18.506587066708033 C19.899055290527606 18.642071632935128, 19.442562829594593 18.777556199162223, 19.157201886235413 18.86224982926107 M20.355547751460616 18.506587066708033 C20.112360153881845 18.578763869151665, 19.869172556303077 18.650940671595293, 19.157201886235413 18.86224982926107 M19.157201886235413 18.86224982926107 C18.84748524087525 18.932940632474537, 18.537768595515086 19.003631435688, 17.938530759676766 19.140403561325773 M19.157201886235413 18.86224982926107 C18.672552017508828 18.972867999161956, 18.187902148782243 19.08348616906284, 17.938530759676766 19.140403561325773 M17.938530759676766 19.140403561325773 C17.491621477381173 19.21265638825408, 17.04471219508558 19.284909215182385, 16.70454215284788 19.3399052695533 M17.938530759676766 19.140403561325773 C17.64011317020906 19.188649402927943, 17.341695580741355 19.23689524453011, 16.70454215284788 19.3399052695533 M16.70454215284788 19.3399052695533 C16.31060160571783 19.37790824035211, 15.916661058587785 19.41591121115092, 15.4603067896239 19.45993515863156 M16.70454215284788 19.3399052695533 C16.22019144631499 19.386629999695575, 15.735840739782102 19.433354729837856, 15.4603067896239 19.45993515863156 M15.4603067896239 19.45993515863156 C15.15421145456805 19.469751040248376, 14.848116119512202 19.47956692186519, 14.210937500000004 19.5 M15.4603067896239 19.45993515863156 C15.1055363226765 19.47131195698774, 14.750765855729098 19.48268875534392, 14.210937500000004 19.5 M14.210937500000004 19.5 C14.210937500000002 19.5, 14.210937500000002 19.5, 14.2109375 19.5 M14.210937500000004 19.5 C14.210937500000004 19.5, 14.210937500000002 19.5, 14.2109375 19.5 M14.2109375 19.5 C3.282911441953642 19.5, -7.645114616092716 19.5, -14.210937499999996 19.5 M14.2109375 19.5 C3.2267723478719095 19.5, -7.757392804256181 19.5, -14.210937499999996 19.5 M-14.210937499999996 19.5 C-14.533585269363178 19.489653314032306, -14.856233038726359 19.479306628064617, -15.460306789623893 19.45993515863156 M-14.210937499999996 19.5 C-14.548903120241599 19.489162100369025, -14.8868687404832 19.47832420073805, -15.460306789623893 19.45993515863156 M-15.460306789623893 19.45993515863156 C-15.771363972953704 19.429927846256728, -16.082421156283516 19.399920533881897, -16.70454215284787 19.3399052695533 M-15.460306789623893 19.45993515863156 C-15.778693082759172 19.42922081584834, -16.097079375894452 19.39850647306512, -16.70454215284787 19.3399052695533 M-16.70454215284787 19.3399052695533 C-17.130087226912565 19.271106442129856, -17.55563230097726 19.202307614706413, -17.93853075967676 19.140403561325773 M-16.70454215284787 19.3399052695533 C-17.175263095360386 19.263802758063303, -17.6459840378729 19.18770024657331, -17.93853075967676 19.140403561325773 M-17.93853075967676 19.140403561325773 C-18.333031339134692 19.050361378421368, -18.727531918592625 18.960319195516963, -19.157201886235388 18.862249829261074 M-17.93853075967676 19.140403561325773 C-18.351982835171942 19.046035823120935, -18.76543491066713 18.951668084916093, -19.157201886235388 18.862249829261074 M-19.157201886235388 18.862249829261074 C-19.594222558525466 18.7325443876937, -20.031243230815548 18.602838946126326, -20.35554775146059 18.506587066708043 M-19.157201886235388 18.862249829261074 C-19.498953390417864 18.76081977670997, -19.840704894600336 18.659389724158864, -20.35554775146059 18.506587066708043 M-20.35554775146059 18.506587066708043 C-20.60164933237152 18.416019409994746, -20.847750913282447 18.32545175328145, -21.528644095147797 18.074876768247425 M-20.35554775146059 18.506587066708043 C-20.659294069554154 18.394805613849428, -20.963040387647716 18.283024160990813, -21.528644095147797 18.074876768247425 M-21.528644095147797 18.074876768247425 C-21.98527037137151 17.872741861100405, -22.44189664759522 17.670606953953385, -22.67167041279238 17.568892924097174 M-21.528644095147797 18.074876768247425 C-21.94719476451127 17.889596802784684, -22.365745433874746 17.704316837321944, -22.67167041279238 17.568892924097174 M-22.67167041279238 17.568892924097174 C-23.062231756170306 17.36513732142339, -23.45279309954823 17.161381718749606, -23.77992976407678 16.990714730406097 M-22.67167041279238 17.568892924097174 C-23.06374827869822 17.364346152591956, -23.455826144604057 17.15979938108674, -23.77992976407678 16.990714730406097 M-23.77992976407678 16.990714730406097 C-24.03241828311963 16.837654706375087, -24.284906802162475 16.684594682344077, -24.848868073605686 16.3427180453909 M-23.77992976407678 16.990714730406097 C-24.178714760203462 16.748968922233338, -24.577499756330145 16.50722311406058, -24.848868073605686 16.3427180453909 M-24.848868073605686 16.3427180453909 C-25.096853347282597 16.169734253583368, -25.344838620959507 15.996750461775832, -25.874092844578712 15.627565626425156 M-24.848868073605686 16.3427180453909 C-25.068341424412715 16.189622936716145, -25.287814775219747 16.036527828041393, -25.874092844578712 15.627565626425156 M-25.874092844578712 15.627565626425156 C-26.20670099196675 15.36231947995772, -26.539309139354785 15.097073333490282, -26.85139120850187 14.848196188198125 M-25.874092844578712 15.627565626425156 C-26.171017648451503 15.390775996837476, -26.467942452324294 15.153986367249798, -26.85139120850187 14.848196188198125 M-26.85139120850187 14.848196188198125 C-27.059881227569452 14.658851069224566, -27.26837124663703 14.469505950251007, -27.776747236767974 14.007812326905697 M-26.85139120850187 14.848196188198125 C-27.104734118593306 14.618116860339166, -27.358077028684743 14.388037532480206, -27.776747236767974 14.007812326905697 M-27.776747236767974 14.007812326905697 C-28.004538795218327 13.77259884077095, -28.23233035366868 13.537385354636202, -28.646358442968655 13.109867360095677 M-27.776747236767974 14.007812326905697 C-28.03614784530808 13.739959901402004, -28.295548453848188 13.47210747589831, -28.646358442968655 13.109867360095677 M-28.646358442968655 13.109867360095677 C-28.933254167152562 12.772863317640093, -29.220149891336465 12.435859275184509, -29.45665140812658 12.158051136245307 M-28.646358442968655 13.109867360095677 C-28.904703331867452 12.806400753354529, -29.163048220766253 12.502934146613383, -29.45665140812658 12.158051136245307 M-29.45665140812658 12.158051136245307 C-29.656281038156127 11.890565618639144, -29.855910668185672 11.623080101032981, -30.204296464640635 11.156274872382316 M-29.45665140812658 12.158051136245307 C-29.62555695046838 11.931733097118757, -29.794462492810176 11.705415057992207, -30.204296464640635 11.156274872382316 M-30.204296464640635 11.156274872382316 C-30.359569547012878 10.917733721197848, -30.51484262938512 10.679192570013383, -30.886221378604244 10.108655082055249 M-30.204296464640635 11.156274872382316 C-30.340944644870522 10.946346572375006, -30.477592825100412 10.736418272367699, -30.886221378604244 10.108655082055249 M-30.886221378604244 10.108655082055249 C-31.073022437520116 9.776970886291759, -31.25982349643599 9.445286690528269, -31.4996239742735 9.019496659696289 M-30.886221378604244 10.108655082055249 C-31.069245359942045 9.783677470002205, -31.252269341279842 9.458699857949163, -31.4996239742735 9.019496659696289 M-31.4996239742735 9.019496659696289 C-31.657702921261837 8.691242343927387, -31.81578186825017 8.362988028158485, -32.04198364880834 7.893275190886686 M-31.4996239742735 9.019496659696289 C-31.651306878435477 8.70452386370971, -31.802989782597457 8.389551067723133, -32.04198364880834 7.893275190886686 M-32.04198364880834 7.893275190886686 C-32.17509745102776 7.564481525824428, -32.30821125324719 7.2356878607621695, -32.511071729970325 6.73461856121551 M-32.04198364880834 7.893275190886686 C-32.15484037430755 7.614516896967299, -32.26769709980675 7.335758603047911, -32.511071729970325 6.73461856121551 M-32.511071729970325 6.73461856121551 C-32.61721122330377 6.414943318326883, -32.723350716637206 6.0952680754382556, -32.90496063421488 5.5482879393051325 M-32.511071729970325 6.73461856121551 C-32.63806198493907 6.3521441463990636, -32.76505223990782 5.969669731582616, -32.90496063421488 5.5482879393051325 M-32.90496063421488 5.5482879393051325 C-32.98669917238809 5.236583467544142, -33.068437710561305 4.92487899578315, -33.22203178754556 4.339158212148136 M-32.90496063421488 5.5482879393051325 C-33.028505563039026 5.077157580987806, -33.15205049186317 4.6060272226704795, -33.22203178754556 4.339158212148136 M-33.22203178754556 4.339158212148136 C-33.30044023009966 3.936547431263031, -33.37884867265376 3.5339366503779264, -33.460982276581774 3.112197953150904 M-33.22203178754556 4.339158212148136 C-33.301210640109794 3.9325915386872015, -33.38038949267403 3.526024865226267, -33.460982276581774 3.112197953150904 M-33.460982276581774 3.112197953150904 C-33.5032726655135 2.784202047778316, -33.545563054445225 2.4562061424057284, -33.62083020250937 1.872449005199809 M-33.460982276581774 3.112197953150904 C-33.500709334241535 2.804082738936693, -33.54043639190129 2.495967524722482, -33.62083020250937 1.872449005199809 M-33.62083020250937 1.872449005199809 C-33.6485808100609 1.4402108926974997, -33.676331417612424 1.0079727801951903, -33.70091871591342 0.6250057626472781 M-33.62083020250937 1.872449005199809 C-33.641950802099196 1.543478618347109, -33.663071401689024 1.214508231494409, -33.70091871591342 0.6250057626472781 M-33.70091871591342 0.6250057626472781 C-33.70091871591342 0.3714497448099119, -33.70091871591342 0.11789372697254563, -33.70091871591342 -0.6250057626472687 M-33.70091871591342 0.6250057626472781 C-33.70091871591342 0.13205432124768857, -33.70091871591342 -0.360897120151901, -33.70091871591342 -0.6250057626472687 M-33.70091871591342 -0.6250057626472687 C-33.679120263428885 -0.9645342554880045, -33.65732181094435 -1.3040627483287404, -33.62083020250937 -1.8724490051997822 M-33.70091871591342 -0.6250057626472687 C-33.683262241336394 -0.9000196062341417, -33.66560576675937 -1.1750334498210147, -33.62083020250937 -1.8724490051997822 M-33.62083020250937 -1.8724490051997822 C-33.572793891254356 -2.2450091494510556, -33.524757579999346 -2.6175692937023287, -33.460982276581774 -3.112197953150895 M-33.62083020250937 -1.8724490051997822 C-33.57486479511258 -2.2289476280728886, -33.528899387715796 -2.585446250945995, -33.460982276581774 -3.112197953150895 M-33.460982276581774 -3.112197953150895 C-33.37515679971877 -3.5528936376214664, -33.289331322855766 -3.993589322092037, -33.22203178754556 -4.339158212148126 M-33.460982276581774 -3.112197953150895 C-33.40909539439302 -3.3786261268936997, -33.357208512204274 -3.6450543006365046, -33.22203178754556 -4.339158212148126 M-33.22203178754556 -4.339158212148126 C-33.157970651814956 -4.583451086960779, -33.09390951608435 -4.827743961773432, -32.90496063421489 -5.548287939305123 M-33.22203178754556 -4.339158212148126 C-33.120244152275355 -4.727318580473607, -33.01845651700515 -5.115478948799088, -32.90496063421489 -5.548287939305123 M-32.90496063421489 -5.548287939305123 C-32.75607673889685 -5.996702510575761, -32.607192843578815 -6.445117081846399, -32.51107172997033 -6.734618561215485 M-32.90496063421489 -5.548287939305123 C-32.79656863556295 -5.874747369325071, -32.68817663691102 -6.2012067993450195, -32.51107172997033 -6.734618561215485 M-32.51107172997033 -6.734618561215485 C-32.33159952741129 -7.1779183713952905, -32.15212732485226 -7.621218181575096, -32.04198364880834 -7.893275190886676 M-32.51107172997033 -6.734618561215485 C-32.37530676909756 -7.069960639408179, -32.23954180822479 -7.405302717600874, -32.04198364880834 -7.893275190886676 M-32.04198364880834 -7.893275190886676 C-31.901059878865233 -8.185906414459177, -31.760136108922126 -8.478537638031678, -31.499623974273504 -9.019496659696282 M-32.04198364880834 -7.893275190886676 C-31.88051208241089 -8.228574353449043, -31.719040516013433 -8.563873516011409, -31.499623974273504 -9.019496659696282 M-31.499623974273504 -9.019496659696282 C-31.267823070363097 -9.431082636975992, -31.036022166452685 -9.842668614255702, -30.886221378604247 -10.108655082055243 M-31.499623974273504 -9.019496659696282 C-31.26907863562042 -9.428853253721844, -31.038533296967334 -9.838209847747407, -30.886221378604247 -10.108655082055243 M-30.886221378604247 -10.108655082055243 C-30.621793544635366 -10.51488724384704, -30.357365710666482 -10.921119405638835, -30.20429646464064 -11.156274872382308 M-30.886221378604247 -10.108655082055243 C-30.729276342801224 -10.349764802691745, -30.572331306998205 -10.590874523328248, -30.20429646464064 -11.156274872382308 M-30.20429646464064 -11.156274872382308 C-29.959689006426014 -11.484026582192039, -29.715081548211383 -11.811778292001769, -29.456651408126586 -12.158051136245302 M-30.20429646464064 -11.156274872382308 C-30.038394269374862 -11.378568700037542, -29.87249207410908 -11.600862527692776, -29.456651408126586 -12.158051136245302 M-29.456651408126586 -12.158051136245302 C-29.29302734847105 -12.350253267189444, -29.129403288815514 -12.542455398133587, -28.646358442968662 -13.10986736009567 M-29.456651408126586 -12.158051136245302 C-29.288402092589333 -12.355686355932622, -29.12015277705208 -12.553321575619945, -28.646358442968662 -13.10986736009567 M-28.646358442968662 -13.10986736009567 C-28.38858494251286 -13.376039662914263, -28.13081144205706 -13.642211965732853, -27.776747236767996 -14.007812326905677 M-28.646358442968662 -13.10986736009567 C-28.470187563119282 -13.29177825743838, -28.294016683269906 -13.473689154781091, -27.776747236767996 -14.007812326905677 M-27.776747236767996 -14.007812326905677 C-27.546378017952424 -14.217027556198456, -27.316008799136856 -14.426242785491237, -26.851391208501887 -14.848196188198107 M-27.776747236767996 -14.007812326905677 C-27.428436601407487 -14.32413883014569, -27.080125966046975 -14.640465333385704, -26.851391208501887 -14.848196188198107 M-26.851391208501887 -14.848196188198107 C-26.475614973064825 -15.147867736133575, -26.099838737627763 -15.447539284069043, -25.87409284457872 -15.627565626425149 M-26.851391208501887 -14.848196188198107 C-26.562536823005964 -15.078549873893088, -26.27368243751004 -15.308903559588067, -25.87409284457872 -15.627565626425149 M-25.87409284457872 -15.627565626425149 C-25.5418886778914 -15.859296872219625, -25.209684511204085 -16.0910281180141, -24.84886807360571 -16.342718045390885 M-25.87409284457872 -15.627565626425149 C-25.587128370596048 -15.827739620983596, -25.30016389661338 -16.027913615542044, -24.84886807360571 -16.342718045390885 M-24.84886807360571 -16.342718045390885 C-24.606952306323763 -16.489368805172052, -24.365036539041814 -16.63601956495322, -23.77992976407679 -16.99071473040609 M-24.84886807360571 -16.342718045390885 C-24.55139966085124 -16.523045145321078, -24.253931248096762 -16.703372245251273, -23.77992976407679 -16.99071473040609 M-23.77992976407679 -16.99071473040609 C-23.455347386259064 -17.160049149008664, -23.130765008441337 -17.329383567611234, -22.671670412792388 -17.56889292409717 M-23.77992976407679 -16.99071473040609 C-23.33743088843905 -17.221566110392242, -22.894932012801316 -17.45241749037839, -22.671670412792388 -17.56889292409717 M-22.671670412792388 -17.56889292409717 C-22.249186726491946 -17.755913919489103, -21.826703040191504 -17.942934914881036, -21.528644095147804 -18.07487676824742 M-22.671670412792388 -17.56889292409717 C-22.41180249073724 -17.683928744482966, -22.151934568682098 -17.79896456486876, -21.528644095147804 -18.07487676824742 M-21.528644095147804 -18.07487676824742 C-21.142006193079755 -18.21716309025005, -20.75536829101171 -18.35944941225268, -20.35554775146062 -18.506587066708033 M-21.528644095147804 -18.07487676824742 C-21.182679035291716 -18.202195108340415, -20.83671397543563 -18.329513448433413, -20.35554775146062 -18.506587066708033 M-20.35554775146062 -18.506587066708033 C-20.098746504286208 -18.582804328892145, -19.841945257111792 -18.659021591076257, -19.157201886235413 -18.862249829261067 M-20.35554775146062 -18.506587066708033 C-19.94575188547518 -18.628212328670116, -19.535956019489742 -18.749837590632197, -19.157201886235413 -18.862249829261067 M-19.157201886235413 -18.862249829261067 C-18.84162003337106 -18.934279327813307, -18.526038180506706 -19.00630882636555, -17.938530759676766 -19.140403561325773 M-19.157201886235413 -18.862249829261067 C-18.85952149750587 -18.930193435442508, -18.56184110877633 -18.99813704162395, -17.938530759676766 -19.140403561325773 M-17.938530759676766 -19.140403561325773 C-17.450562024508187 -19.21929456217377, -16.96259328933961 -19.298185563021768, -16.704542152847882 -19.3399052695533 M-17.938530759676766 -19.140403561325773 C-17.5570125692545 -19.20208446363549, -17.175494378832234 -19.263765365945208, -16.704542152847882 -19.3399052695533 M-16.704542152847882 -19.3399052695533 C-16.223139703940078 -19.386345584828284, -15.741737255032271 -19.43278590010327, -15.460306789623903 -19.45993515863156 M-16.704542152847882 -19.3399052695533 C-16.369886240998 -19.372189122886837, -16.035230329148114 -19.404472976220376, -15.460306789623903 -19.45993515863156 M-15.460306789623903 -19.45993515863156 C-15.167177030523595 -19.469335259463442, -14.874047271423288 -19.478735360295325, -14.210937500000005 -19.5 M-15.460306789623903 -19.45993515863156 C-15.097894463435173 -19.47155701653963, -14.735482137246443 -19.483178874447706, -14.210937500000005 -19.5 M-14.210937500000005 -19.5 C-14.210937500000004 -19.5, -14.210937500000002 -19.5, -14.2109375 -19.5 M-14.210937500000005 -19.5 C-14.210937500000004 -19.5, -14.210937500000002 -19.5, -14.2109375 -19.5" stroke="#7c3aed" stroke-width="2" fill="none" stroke-dasharray="0 0" style="fill:#ede9fe !important;stroke:#7c3aed !important;stroke-width:2px !important"/></g><g class="label" style="color:#3b0764 !important" transform="translate(-21.3359375, -12)"><rect/><foreignObject width="42.671875" height="24"><div style="color: rgb(59, 7, 100) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#3b0764 !important" class="nodeLabel"><p>Client</p></span></div></foreignObject></g></g><g class="node default entry" id="mermaid-interview_defensive_foundations-1-flowchart-edge-1" transform="translate(220.12840270996094, 201)"><rect class="basic label-container" style="fill:#ede9fe !important;stroke:#7c3aed !important;stroke-width:2px !important" x="-94.7265625" y="-27" width="189.453125" height="54"/><g class="label" style="color:#3b0764 !important" transform="translate(-64.7265625, -12)"><rect/><foreignObject width="129.453125" height="24"><div style="color: rgb(59, 7, 100) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#3b0764 !important" class="nodeLabel"><p>DNS CDN Gateway</p></span></div></foreignObject></g></g><g class="node default compute" id="mermaid-interview_defensive_foundations-1-flowchart-service-3" transform="translate(463.66746520996094, 201)"><rect class="basic label-container" style="fill:#dbeafe !important;stroke:#2563eb !important;stroke-width:2px !important" x="-98.8125" y="-27" width="197.625" height="54"/><g class="label" style="color:#1e3a5f !important" transform="translate(-68.8125, -12)"><rect/><foreignObject width="137.625" height="24"><div style="color: rgb(30, 58, 95) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#1e3a5f !important" class="nodeLabel"><p>Application Service</p></span></div></foreignObject></g></g><g class="node default data" id="mermaid-interview_defensive_foundations-1-flowchart-cache-5" transform="translate(700.6049652099609, 35)"><rect class="basic label-container" style="fill:#dcfce7 !important;stroke:#16a34a !important;stroke-width:2px !important" x="-51.6875" y="-27" width="103.375" height="54"/><g class="label" style="color:#14532d !important" transform="translate(-21.6875, -12)"><rect/><foreignObject width="43.375" height="24"><div style="color: rgb(20, 83, 45) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#14532d !important" class="nodeLabel"><p>Cache</p></span></div></foreignObject></g></g><g class="node default data" id="mermaid-interview_defensive_foundations-1-flowchart-database-7" transform="translate(700.6049652099609, 139)"><rect class="basic label-container" style="fill:#dcfce7 !important;stroke:#16a34a !important;stroke-width:2px !important" x="-62.75" y="-27" width="125.5" height="54"/><g class="label" style="color:#14532d !important" transform="translate(-32.75, -12)"><rect/><foreignObject width="65.5" height="24"><div style="color: rgb(20, 83, 45) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#14532d !important" class="nodeLabel"><p>Database</p></span></div></foreignObject></g></g><g class="node default data" id="mermaid-interview_defensive_foundations-1-flowchart-queue-9" transform="translate(700.6049652099609, 367)"><rect class="basic label-container" style="fill:#dcfce7 !important;stroke:#16a34a !important;stroke-width:2px !important" x="-84.3828125" y="-27" width="168.765625" height="54"/><g class="label" style="color:#14532d !important" transform="translate(-54.3828125, -12)"><rect/><foreignObject width="108.765625" height="24"><div style="color: rgb(20, 83, 45) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#14532d !important" class="nodeLabel"><p>Message Queue</p></span></div></foreignObject></g></g><g class="node default compute" id="mermaid-interview_defensive_foundations-1-flowchart-worker-11" transform="translate(916.7377777099609, 367)"><rect class="basic label-container" style="fill:#dbeafe !important;stroke:#2563eb !important;stroke-width:2px !important" x="-78.0078125" y="-27" width="156.015625" height="54"/><g class="label" style="color:#1e3a5f !important" transform="translate(-48.0078125, -12)"><rect/><foreignObject width="96.015625" height="24"><div style="color: rgb(30, 58, 95) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#1e3a5f !important" class="nodeLabel"><p>Async Worker</p></span></div></foreignObject></g></g><g class="node default support" id="mermaid-interview_defensive_foundations-1-flowchart-external-13" transform="translate(700.6049652099609, 263)"><rect class="basic label-container" style="fill:#fef3c7 !important;stroke:#d97706 !important;stroke-width:2px !important" x="-88.125" y="-27" width="176.25" height="54"/><g class="label" style="color:#78350f !important" transform="translate(-58.125, -12)"><rect/><foreignObject width="116.25" height="24"><div style="color: rgb(120, 53, 15) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#78350f !important" class="nodeLabel"><p>External Service</p></span></div></foreignObject></g></g><g class="node default support" id="mermaid-interview_defensive_foundations-1-flowchart-observe-15" transform="translate(1143.464340209961, 284)"><rect class="basic label-container" style="fill:#fef3c7 !important;stroke:#d97706 !important;stroke-width:2px !important" x="-98.71875" y="-27" width="197.4375" height="54"/><g class="label" style="color:#78350f !important" transform="translate(-68.71875, -12)"><rect/><foreignObject width="137.4375" height="24"><div style="color: rgb(120, 53, 15) !important; display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;" xmlns="http://www.w3.org/1999/xhtml"><span style="color:#78350f !important" class="nodeLabel"><p>Logs Metrics Traces</p></span></div></foreignObject></g></g></g></g></g></svg>
+</div>
+
+<h3>面试中的边界表达</h3>
+<p>非主攻方向不需要假装自己是专家。更成熟的表达方式是：</p>
+<blockquote>
+<p>“我对这个方向的基础理解是……它主要解决……常见风险是……我实际主攻的是 X，所以源码级细节没有深入，但如果落到系统设计，我会从可靠性、性能和运维成本三个方面评估。”</p>
+</blockquote>
+<p>这比背出一堆名词后在追问中暴露概念混乱更稳。</p>
+<hr />
+<h2>第一部分 数据库与数据组件基础</h2>
+<h2 id="ch1">1. 数据库最小知识地图</h2>
+<h3 id="ch1-1">题目</h3>
+<p>什么是数据库、DBMS、关系型数据库和 SQL？表、行、列、主键、外键、索引分别是什么？数据库和普通文件保存数据有什么区别？</p>
+<h3 id="ch1-2">这道题在考什么</h3>
+<p>面试官通常不是想让你立刻讲出存储引擎源码，而是在确认你能不能把“数据、数据结构、查询语言、并发和持久化”分层理解。只要先把数据库看成“带结构、约束、查询、并发和恢复能力的数据管理系统”，后续索引、事务和缓存就有了挂靠点。</p>
+<h3 id="ch1-3">面试核心结论</h3>
+<blockquote>
+<p>数据库是有组织的数据集合，DBMS 是管理这些数据的软件，MySQL、PostgreSQL 是关系型 DBMS，SQL 是描述查询和修改意图的语言。关系型数据库用表组织数据：行代表记录，列代表属性，主键标识一行，外键表达表之间的关系，约束负责阻止明显非法的数据。数据库相对普通文件的主要价值，不只是“帮你存东西”，还包括结构化查询、索引、事务、并发控制、权限和故障恢复。</p>
+</blockquote>
+<h3 id="ch1-4">数据库、DBMS、表和 SQL</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>最低限度理解</th>
+<th>面试中的说法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库</td>
+<td>被管理的数据集合</td>
+<td>保存和组织业务数据</td>
+</tr>
+<tr>
+<td>DBMS</td>
+<td>管理数据库的软件</td>
+<td>负责查询、并发、权限和恢复</td>
+</tr>
+<tr>
+<td>关系型数据库</td>
+<td>用表和关系组织数据</td>
+<td>MySQL、PostgreSQL、Oracle</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>描述数据操作的语言</td>
+<td>说“查什么”，不直接描述每一步怎么执行</td>
+</tr>
+<tr>
+<td>表</td>
+<td>一类记录的集合</td>
+<td>用户表、订单表、商品表</td>
+</tr>
+<tr>
+<td>主键</td>
+<td>唯一标识一行</td>
+<td>通常要求唯一且非空</td>
+</tr>
+<tr>
+<td>外键</td>
+<td>表之间的关系约束</td>
+<td>订单中的用户 ID</td>
+</tr>
+<tr>
+<td>索引</td>
+<td>加速检索的辅助结构</td>
+<td>用空间和写入成本换查询速度</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch1-5">数据库和文件有什么区别</h3>
+<p>用文件也能保存数据，但应用通常需要自己处理：</p>
+<ul>
+<li>如何按条件查找，而不是每次从头扫描文件；</li>
+<li>多个线程或进程同时读写时如何协调；</li>
+<li>写到一半进程崩溃时如何恢复；</li>
+<li>如何保证字段类型、唯一性和引用关系；</li>
+<li>多个客户端如何共享访问和控制权限。</li>
+</ul>
+<p>数据库把这些通用能力集中提供出来，代价是部署、运维、连接和学习成本更高。数据量很小、结构简单、访问模式固定时，文件或嵌入式数据库也可能更合适。</p>
+<h3 id="ch1-6">关系型数据库和 NoSQL 的基本区别</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>关系型数据库</th>
+<th>NoSQL 的常见取向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据模型</td>
+<td>表、行、列、关系</td>
+<td>键值、文档、列族、图</td>
+</tr>
+<tr>
+<td>查询方式</td>
+<td>SQL，表达能力强</td>
+<td>通常围绕访问模式设计</td>
+</tr>
+<tr>
+<td>约束</td>
+<td>结构和事务能力较完整</td>
+<td>约束可能更多交给应用</td>
+</tr>
+<tr>
+<td>扩展方式</td>
+<td>传统上先强调单机能力</td>
+<td>常强调水平扩展和灵活模型</td>
+</tr>
+<tr>
+<td>典型选择</td>
+<td>订单、账户、库存</td>
+<td>缓存、日志、文档、海量特定访问</td>
+</tr>
+</tbody>
+</table></div>
+<p>不要把关系型数据库和 NoSQL 说成绝对的“谁更先进”。选型取决于数据关系、事务要求、访问模式、规模和团队运维能力。</p>
+<h3 id="ch1-7">高频追问</h3>
+<h4>追问 1：主键和唯一索引有什么区别？</h4>
+<p>主键表达“这张表用什么字段唯一标识记录”的业务和结构约束，通常只能有一个且不允许为空；唯一索引主要是为了保证某列或列组合不重复，一张表可以有多个。不同数据库对空值和索引实现的细节可能不同，面试时先说概念边界，再补充具体数据库差异。</p>
+<h4>追问 2：外键一定要在数据库里建立吗？</h4>
+<p>不一定。外键约束能让数据库帮忙保证引用完整性，但高并发、分库分表或跨服务场景中，物理外键可能增加写入和迁移成本，团队也可能选择由应用和校验任务维护逻辑关系。关键不是“必须建”或“绝对不建”，而是说明一致性责任由谁承担。</p>
+<h4>追问 3：数据库是不是一定比文件快？</h4>
+<p>不是。数据库有连接、解析、事务和网络开销；对简单的顺序读写，文件可能更直接。数据库的优势在于复杂查询、并发访问、数据约束、索引和恢复能力，而不是所有场景下的单次读写延迟都最低。</p>
+<h3 id="ch1-8">易错点</h3>
+<ul>
+<li>把数据库、DBMS 和 SQL 当成同一个概念。</li>
+<li>认为 NoSQL 就是“不需要设计结构”。</li>
+<li>认为索引只带来收益，忽略空间、写入和维护成本。</li>
+<li>把主键、唯一索引、外键混成“都是保证唯一”。</li>
+</ul>
+<h3 id="ch1-9">30 秒回答模板</h3>
+<blockquote>
+<p>数据库是有组织的数据集合，DBMS 负责查询、并发、权限和恢复，SQL 是描述数据操作的语言。关系型数据库用表组织数据，行是记录，列是属性，主键唯一标识一行，外键描述表间关系，索引用额外空间换取更快检索。相比普通文件，数据库的核心价值是结构化查询、约束、事务和并发恢复能力；NoSQL 则根据键值、文档或其他模型优化特定访问模式，不能简单理解为关系型数据库的替代品。</p>
+</blockquote>
+<h3 id="ch1-10">学习停止线</h3>
+<p>本章不展开具体存储引擎、日志格式、复制协议和分布式事务；只要能把数据模型、DBMS 能力和关系型/NoSQL 的选型边界讲清，就达成防守目标。</p>
+<h2 id="ch2">2. SQL 基础与表结构设计</h2>
+<h3 id="ch2-1">题目</h3>
+<p>如何写一条基础 SQL？<code>WHERE</code> 和 <code>HAVING</code> 有什么区别？内连接和左连接怎么选？三大范式解决什么问题，为什么又经常反范式？</p>
+<h3 id="ch2-2">这道题在考什么</h3>
+<p>这一章考的是“能不能读懂常见 SQL”和“有没有基本的数据建模意识”。重点不是背语法，而是理解查询的逻辑步骤：先确定数据来源，再过滤、分组、投影、排序和限制结果。</p>
+<h3 id="ch2-3">面试核心结论</h3>
+<blockquote>
+<p>SQL 的基本思路是从一个或多个数据源中选择记录，再按条件过滤、分组统计、选择列、排序和限制数量。<code>WHERE</code> 过滤分组前的明细行，<code>HAVING</code> 过滤分组后的统计结果；内连接只保留两边都匹配的行，左连接保留左表全部行。范式主要减少重复和更新异常，反范式则是为了在明确访问模式下减少 JOIN、降低查询成本；二者是取舍，不是绝对规则。</p>
+</blockquote>
+<h3 id="ch2-4">CRUD 和 SQL 分类</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>目标</th>
+<th>常见语句</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create</td>
+<td><code>INSERT</code></td>
+<td>新增记录</td>
+</tr>
+<tr>
+<td>Read</td>
+<td><code>SELECT</code></td>
+<td>查询记录</td>
+</tr>
+<tr>
+<td>Update</td>
+<td><code>UPDATE</code></td>
+<td>修改记录</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td><code>DELETE</code></td>
+<td>删除记录</td>
+</tr>
+<tr>
+<td>Definition</td>
+<td><code>CREATE</code>、<code>ALTER</code>、<code>DROP</code></td>
+<td>修改表结构</td>
+</tr>
+<tr>
+<td>Transaction</td>
+<td><code>COMMIT</code>、<code>ROLLBACK</code></td>
+<td>提交或回滚事务</td>
+</tr>
+</tbody>
+</table></div>
+<p>一个简单查询通常可以按这个顺序阅读：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">department</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_count</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">employee</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;active&#39;</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">department</span>
+<span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">employee_count</span><span class="w"> </span><span class="k">DESC</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</code></pre></div>
+
+<p>逻辑上可以记成：<code>FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</code>。数据库实际执行时可能通过索引、改写和不同执行计划优化这个过程，但写 SQL 时先用这个逻辑顺序检查语义。</p>
+<h3 id="ch2-5">JOIN 的最低限度理解</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>连接类型</th>
+<th>保留什么</th>
+<th>常见场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内连接</td>
+<td>两边都匹配的记录</td>
+<td>只看有对应关系的数据</td>
+</tr>
+<tr>
+<td>左连接</td>
+<td>左表全部，右表匹配则补充</td>
+<td>查所有用户及其可选订单</td>
+</tr>
+<tr>
+<td>右连接</td>
+<td>右表全部，左表匹配则补充</td>
+<td>可以改写成左连接，使用较少</td>
+</tr>
+<tr>
+<td>交叉连接</td>
+<td>两边组合</td>
+<td>特殊生成或测试场景，谨慎使用</td>
+</tr>
+</tbody>
+</table></div>
+<p>左连接最容易出错的地方是过滤条件的位置。把右表条件写在 <code>WHERE</code> 中，可能会把没有匹配右表的行过滤掉，从效果上变成内连接；需要保留左表行时，要认真判断条件应该放在 <code>ON</code> 还是 <code>WHERE</code>。</p>
+<h3 id="ch2-6">三大范式和反范式</h3>
+<ul>
+<li><strong>第一范式</strong>：字段尽量保持原子性，不把多个值塞进一个字段。</li>
+<li><strong>第二范式</strong>：非主属性依赖完整主键，主要针对组合主键的部分依赖。</li>
+<li><strong>第三范式</strong>：非主属性不通过另一个非主属性间接依赖主键，减少传递依赖。</li>
+</ul>
+<p>范式化可以减少重复和更新异常，但查询时可能需要更多 JOIN。反范式可以把高频查询需要的结果预先放在一起，代价是写入和一致性维护更复杂。面试时说“为了性能反范式”还不够，要补充“基于稳定访问模式、接受冗余，并配套更新策略和校验”。</p>
+<h3 id="ch2-7">高频追问</h3>
+<h4>追问 1：<code>WHERE</code> 和 <code>HAVING</code> 的区别是什么？</h4>
+<p><code>WHERE</code> 在分组前过滤明细记录，<code>HAVING</code> 在分组后过滤聚合结果。例如“先筛选在职员工，再统计部门人数，最后只保留人数不少于 5 的部门”：在职条件写 <code>WHERE</code>，人数条件写 <code>HAVING</code>。</p>
+<h4>追问 2：左连接后为什么结果变少了？</h4>
+<p>常见原因是把右表条件放在了 <code>WHERE</code>，导致右表为空的行被过滤；也可能是连接条件写错或后续 <code>GROUP BY</code>、<code>DISTINCT</code> 改变了结果。排查时先单独查看连接结果，再逐步加过滤和聚合。</p>
+<h4>追问 3：为什么不把所有数据放一张大表？</h4>
+<p>一张大表会产生大量重复数据，修改时容易不一致，字段含义也会混乱；拆表能表达关系、减少冗余并支持独立约束。也不能机械拆分，查询路径过长、跨表 JOIN 过多时需要结合访问模式适度反范式。</p>
+<h3 id="ch2-8">易错点</h3>
+<ul>
+<li>把 SQL 的书写顺序和逻辑执行顺序混为一谈。</li>
+<li>忘记 <code>NULL</code> 不是普通字符串，不能简单用 <code>= NULL</code> 判断。</li>
+<li>只会说“范式减少冗余”，说不出更新、插入、删除异常。</li>
+<li>连接条件缺失导致笛卡尔积，却只去怀疑数据库性能。</li>
+</ul>
+<h3 id="ch2-9">30 秒回答模板</h3>
+<blockquote>
+<p>写 SQL 时我会先确定 <code>FROM</code> 和连接关系，再用 <code>WHERE</code> 过滤明细，必要时 <code>GROUP BY</code> 聚合，<code>HAVING</code> 过滤聚合结果，最后选择列、排序和分页。内连接只保留匹配行，左连接保留左表全部行。范式主要通过拆分关系减少冗余和更新异常；如果某个查询路径非常稳定、JOIN 成本高，可以在评估一致性维护成本后做反范式，而不是为了性能无条件堆字段。</p>
+</blockquote>
+<h3 id="ch2-10">学习停止线</h3>
+<p>本章不要求背完整 SQL 语法，也不要求掌握复杂窗口函数和存储过程；能读懂基础 CRUD、JOIN、聚合和范式取舍即可。</p>
+<h2 id="ch3">3. 索引与查询性能基础</h2>
+<h3 id="ch3-1">题目</h3>
+<p>索引为什么能加快查询？B+ 树为什么常用？联合索引的最左匹配是什么？什么是回表和覆盖索引？如何用 <code>EXPLAIN</code> 做基础排查？</p>
+<h3 id="ch3-2">这道题在考什么</h3>
+<p>面试官想确认你知道索引不是“给字段加个标记”，而是一种额外维护的数据结构。它用空间和写入成本换取更少的数据扫描；索引是否有效，取决于查询条件、数据分布和优化器选择。</p>
+<h3 id="ch3-3">面试核心结论</h3>
+<blockquote>
+<p>索引通过维护有序或可快速定位的辅助结构，减少查询需要检查的数据范围。关系型数据库常用 B+ 树，是因为它适合范围查询、树高较低、节点可存多个键并且叶子通常有序连接。联合索引要遵循从左到右的匹配规律；覆盖索引可以直接从索引拿到所需列，避免再访问主表。索引不是越多越好，它会增加写入、存储和维护成本。</p>
+</blockquote>
+<h3 id="ch3-4">为什么 B+ 树适合数据库索引</h3>
+<p>只记住三个特点即可：</p>
+<ol>
+<li>一个节点可以放很多键，树的高度通常比二叉树低，减少磁盘或页访问次数。</li>
+<li>叶子节点按顺序组织，适合范围查询和排序。</li>
+<li>非叶子节点主要存键和指针，更多空间留给叶子中的数据定位信息。</li>
+</ol>
+<p>哈希索引适合等值查询，但不擅长范围查询和排序；普通二叉搜索树高度可能退化，也不适合磁盘页的批量访问。不要把 B+ 树说成“任何情况下都最快”，它只是综合访问模式和存储介质后的常见选择。</p>
+<h3 id="ch3-5">常见索引概念</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>最低限度理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主键索引</td>
+<td>围绕主键组织的索引</td>
+</tr>
+<tr>
+<td>二级/普通索引</td>
+<td>主键之外的检索入口</td>
+</tr>
+<tr>
+<td>联合索引</td>
+<td>多个列按顺序组成一个索引</td>
+</tr>
+<tr>
+<td>回表</td>
+<td>先查二级索引，再根据主键取完整行</td>
+</tr>
+<tr>
+<td>覆盖索引</td>
+<td>查询所需列都在索引中，不必回表</td>
+</tr>
+<tr>
+<td>选择性</td>
+<td>一个条件区分数据的能力</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch3-6">最左匹配的直观例子</h3>
+<p>假设有联合索引 <code>(user_id, status, created_at)</code>：</p>
+<ul>
+<li><code>WHERE user_id = ?</code> 通常可以利用最左列；</li>
+<li><code>WHERE user_id = ? AND status = ?</code> 可以继续利用后续列；</li>
+<li>只查 <code>status = ?</code>，通常不能完整利用这个联合索引；</li>
+<li>范围条件出现在中间列后，后续列的继续匹配能力可能受到影响。</li>
+</ul>
+<p>具体能否使用、使用到什么程度，仍要看数据库版本、统计信息和执行计划。面试回答“最左匹配是绝对规则”会显得过于机械。</p>
+<h3 id="ch3-7"><code>EXPLAIN</code> 看什么</h3>
+<p>防守级别关注：</p>
+<ul>
+<li>使用了哪个表和访问方式；</li>
+<li>是否命中预期索引；</li>
+<li>预计扫描多少行；</li>
+<li>是否出现全表扫描、临时表或额外排序；</li>
+<li>实际执行时间和扫描行数是否与估计差距很大。</li>
+</ul>
+<p>优化的基本流程是：先确认慢在哪里，再看执行计划和数据分布，最后通过改 SQL、改索引或改访问方式解决。不要一看到慢就盲目加索引。</p>
+<h3 id="ch3-8">高频追问</h3>
+<h4>追问 1：索引为什么会失效？</h4>
+<p>常见原因包括对索引列做函数或计算、隐式类型转换、前缀模糊匹配、联合索引不满足左侧条件、选择性太低，以及优化器判断扫描全表更便宜。回答时最好说“可能无法有效使用”，不要绝对断言“只要用了函数就一定失效”。</p>
+<h4>追问 2：索引越多越好吗？</h4>
+<p>不是。索引会占空间，插入、更新、删除时也要维护；重复或低选择性的索引还可能增加优化器选择成本。索引应该围绕真实查询建立，并通过执行计划和压测验证收益。</p>
+<h4>追问 3：深分页为什么慢？</h4>
+<p><code>OFFSET</code> 很大时，数据库可能需要先扫描并跳过大量记录，再返回后面的少量结果。常见改进是基于稳定排序键做游标/范围分页，或者限制允许的页数；具体方案取决于是否需要随机跳页。</p>
+<h3 id="ch3-9">易错点</h3>
+<ul>
+<li>把索引等同于哈希表，忽略范围查询和排序。</li>
+<li>把“命中索引”误认为“查询一定快”。</li>
+<li>只会背最左匹配，不会看 <code>EXPLAIN</code> 和实际数据量。</li>
+<li>为每个字段都建索引，忽略写入成本和索引冗余。</li>
+</ul>
+<h3 id="ch3-10">30 秒回答模板</h3>
+<blockquote>
+<p>索引是为了减少查询扫描范围的辅助数据结构，数据库常用 B+ 树，因为它树高低、适合页式存储，也支持范围查询和有序遍历。联合索引要遵循从左到右的匹配规律；如果查询所需列都在索引中，可以形成覆盖索引，减少回表。排查慢 SQL 时我会先看执行计划、扫描行数和排序临时表，再决定改 SQL、加合适索引还是调整分页方式，同时评估索引对写入和空间的成本。</p>
+</blockquote>
+<h3 id="ch3-11">学习停止线</h3>
+<p>本章不要求深入优化器源码、页分裂细节、索引下推实现和存储引擎内部页结构；能解释“索引的收益与代价”和完成基础执行计划判断即可。</p>
+<h2 id="ch4">4. 事务与并发控制基础</h2>
+<h3 id="ch4-1">题目</h3>
+<p>什么是事务？ACID 分别是什么意思？脏读、不可重复读、幻读有什么区别？隔离级别怎么选？乐观锁、悲观锁和 MVCC 解决什么问题？</p>
+<h3 id="ch4-2">这道题在考什么</h3>
+<p>这类题主要考“多条操作如何保持业务正确性”。不需要一开始就进入 undo log、redo log 和 Read View 的实现细节，但要知道事务解决的是一组操作的原子性、并发可见性和故障恢复问题。</p>
+<h3 id="ch4-3">面试核心结论</h3>
+<blockquote>
+<p>事务把一组相关操作组织成一个逻辑单元，要求它要么整体成功，要么整体失败。ACID 分别强调原子性、一致性、隔离性和持久性；隔离级别是在并发性能与读一致性之间做取舍。锁和 MVCC 都是并发控制手段：锁通过限制同时访问保护共享数据，MVCC 通过保存多个版本让读写在一定程度上并行。事务不能替代幂等、重试和业务校验，也不能自动保证跨服务操作的一致性。</p>
+</blockquote>
+<h3 id="ch4-4">ACID 怎么解释</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>面试级解释</th>
+<th>关注点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Atomicity</td>
+<td>一组操作整体成功或失败</td>
+<td>出错时回滚</td>
+</tr>
+<tr>
+<td>Consistency</td>
+<td>事务前后满足约束和业务不变量</td>
+<td>约束、状态转换</td>
+</tr>
+<tr>
+<td>Isolation</td>
+<td>并发事务之间相互隔离</td>
+<td>脏读、幻读等</td>
+</tr>
+<tr>
+<td>Durability</td>
+<td>提交后的结果在故障后仍可恢复</td>
+<td>持久化和恢复</td>
+</tr>
+</tbody>
+</table></div>
+<p>“一致性”不是说所有副本永远同时一样，也不是数据库替你保证所有业务规则。它首先指事务提交前后应满足数据库约束和应用声明的不变量；分布式系统里的副本一致性是另一个层次的问题。</p>
+<h3 id="ch4-5">三类并发读问题</h3>
+<ul>
+<li><strong>脏读</strong>：读到了另一个尚未提交事务写入的数据，之后对方回滚，刚才读到的内容不存在了。</li>
+<li><strong>不可重复读</strong>：同一个事务两次读取同一行，期间另一个事务提交了修改，前后结果不同。</li>
+<li><strong>幻读</strong>：同一事务按范围查询，两次结果的行集合发生变化，像凭空出现或消失了记录。</li>
+</ul>
+<p>不同数据库对隔离级别、快照读、当前读和幻读的具体边界可能不同。基础面试中先给标准定义，再说明“具体行为要看数据库实现”，比绝对化表述更可靠。</p>
+<h3 id="ch4-6">隔离级别的基本光谱</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>读一致性</th>
+<th>并发能力</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read Uncommitted</td>
+<td>最弱</td>
+<td>较高</td>
+<td>可能脏读</td>
+</tr>
+<tr>
+<td>Read Committed</td>
+<td>读已提交数据</td>
+<td>中等</td>
+<td>可能不可重复读</td>
+</tr>
+<tr>
+<td>Repeatable Read</td>
+<td>同一事务读取更稳定</td>
+<td>中等</td>
+<td>仍需关注范围写入和实现差异</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td>近似串行执行</td>
+<td>较低</td>
+<td>吞吐和等待成本高</td>
+</tr>
+</tbody>
+</table></div>
+<p>不要把隔离级别简单说成“越高越好”。高隔离通常意味着更多锁、等待或版本管理，选型要结合业务是否允许旧数据、并发量和写冲突。</p>
+<h3 id="ch4-7">锁、乐观锁和 MVCC</h3>
+<ul>
+<li><strong>悲观锁</strong>：假设冲突会发生，访问前先加锁。适合冲突频繁、必须强保护的场景，代价是等待和死锁风险。</li>
+<li><strong>乐观锁</strong>：假设冲突较少，更新时检查版本号或时间戳是否变化。适合读多写少，冲突时让失败方重试或提示。</li>
+<li><strong>MVCC</strong>：通过保存版本信息，让读操作读取符合可见性规则的版本，减少读写互相阻塞。它不是“完全没有锁”，更新、范围保护和当前读仍可能需要锁。</li>
+</ul>
+<p>业务上还要记住：数据库锁只能保护数据库里的并发访问，不能自动保护缓存、文件、远程服务或另一个数据库。</p>
+<h3 id="ch4-8">事务边界和幂等</h3>
+<p>事务边界太小，可能无法保证业务整体正确；边界太大，会长时间占用锁和连接，增加冲突与回滚成本。一个常见原则是：</p>
+<ol>
+<li>在事务内只做必须和数据一致性绑定的操作；</li>
+<li>不要在持有数据库事务时调用慢的外部 RPC；</li>
+<li>对外部重试、消息重复和网络超时，使用业务幂等键、唯一约束或状态机兜底。</li>
+</ol>
+<h3 id="ch4-9">高频追问</h3>
+<h4>追问 1：事务回滚是不是所有操作都能撤销？</h4>
+<p>通常只能可靠回滚事务管理范围内的数据库操作。已经发出的邮件、扣款请求、远程 RPC 和外部消息，不能因为本地事务回滚就自动撤销，所以跨系统操作要设计补偿、状态机、可靠事件或幂等重试。</p>
+<h4>追问 2：乐观锁失败怎么办？</h4>
+<p>根据业务选择重试、重新读取后合并、提示用户冲突或放弃本次更新。重试必须有上限和退避，不能无限循环；如果冲突本身意味着业务不允许覆盖，就应该返回明确的冲突结果。</p>
+<h4>追问 3：数据库死锁怎么处理？</h4>
+<p>先通过数据库日志或监控确认等待环，再缩短事务、统一访问顺序、减少锁范围和锁持有时间；运行时通常捕获死锁错误并在安全条件下重试。重试不是根治方案，根治仍是调整访问顺序和事务设计。</p>
+<h4>追问 4：为什么事务里不应该调用外部服务？</h4>
+<p>外部服务延迟不可控，可能让数据库锁长时间不释放；外部服务失败时，本地事务又无法回滚对方。更稳妥的方式是先完成本地必要状态变更，再通过消息或任务异步推进外部动作，并设计幂等和补偿。</p>
+<h3 id="ch4-10">易错点</h3>
+<ul>
+<li>把 ACID 的“一致性”说成分布式副本强一致。</li>
+<li>认为 MVCC 完全不需要锁。</li>
+<li>认为加了事务就不会出现业务不一致。</li>
+<li>认为重试天然安全，忽略重复扣款、重复发货等副作用。</li>
+<li>只会说“加大隔离级别”，不会分析吞吐和等待成本。</li>
+</ul>
+<h3 id="ch4-11">30 秒回答模板</h3>
+<blockquote>
+<p>事务把一组相关操作作为一个整体执行，ACID 分别是原子性、一致性、隔离性和持久性。隔离级别是在并发性能和读一致性之间取舍，脏读、不可重复读、幻读是常见并发问题。锁通过限制并发访问保护数据，MVCC 通过版本可见性减少读写阻塞；但它们只覆盖数据库内部。涉及消息、缓存或 RPC 时，我还会配合幂等键、唯一约束、重试上限和补偿机制。</p>
+</blockquote>
+<h3 id="ch4-12">学习停止线</h3>
+<p>本章不要求背数据库日志恢复流程、复杂 MVCC 可见性算法和分布式事务协议；能讲清事务边界、隔离问题、锁与 MVCC 的定位，以及幂等和重试的关系即可。</p>
+<h2 id="ch5">5. 缓存与 Redis 基础</h2>
+<h3 id="ch5-1">题目</h3>
+<p>为什么要使用缓存？Redis 常见数据类型有哪些？缓存穿透、击穿、雪崩分别是什么？数据库和缓存如何保持一致？Redis 分布式锁可靠吗？</p>
+<h3 id="ch5-2">这道题在考什么</h3>
+<p>缓存题考的是取舍：用更快但可能过期或丢失的数据副本，换取更低延迟和更高吞吐。面试官希望听到的不只是“Redis 很快”，还包括缓存失效、脏数据、热点、容量和故障时的降级方案。</p>
+<h3 id="ch5-3">面试核心结论</h3>
+<blockquote>
+<p>缓存通过保存近期或热点数据，减少后端存储和计算压力。常见 Cache Aside 模式是读缓存，未命中时读数据库并回填；写入时先更新数据库，再删除缓存。缓存天然存在过期、穿透、击穿、雪崩和一致性窗口，方案选择要在延迟、一致性、可用性和实现复杂度之间取舍。Redis 适合做高吞吐的内存数据组件，但不能在所有场景中替代数据库。</p>
+</blockquote>
+<h3 id="ch5-4">Redis 数据类型只记用途</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>常见用途</th>
+<th>需要知道的关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String</td>
+<td>缓存值、计数器、分布式锁</td>
+<td>原子自增、过期时间</td>
+</tr>
+<tr>
+<td>Hash</td>
+<td>对象字段、局部更新</td>
+<td>按字段读写</td>
+</tr>
+<tr>
+<td>List</td>
+<td>简单队列、时间线</td>
+<td>两端操作</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>去重、集合运算</td>
+<td>交集、并集</td>
+</tr>
+<tr>
+<td>Sorted Set</td>
+<td>排行榜、按分数排序</td>
+<td>score、范围查询</td>
+</tr>
+</tbody>
+</table></div>
+<p>选类型时先看访问模式，不要为了“用上 Redis”而把所有对象都塞成字符串。</p>
+<h3 id="ch5-5">Cache Aside 的基本流程</h3>
+<p>读请求通常是：</p>
+<ol>
+<li>查询缓存；</li>
+<li>命中则直接返回；</li>
+<li>未命中则查询数据库；</li>
+<li>把结果写入缓存并设置合理过期时间；</li>
+<li>返回结果。</li>
+</ol>
+<p>写请求通常是：</p>
+<ol>
+<li>更新数据库；</li>
+<li>删除缓存；</li>
+<li>下一次读请求再从数据库加载并回填。</li>
+</ol>
+<p>“更新数据库后删除缓存”不是强一致方案，只是比“先删缓存再更新数据库”更不容易留下长期脏缓存。对强一致要求高的业务，要考虑版本校验、消息驱动更新、读写屏障或直接绕过缓存。</p>
+<h3 id="ch5-6">三类缓存问题</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>典型原因</th>
+<th>基础防守方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>穿透</td>
+<td>请求大量不存在的 key</td>
+<td>参数校验、空值缓存、布隆过滤器</td>
+</tr>
+<tr>
+<td>击穿</td>
+<td>一个热点 key 同时失效</td>
+<td>互斥重建、逻辑过期、预热</td>
+</tr>
+<tr>
+<td>雪崩</td>
+<td>大量 key 同时失效或缓存整体故障</td>
+<td>随机过期、多级缓存、限流降级</td>
+</tr>
+</tbody>
+</table></div>
+<p>不要把三者混成“缓存失效”。穿透强调查不存在的数据，击穿强调单个热点，雪崩强调成片失效或缓存集群不可用。</p>
+<h3 id="ch5-7">过期、淘汰和容量</h3>
+<p>缓存中的“过期”与“淘汰”不是同一件事：过期是数据到达生命周期，淘汰是内存不足时选择清理对象。工程上还要考虑：</p>
+<ul>
+<li>热点 key 是否集中在少数节点；</li>
+<li>过期时间是否同时到期；</li>
+<li>大 key 是否造成网络和内存压力；</li>
+<li>缓存失效后数据库能否承受回源流量；</li>
+<li>Redis 故障时是否有降级、限流和恢复方案。</li>
+</ul>
+<h3 id="ch5-8">Redis 分布式锁的最低限度</h3>
+<p>一个基础锁至少要满足：加锁原子、带过期时间、释放时验证持有者身份。简单地执行 <code>SETNX</code> 后再单独设置过期时间，可能在进程崩溃时留下永久锁；释放时直接 <code>DEL</code>，可能误删其他客户端后来获得的锁。</p>
+<p>Redis 锁还可能受到主从切换、时钟、网络分区和租约过期的影响。它适合配合幂等和业务兜底解决“减少重复工作”，不应未经评估就被当成绝对可靠的分布式互斥协议。</p>
+<h3 id="ch5-9">高频追问</h3>
+<h4>追问 1：为什么不直接更新缓存？</h4>
+<p>并发写入时，不同请求可能乱序到达缓存，后写入数据库的旧值可能反而最后覆盖缓存。删除缓存把重建动作交给下一次读请求，通常更容易控制；但它仍是最终一致，删除失败要有重试、消息或对账机制。</p>
+<h4>追问 2：缓存击穿怎么处理？</h4>
+<p>可以让只有一个请求负责回源重建，其余请求等待或返回旧值；也可以使用逻辑过期，让数据物理上暂时保留，后台异步刷新。前者偏一致性，后者偏可用性和低延迟。</p>
+<h4>追问 3：缓存和数据库谁是最终事实来源？</h4>
+<p>多数 Cache Aside 架构中数据库是事实来源，缓存是可重建的副本。缓存可以丢失、过期或被淘汰，因此不能把无法恢复的唯一数据只放在缓存里。</p>
+<h3 id="ch5-10">易错点</h3>
+<ul>
+<li>只背“缓存三大问题”，说不清成因和影响范围。</li>
+<li>把缓存一致性说成强一致。</li>
+<li>分布式锁只会说 <code>SETNX</code>，不提过期、误删和主从风险。</li>
+<li>忽略大 key、热 key 和回源风暴。</li>
+</ul>
+<h3 id="ch5-11">30 秒回答模板</h3>
+<blockquote>
+<p>缓存用空间换时间，减少数据库和计算压力。常见 Cache Aside 读流程是先查缓存，未命中查数据库再回填；写流程通常先更新数据库，再删除缓存。穿透是查不存在的数据，击穿是单热点失效，雪崩是成片失效或缓存整体故障，分别通过参数校验、互斥重建、随机过期、限流降级等方式处理。Redis 适合做高吞吐缓存和数据组件，但它不是天然可靠的事实数据库，分布式锁也必须考虑租约、误删和故障切换。</p>
+</blockquote>
+<h3 id="ch5-12">学习停止线</h3>
+<p>本章不深入 Redis 源码、跳表、RDB/AOF 文件格式和 Cluster 选主细节；能完成缓存方案的基础选型、风险识别和故障兜底说明即可。</p>
+<h2 id="ch6">6. 消息队列基础</h2>
+<h3 id="ch6-1">题目</h3>
+<p>为什么需要消息队列？消息如何保证不丢？重复消费怎么办？如何处理顺序、积压和消费失败？Kafka、RabbitMQ、RocketMQ 大致有什么区别？</p>
+<h3 id="ch6-2">这道题在考什么</h3>
+<p>消息队列的核心不是“换一个 API 发消息”，而是把生产者和消费者解耦，并把处理从同步调用变成可排队、可重试、可削峰的异步流程。代价是引入延迟、重复、顺序、积压和运维复杂度。</p>
+<h3 id="ch6-3">面试核心结论</h3>
+<blockquote>
+<p>消息队列主要用于异步、解耦和削峰。生产者把消息写入队列，消费者稍后读取并确认处理结果。可靠消息系统通常需要持久化、确认、重试和失败转移，但“至少一次投递”往往意味着消费者可能收到重复消息，因此业务必须幂等。顺序性、吞吐量、延迟、可靠性和运维成本之间不能同时无限优化。</p>
+</blockquote>
+<h3 id="ch6-4">基本角色</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>角色</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producer</td>
+<td>产生并发送消息</td>
+</tr>
+<tr>
+<td>Broker</td>
+<td>接收、保存、分发消息</td>
+</tr>
+<tr>
+<td>Topic/Queue</td>
+<td>按业务或消费关系组织消息</td>
+</tr>
+<tr>
+<td>Partition</td>
+<td>把数据拆分以并行扩展</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>读取并处理消息</td>
+</tr>
+<tr>
+<td>Consumer Group</td>
+<td>多个消费者协作消费一组消息</td>
+</tr>
+<tr>
+<td>ACK/Offset</td>
+<td>记录消息是否被确认或消费到哪里</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch6-5">消息可靠性的基本链路</h3>
+<p>需要分别考虑三段：</p>
+<ol>
+<li><strong>生产端到 Broker</strong>：发送是否成功确认，失败如何重试，重试是否产生重复。</li>
+<li><strong>Broker 持久化</strong>：消息是否写入可靠介质，副本是否足够，故障时能否恢复。</li>
+<li><strong>Broker 到消费端</strong>：消费者处理成功后何时确认；确认过早可能丢数据，确认过晚可能重复消费。</li>
+</ol>
+<p>因此“消息不丢”不是某一个开关，而是生产、存储、消费和业务落库共同完成的结果。</p>
+<h3 id="ch6-6">重复消费与幂等</h3>
+<p>常见幂等方式包括：</p>
+<ul>
+<li>业务唯一键或去重表；</li>
+<li>数据库唯一约束；</li>
+<li>状态机限制非法重复转换；</li>
+<li>更新时带版本号或条件；</li>
+<li>记录消费进度和处理结果。</li>
+</ul>
+<p>不要把“消息队列只投递一次”当成业务设计前提。网络重试、消费者崩溃、确认超时和重新分配都可能导致同一消息再次被处理。</p>
+<h3 id="ch6-7">顺序和积压</h3>
+<p>严格顺序通常只能在有限范围内保证，例如同一个订单或同一个用户的消息进入同一分区并由同一消费顺序处理；全局顺序会严重限制并行度。</p>
+<p>消息积压时先判断：</p>
+<ul>
+<li>生产速度是否突然升高；</li>
+<li>消费者是否变慢或频繁失败；</li>
+<li>下游数据库或 RPC 是否成为瓶颈；</li>
+<li>是否可以扩容消费者；</li>
+<li>是否可以降级、丢弃低价值消息或延迟处理。</li>
+</ul>
+<p>盲目增加消费者可能把压力转移给数据库和下游服务，甚至造成更大故障。</p>
+<h3 id="ch6-8">三类产品的定位级理解</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>更适合强调</th>
+<th>面试级记忆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kafka 类日志系统</td>
+<td>高吞吐、分区、流式处理</td>
+<td>适合大规模事件流和日志</td>
+</tr>
+<tr>
+<td>RabbitMQ 类消息代理</td>
+<td>路由、确认、灵活投递</td>
+<td>适合业务消息和复杂路由</td>
+</tr>
+<tr>
+<td>RocketMQ 类业务消息系统</td>
+<td>事务消息、延迟消息等</td>
+<td>常见于业务异步和电商场景</td>
+</tr>
+</tbody>
+</table></div>
+<p>具体选型还要看团队经验、已有基础设施、可靠性要求和运维能力，不要只背产品标签。</p>
+<h3 id="ch6-9">高频追问</h3>
+<h4>追问 1：消息重复了怎么办？</h4>
+<p>把消费设计成幂等：用业务 ID、唯一约束、状态判断或去重记录确保同一消息多次执行不会重复产生副作用。先确认副作用是什么，再决定数据库约束、缓存标记还是业务状态机。</p>
+<h4>追问 2：消息消费失败怎么办？</h4>
+<p>短暂故障可以重试并退避；持续失败应进入死信或人工处理队列，同时记录原因和告警。重试次数要有限，避免坏消息无限阻塞整个消费链路。</p>
+<h4>追问 3：消息队列能解决所有异步问题吗？</h4>
+<p>不能。它增加了排队和最终一致性，不能替代事务、缓存、RPC 或任务调度器。对于必须同步得到结果的请求，消息队列可能只适合作为后续异步通知，而不是主流程替代品。</p>
+<h3 id="ch6-10">易错点</h3>
+<ul>
+<li>把异步等同于一定更快，忽略用户感知延迟和最终一致性。</li>
+<li>只谈生产者发送成功，不谈消费者处理和确认时机。</li>
+<li>说“保证 exactly once”却没有解释业务副作用如何去重。</li>
+<li>遇到积压只会扩容消费者，不分析下游瓶颈。</li>
+</ul>
+<h3 id="ch6-11">30 秒回答模板</h3>
+<blockquote>
+<p>消息队列主要解决异步、解耦和削峰。生产者把消息交给 Broker，消费者异步读取并确认处理结果。可靠性要分别看生产确认、Broker 持久化和消费确认；实际系统常采用至少一次投递，所以消费者必须用业务 ID、唯一约束或状态机保证幂等。顺序只能在有限范围内保证，积压时要先判断生产突增、消费失败还是下游瓶颈，再选择扩容、降级、重试或死信处理。</p>
+</blockquote>
+<h3 id="ch6-12">学习停止线</h3>
+<p>本章不深入 Kafka 副本协议、消息存储文件、RocketMQ 事务消息源码和复杂流处理语义；能讲清消息队列的价值、可靠性链路和幂等边界即可。</p>
+<h2>第二部分 后端系统与分布式基础</h2>
+<h2 id="ch7">7. 一个 Web 请求的完整路径</h2>
+<h3 id="ch7-1">题目</h3>
+<p>从用户在浏览器输入地址，到服务端返回结果，中间大致经历了什么？DNS、CDN、网关、应用服务、缓存、数据库、消息队列分别处在什么位置？</p>
+<h3 id="ch7-2">这道题在考什么</h3>
+<p>这道题考的是能不能把网络、应用、数据和运维知识串成一条链，而不是要求背某一家公司的固定架构。回答时要区分“用户必须等待的同步主链路”和“可以稍后完成的异步副作用”，还要知道每一层都可能引入延迟、失败和重试。</p>
+<h3 id="ch7-3">面试核心结论</h3>
+<blockquote>
+<p>一个典型 Web 请求会经过域名解析和网络接入，可能命中 CDN 或负载均衡，再由网关转发到应用服务。应用服务先做鉴权、参数校验和业务编排，然后查询缓存；缓存未命中时访问数据库，并视情况回填缓存。下单、发通知、写审计日志等不必阻塞主请求的工作，可以通过消息队列交给异步消费者。日志、指标和链路追踪贯穿整个过程。真实架构会按业务取舍删减或拆分这些组件，关键是明确每个组件解决的问题和失败后的影响。</p>
+</blockquote>
+<h3 id="ch7-4">一条请求链路</h3>
+<div class="codehilite"><pre><span></span><code>客户端
+  ↓
+DNS / CDN / 网关
+  ↓
+应用服务 ──→ 缓存命中 ──→ 返回响应
+  │
+  ├────→ 缓存未命中 ──→ 数据库 ──→ 回填缓存
+  │
+  ├────→ 消息队列 ──→ 异步 Worker
+  │
+  └────→ 日志 / 指标 / 链路追踪
+</code></pre></div>
+
+<h3 id="ch7-5">各层只记最小职责</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>层次</th>
+<th>最低限度理解</th>
+<th>典型问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNS</td>
+<td>把域名解析为可访问的地址</td>
+<td>解析缓存、TTL、切换生效时间</td>
+</tr>
+<tr>
+<td>CDN</td>
+<td>在靠近用户的位置缓存静态或可缓存内容</td>
+<td>缓存失效、回源、内容一致性</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>把请求分配到多个实例</td>
+<td>健康检查、会话、故障摘除</td>
+</tr>
+<tr>
+<td>网关</td>
+<td>统一接入和路由</td>
+<td>鉴权、限流、路由、超时</td>
+</tr>
+<tr>
+<td>应用服务</td>
+<td>执行业务规则和编排依赖</td>
+<td>线程池、连接池、业务异常</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>用更快的存储承接热点读取</td>
+<td>击穿、穿透、雪崩、脏数据</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>保存较完整、可恢复的业务事实</td>
+<td>事务、锁、索引、容量</td>
+</tr>
+<tr>
+<td>消息队列</td>
+<td>把生产和消费解耦</td>
+<td>重复、积压、顺序、重试</td>
+</tr>
+<tr>
+<td>可观测性</td>
+<td>记录系统发生了什么</td>
+<td>定位慢请求和跨服务故障</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch7-6">同步主链路和异步副作用</h3>
+<p>应先问“这个结果是不是用户必须立即知道”。余额扣减、库存校验等通常在同步主链路中完成；发送邮件、更新搜索索引、生成报表等通常可以异步化。异步不是免费提速，它会引入消息可靠性、最终一致性、重试和排查成本。</p>
+<p>一个实用判断方式是：</p>
+<ul>
+<li><strong>必须立即返回的结果</strong>：同步调用，并设置明确超时；</li>
+<li><strong>允许稍后完成的动作</strong>：事件或消息异步处理；</li>
+<li><strong>失败后不能悄悄丢失的动作</strong>：需要持久化、重试、死信或补偿；</li>
+<li><strong>可能重复执行的动作</strong>：从接口和数据库约束上设计幂等。</li>
+</ul>
+<h3 id="ch7-7">高频追问</h3>
+<h4>追问 1：为什么要先查缓存，再查数据库？</h4>
+<p>缓存的访问延迟和并发承载能力通常优于数据库，适合承接热点数据。未命中时以数据库作为事实来源，再回填缓存。回填和失效策略需要结合数据变化频率、允许的旧数据时间和一致性要求决定。</p>
+<h4>追问 2：请求为什么会变慢？</h4>
+<p>先按链路拆分：DNS、网络、网关排队、应用线程池、外部 RPC、缓存、数据库、序列化和下游队列。不能只看平均耗时，还要看 P95/P99；也不能只看应用 CPU，因为连接池耗尽、锁等待和下游超时同样会造成慢请求。</p>
+<h4>追问 3：一个下游服务故障，为什么可能拖垮整个系统？</h4>
+<p>如果上游没有超时、限流、熔断和隔离，调用线程会持续等待，连接池和线程池逐渐耗尽，故障就会沿依赖链扩散。重试还可能把压力放大，因此重试必须有上限、退避和幂等条件。</p>
+<h4>追问 4：为什么要有链路追踪？</h4>
+<p>单个请求可能跨越多个服务和异步任务。通过请求 ID、Trace ID 和 Span 可以把同一条链路串起来，定位到底是哪一跳慢或失败。它不能替代日志和指标，而是提供跨组件的关联视角。</p>
+<h3 id="ch7-8">易错点</h3>
+<ul>
+<li>把所有组件都当成系统必选项，忽略架构取舍；</li>
+<li>只描述“请求成功路径”，不说明超时、重试和降级；</li>
+<li>把缓存或消息队列当成数据库的替代品；</li>
+<li>把异步理解成没有一致性成本的免费性能优化；</li>
+<li>只看平均延迟，不看尾延迟和资源耗尽。</li>
+</ul>
+<h3 id="ch7-9">30 秒回答模板</h3>
+<blockquote>
+<p>一个 Web 请求通常先经过 DNS 和接入层，再由网关路由到应用服务。应用完成鉴权和业务编排后优先查缓存，未命中再查数据库并回填；不必阻塞用户的通知、索引更新等动作通过消息队列异步处理，日志、指标和链路追踪负责观察全过程。设计时我会把同步主链路、超时重试、缓存一致性、消息幂等和下游故障隔离分别考虑，而不会把这张架构图当成固定模板。</p>
+</blockquote>
+<h3 id="ch7-10">学习停止线</h3>
+<p>本章不深入 CDN 内核、网关源码、服务网格数据面或具体云厂商网络；能画出请求链路，并能指出每层的价值、延迟来源和故障边界即可。</p>
+<h2 id="ch8">8. 分布式系统最小知识地图</h2>
+<h3 id="ch8-1">题目</h3>
+<p>什么是分布式系统？为什么把一个程序拆到多台机器后会复杂很多？CAP、强一致性、最终一致性、分片、副本和分布式 ID 分别解决什么问题？</p>
+<h3 id="ch8-2">这道题在考什么</h3>
+<p>面试官主要想确认你是否理解：分布式的难点不是“机器变多”本身，而是网络通信和局部故障让系统无法直接观察全局状态。回答不需要背完整理论，但要能从一致性、可用性、扩展性和运维成本之间说明取舍。</p>
+<h3 id="ch8-3">面试核心结论</h3>
+<blockquote>
+<p>分布式系统把一个逻辑系统部署在多个独立节点上，以获得容量、性能、可用性或组织上的收益，但节点之间只能通过网络通信，网络可能延迟、丢包、重复或分区，节点也可能单独故障。因此必须明确数据由谁负责、多个副本何时算一致、请求失败如何重试以及操作是否幂等。CAP 讨论的是发生网络分区时，一致性和可用性之间的取舍；它不是“任意情况下只能三选二”的产品标签。</p>
+</blockquote>
+<h3 id="ch8-4">分布式复杂性的来源</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>复杂性</th>
+<th>直观问题</th>
+<th>面试时的落点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络不可靠</td>
+<td>对方没响应，是慢、丢了还是已经成功？</td>
+<td>超时、重试、幂等</td>
+</tr>
+<tr>
+<td>局部故障</td>
+<td>一台机器坏了，整体还能工作吗？</td>
+<td>副本、故障转移、隔离</td>
+</tr>
+<tr>
+<td>多副本</td>
+<td>哪个值是最新的？</td>
+<td>一致性模型、版本和冲突处理</td>
+</tr>
+<tr>
+<td>并发发生</td>
+<td>多节点同时修改同一资源怎么办？</td>
+<td>锁、版本号、串行化</td>
+</tr>
+<tr>
+<td>时钟不完美</td>
+<td>不同机器的时间不完全一致</td>
+<td>不依赖物理时间判断全部顺序</td>
+</tr>
+<tr>
+<td>扩容与分片</td>
+<td>数据和请求如何均匀分布？</td>
+<td>哈希、范围、热点治理</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch8-5">CAP 的最低限度理解</h3>
+<p>CAP 中的三个词是：</p>
+<ul>
+<li><strong>Consistency</strong>：对一次读操作而言，系统表现得像访问一个一致的数据副本；</li>
+<li><strong>Availability</strong>：每个请求都能得到非错误响应，但不代表一定读到最新值；</li>
+<li><strong>Partition tolerance</strong>：网络发生分区或消息互不可达时，系统仍尝试继续工作。</li>
+</ul>
+<p>现实分布式系统通常必须面对网络分区，因此分区发生时往往要在“返回最新数据的确定性”和“继续对外服务”之间选择。这个选择应落到业务：支付余额、库存扣减更重视一致性；推荐列表、点赞数展示可能允许短暂最终一致。</p>
+<h3 id="ch8-6">强一致、最终一致和业务一致</h3>
+<ul>
+<li><strong>强一致</strong>：写成功后，后续读取在约定范围内立即看到新值，代价通常是等待协调或牺牲部分可用性；</li>
+<li><strong>最终一致</strong>：系统暂时可能读到旧值，但在没有继续更新和故障的情况下，副本最终收敛；</li>
+<li><strong>业务一致</strong>：即使底层组件是最终一致，业务也可通过状态机、补偿、对账和幂等保证最终结果正确。</li>
+</ul>
+<p>不要把“最终一致”说成“不一致也没关系”，而应说明允许的旧数据窗口、异常期间的用户体验和最终修复机制。</p>
+<h3 id="ch8-7">分片、副本和分布式 ID</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>解决的问题</th>
+<th>需要警惕什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分片/分区</td>
+<td>单节点容量或吞吐不足</td>
+<td>热点、跨分片查询和再均衡</td>
+</tr>
+<tr>
+<td>副本</td>
+<td>读扩展和故障容错</td>
+<td>复制延迟、选主和数据一致性</td>
+</tr>
+<tr>
+<td>分布式 ID</td>
+<td>多节点生成不重复的业务标识</td>
+<td>时钟回拨、趋势递增和长度</td>
+</tr>
+<tr>
+<td>Leader/Follower</td>
+<td>规定写入或协调角色</td>
+<td>Leader 故障、切换窗口</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch8-8">高频追问</h3>
+<h4>追问 1：CAP 是不是说系统只能满足三个中的两个？</h4>
+<p>不是。CAP 讨论的是网络分区发生时的取舍；在没有分区时，一个系统可以同时表现出较强的一致性和较高的可用性。面试回答应补上具体故障前提，而不是机械地说“只能二选一”。</p>
+<h4>追问 2：为什么重试会带来重复操作？</h4>
+<p>客户端可能在服务端已经成功处理后才因网络超时，于是无法知道结果，随后再次发送。网络层无法替业务判断“重复是否有害”，所以需要请求 ID、幂等键、唯一约束或状态查询接口。</p>
+<h4>追问 3：分布式锁能解决所有并发问题吗？</h4>
+<p>不能。它只能在锁的正确性、租约、故障恢复和业务边界都设计好的前提下，限制某段临界区的并发执行；还要考虑锁持有者暂停、租约过期、误删他人锁和下游操作不可回滚等问题。很多场景用数据库唯一约束或状态机更直接。</p>
+<h4>追问 4：为什么不能用时间戳简单生成全局有序 ID？</h4>
+<p>多台机器的时钟可能不同步、回拨或同一毫秒生成多个 ID。实际方案通常把时间、节点标识和序列号组合起来，或由专门服务分配，并明确是否只要求唯一、趋势递增还是严格全局有序。</p>
+<h3 id="ch8-9">易错点</h3>
+<ul>
+<li>把 CAP 背成没有网络分区前提的口号；</li>
+<li>把最终一致说成不需要修复和对账；</li>
+<li>认为加副本就天然高可用，忽略副本延迟和切换；</li>
+<li>认为分布式锁一加就安全，不谈租约和幂等；</li>
+<li>看到“分布式”就直接引入复杂中间件，没有先明确约束。</li>
+</ul>
+<h3 id="ch8-10">30 秒回答模板</h3>
+<blockquote>
+<p>分布式系统的主要复杂性来自网络和局部故障：节点之间可能超时、重复、分区，多个副本也可能暂时不一致。因此设计时要先明确一致性和可用性的业务要求，再选择分片、副本、协调和故障恢复方式。CAP 只讨论网络分区时的一致性与可用性取舍；无论采用什么方案，都要补上超时、重试、幂等、监控和人工或自动补偿。</p>
+</blockquote>
+<h3 id="ch8-11">学习停止线</h3>
+<p>本章不展开共识算法证明、Raft 日志复制细节、CRDT 数学形式和复杂分布式事务协议；能正确解释分布式故障模型、CAP 边界和常见组件职责即可。</p>
+<h2 id="ch9">9. 高可用与服务治理基础</h2>
+<h3 id="ch9-1">题目</h3>
+<p>如何提高一个服务的可用性？限流、熔断、降级、超时、重试、负载均衡和健康检查分别解决什么问题？</p>
+<h3 id="ch9-2">这道题在考什么</h3>
+<p>这道题考的是故障设计，而不是“多部署几台机器”。面试官希望听到从冗余、流量控制、依赖隔离、优雅退化到故障恢复的完整思路，并且知道可用性提升会增加一致性、运维和成本。</p>
+<h3 id="ch9-3">面试核心结论</h3>
+<blockquote>
+<p>高可用的基础是消除单点并让故障可隔离、可发现、可恢复。常见手段包括多实例和负载均衡、健康检查和自动摘除、超时与有限重试、限流与舱壁隔离、熔断和降级、数据副本与备份，以及演练和发布回滚。它们不是互相替代的开关：超时控制等待时间，重试处理瞬时失败，熔断阻止持续调用，限流保护系统容量，降级定义业务在资源不足时保留什么。</p>
+</blockquote>
+<h3 id="ch9-4">保护链路的基本工具</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>机制</th>
+<th>解决的问题</th>
+<th>常见误区</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>超时</td>
+<td>防止请求无限等待</td>
+<td>所有下游都使用一个过长固定值</td>
+</tr>
+<tr>
+<td>重试</td>
+<td>应对少量瞬时失败</td>
+<td>无上限重试、没有退避、重复副作用</td>
+</tr>
+<tr>
+<td>限流</td>
+<td>控制进入系统的流量</td>
+<td>只限入口，不保护关键资源</td>
+</tr>
+<tr>
+<td>熔断</td>
+<td>下游持续失败时快速失败</td>
+<td>熔断后没有探活和恢复策略</td>
+</tr>
+<tr>
+<td>降级</td>
+<td>资源不足时保留核心功能</td>
+<td>没有定义可接受的旧数据或空结果</td>
+</tr>
+<tr>
+<td>舱壁隔离</td>
+<td>防止一个依赖耗尽全部线程/连接</td>
+<td>所有资源池仍然共享</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>发现异常并摘除实例</td>
+<td>只检查进程存活，不检查服务能力</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>分散请求和故障影响</td>
+<td>忽略会话、热点和不均匀流量</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch9-5">超时、重试和熔断要一起设计</h3>
+<p>假设服务 A 调用服务 B：</p>
+<ol>
+<li>A 必须给 B 设置小于自身请求预算的超时时间；</li>
+<li>只有判断为瞬时错误且操作具备幂等性时才重试；</li>
+<li>重试要限制次数，并使用退避和抖动，避免同时重试形成风暴；</li>
+<li>B 持续失败时，A 通过熔断快速失败或走降级路径；</li>
+<li>经过探测确认 B 恢复后，再逐步放量关闭熔断。</li>
+</ol>
+<p>如果每层都重试 3 次，五层调用链可能把一次请求放大为大量下游请求，因此重试预算要在链路上统一考虑。</p>
+<h3 id="ch9-6">可用性和数据安全不是同一个指标</h3>
+<p>服务能够返回响应，不代表数据没有丢失；数据库有备份，也不代表接口一定可用。面试时可以把目标拆成：</p>
+<ul>
+<li><strong>可用性</strong>：用户请求多大比例能在约定时间内成功；</li>
+<li><strong>可靠性</strong>：系统在故障和恢复过程中是否维持正确行为；</li>
+<li><strong>持久性</strong>：成功写入的数据在故障后能否恢复；</li>
+<li><strong>恢复能力</strong>：故障发生后多久恢复（RTO），最多允许丢失多久数据（RPO）。</li>
+</ul>
+<h3 id="ch9-7">高频追问</h3>
+<h4>追问 1：服务部署多个实例就高可用了吗？</h4>
+<p>不一定。还要确认实例是否跨故障域、负载均衡是否能摘除异常实例、依赖的数据库和配置中心是否有单点、发布是否支持回滚，以及连接池和线程池是否会在故障时耗尽。多实例只是冗余的一部分。</p>
+<h4>追问 2：重试次数越多越可靠吗？</h4>
+<p>不是。重试可以提高对瞬时网络抖动的容忍度，但会增加延迟和下游压力，还可能重复执行写操作。重试前要判断错误类型、剩余时间和幂等性，持续失败应快速失败或降级。</p>
+<h4>追问 3：限流应该按什么维度做？</h4>
+<p>按业务可以按用户、租户、接口、IP、令牌或资源类型限流；算法可用固定窗口、滑动窗口、漏桶或令牌桶。关键不是背算法名字，而是说明保护对象、超限响应和突发流量是否允许。</p>
+<h4>追问 4：什么是灰度发布？</h4>
+<p>先把小比例流量导向新版本，观察错误率、延迟和业务指标，再逐步扩大范围；异常时可以快速回退。灰度需要版本兼容、流量标记、数据库变更兼容和明确的停止条件。</p>
+<h3 id="ch9-8">易错点</h3>
+<ul>
+<li>只说“加机器”，不谈单点、故障域和数据层；</li>
+<li>把重试、熔断、限流当成同一种机制；</li>
+<li>认为重试能够解决所有失败；</li>
+<li>只设置存活探针，不检查实例是否真的能提供服务；</li>
+<li>讨论 99.99% 可用性，却不说明统计窗口和降级目标。</li>
+</ul>
+<h3 id="ch9-9">30 秒回答模板</h3>
+<blockquote>
+<p>提高可用性要从冗余、隔离、控制和恢复四方面做：多实例和跨故障域消除单点，健康检查与负载均衡摘除异常实例，超时、有限重试、限流、熔断和舱壁防止故障扩散，降级和备份保证核心能力与数据可恢复。重试只适用于有限的瞬时错误，并且必须结合幂等、退避和整体超时预算设计。</p>
+</blockquote>
+<h3 id="ch9-10">学习停止线</h3>
+<p>本章不深入服务网格控制面、复杂流量调度算法和多地域容灾实现；能把常见治理机制放到正确的故障场景中，并知道它们的副作用即可。</p>
+<h2 id="ch10">10. 容器、云计算与 DevOps 基础</h2>
+<h3 id="ch10-1">题目</h3>
+<p>容器和虚拟机有什么区别？Docker 镜像、容器、Pod、Deployment、Service 分别是什么？CI/CD、滚动发布、蓝绿发布和灰度发布解决什么问题？</p>
+<h3 id="ch10-2">这道题在考什么</h3>
+<p>这道题主要防止把一组运维名词混在一起。面试中应先讲清“应用如何被打包、运行、扩缩容和发布”，再补充 Kubernetes 或云服务名词，不需要假装自己是集群运维专家。</p>
+<h3 id="ch10-3">面试核心结论</h3>
+<blockquote>
+<p>虚拟机通常虚拟出完整硬件并运行独立操作系统，隔离更重；容器共享宿主机内核，通过镜像和隔离机制封装应用及其依赖，启动更快、密度更高，但隔离边界与虚拟机不同。镜像是不可变的打包产物，容器是镜像的运行实例。Kubernetes 这类平台负责把容器按照期望状态部署、发现、扩缩容和自愈；CI/CD 则把代码变更自动经过构建、测试、发布和回滚流程。</p>
+</blockquote>
+<h3 id="ch10-4">只记这些对象</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>最低限度理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>镜像 Image</td>
+<td>应用和运行依赖的只读打包产物</td>
+</tr>
+<tr>
+<td>容器 Container</td>
+<td>镜像启动后的隔离运行实例</td>
+</tr>
+<tr>
+<td>虚拟机 VM</td>
+<td>带独立客户操作系统的虚拟化环境</td>
+</tr>
+<tr>
+<td>Pod</td>
+<td>Kubernetes 中共同调度和网络命名空间的最小运行单元</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>描述副本数、版本和滚动更新的控制对象</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>为一组 Pod 提供稳定访问入口和负载分发</td>
+</tr>
+<tr>
+<td>Config/Secret</td>
+<td>将配置和敏感信息与镜像解耦</td>
+</tr>
+<tr>
+<td>Registry</td>
+<td>存放和分发镜像的仓库</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch10-5">CI/CD 的基本流水线</h3>
+<p>一条简化流水线可以是：代码提交 → 静态检查 → 单元测试 → 构建镜像 → 安全扫描 → 部署测试环境 → 集成测试 → 灰度或滚动发布 → 观测 → 自动或人工回滚。</p>
+<p>这里最容易被忽略的是“可回滚”和“可观测”。如果数据库变更不可逆、镜像没有版本号或发布后没有错误率和延迟指标，自动化流水线反而可能把故障传播得更快。</p>
+<h3 id="ch10-6">发布策略只记定位</h3>
+<ul>
+<li><strong>滚动发布</strong>：逐步替换旧实例，资源利用率较好，但新旧版本会同时存在；</li>
+<li><strong>蓝绿发布</strong>：准备两套环境，切换流量，回滚直观但成本更高；</li>
+<li><strong>灰度/金丝雀发布</strong>：只给小部分用户或流量新版本，根据指标逐步放量；</li>
+<li><strong>特性开关</strong>：代码已发布，但通过配置决定功能是否开放，适合快速关闭风险功能。</li>
+</ul>
+<h3 id="ch10-7">高频追问</h3>
+<h4>追问 1：容器是不是轻量级虚拟机？</h4>
+<p>这是便于入门的类比，但不严谨。容器通常共享宿主机内核，主要通过命名空间、资源限制等机制隔离；虚拟机包含独立客户操作系统，隔离和启动开销通常更大。两者都能封装运行环境，但安全边界和运维方式不同。</p>
+<h4>追问 2：为什么镜像要尽量不可变？</h4>
+<p>不可变镜像能让同一版本在不同环境中更容易复现，便于审计、回滚和定位差异。运行时状态应放到外部卷、数据库或对象存储中，不能把容器本地文件系统当成可靠持久化存储。</p>
+<h4>追问 3：Pod 和容器有什么关系？</h4>
+<p>容器是进程运行环境，Pod 是 Kubernetes 的调度和网络边界；一个 Pod 可以包含一个或多个需要共享网络和生命周期的容器。常见应用是一 Pod 一主容器，辅助容器用于代理、采集或初始化等场景。</p>
+<h4>追问 4：为什么发布后新旧版本要兼容？</h4>
+<p>滚动发布和灰度期间新旧实例会同时处理请求，客户端、消息和数据库也可能处于不同版本。接口字段新增应尽量向后兼容，数据库变更通常采用“先扩展、迁移、再收缩”的步骤。</p>
+<h3 id="ch10-8">易错点</h3>
+<ul>
+<li>把容器当成天然安全隔离；</li>
+<li>把容器本地文件当成持久化数据；</li>
+<li>只讲自动部署，不讲测试、观测和回滚；</li>
+<li>认为 Kubernetes 本身能修复所有应用缺陷；</li>
+<li>忽略资源请求、限制和 OOM 对服务的影响。</li>
+</ul>
+<h3 id="ch10-9">30 秒回答模板</h3>
+<blockquote>
+<p>镜像是应用及依赖的不可变打包产物，容器是它的运行实例；容器通常共享宿主机内核，和带独立操作系统的虚拟机在隔离和开销上不同。Kubernetes 用 Pod、Deployment、Service 等对象管理容器的调度、发现和滚动更新。CI/CD 的完整目标不只是自动发布，还包括自动测试、安全检查、灰度观测和可回滚。</p>
+</blockquote>
+<h3 id="ch10-10">学习停止线</h3>
+<p>本章不深入 Kubernetes 调度器、CNI/CSI、Linux 容器隔离实现和云厂商产品矩阵；能理解打包、部署、服务发现、扩缩容和发布回滚的基本关系即可。</p>
+<h2 id="ch11">11. 监控、日志与故障排查基础</h2>
+<h3 id="ch11-1">题目</h3>
+<p>日志、指标、链路追踪有什么区别？线上服务变慢或报错时如何排查？什么是 SLI、SLO、SLA？</p>
+<h3 id="ch11-2">这道题在考什么</h3>
+<p>这道题考的是“能不能观察系统并形成排查闭环”。不仅要知道三个可观测性信号的定义，还要能从现象、范围、时间、依赖和变更记录出发缩小问题范围，而不是上来就重启服务。</p>
+<h3 id="ch11-3">面试核心结论</h3>
+<blockquote>
+<p>日志记录单个事件的上下文，指标把大量事件聚合成时间序列，链路追踪把一次请求跨服务的调用关系串起来。三者互相补充：指标适合发现趋势和告警，日志适合看具体错误，追踪适合定位调用链中的慢点。排障时先确认影响范围和开始时间，再对比发布、流量、资源和下游依赖，最后通过回滚、限流、降级或修复验证结果，并沉淀复盘。</p>
+</blockquote>
+<h3 id="ch11-4">三类信号的分工</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>信号</th>
+<th>回答的问题</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>日志 Logs</td>
+<td>某个请求或事件具体发生了什么？</td>
+<td>错误堆栈、用户 ID、请求 ID</td>
+</tr>
+<tr>
+<td>指标 Metrics</td>
+<td>系统整体趋势和比例怎样？</td>
+<td>QPS、错误率、P99、CPU</td>
+</tr>
+<tr>
+<td>追踪 Traces</td>
+<td>一次请求经过哪些组件，哪一跳慢？</td>
+<td>Span、依赖调用耗时</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch11-5">最低限度的指标集合</h3>
+<p>可以从四类指标开始：</p>
+<ul>
+<li><strong>流量</strong>：请求数、消息生产和消费速率；</li>
+<li><strong>错误</strong>：HTTP 5xx、业务失败、重试、死信；</li>
+<li><strong>延迟</strong>：平均值、P95、P99 和超时数；</li>
+<li><strong>饱和度</strong>：CPU、内存、线程池、连接池、队列长度和磁盘空间。</li>
+</ul>
+<p>这和常说的 RED（Rate、Errors、Duration）以及 USE（Utilization、Saturation、Errors）思路相近。不要只监控机器 CPU：线程池耗尽时 CPU 可能很低，数据库锁等待也可能只表现为延迟升高。</p>
+<h3 id="ch11-6">故障排查的基本顺序</h3>
+<ol>
+<li><strong>确认事实</strong>：什么时候开始，影响哪些接口、用户、地域和版本；</li>
+<li><strong>看变化</strong>：是否刚发布、扩容、改配置、流量突增或下游异常；</li>
+<li><strong>看四类指标</strong>：流量、错误、延迟、饱和度是否同步变化；</li>
+<li><strong>沿链路下钻</strong>：用 Trace ID 找慢请求，再查对应日志和下游；</li>
+<li><strong>先止损</strong>：回滚、限流、熔断、降级、摘除实例或切换备用；</li>
+<li><strong>验证恢复</strong>：确认业务成功率、尾延迟和队列积压恢复，而不是只看进程存活；</li>
+<li><strong>复盘改进</strong>：补监控、测试、容量评估、自动化和操作手册。</li>
+</ol>
+<h3 id="ch11-7">日志至少要有的字段</h3>
+<p>时间、级别、服务名、实例、环境、请求 ID/Trace ID、接口、耗时、结果码和关键业务标识通常比一段不可检索的自然语言更有价值。敏感信息应脱敏，不能为了排障把密码、令牌或完整身份证号写进日志。</p>
+<h3 id="ch11-8">高频追问</h3>
+<h4>追问 1：平均延迟很低，用户为什么仍然觉得慢？</h4>
+<p>平均值会掩盖少量极慢请求。高并发场景通常要看 P95/P99 等尾延迟，并按接口、地域、版本和依赖拆分；还要确认客户端、网络和页面渲染是否贡献了用户感知延迟。</p>
+<h4>追问 2：日志、指标和 Trace 能互相替代吗？</h4>
+<p>不能。指标适合聚合和告警，日志适合具体上下文，追踪适合跨服务链路。只保留一种信号通常会导致发现、定位或关联其中一环缺失。</p>
+<h4>追问 3：什么是 SLI、SLO、SLA？</h4>
+<p>SLI 是实际测量的服务指标，例如成功率和 P99；SLO 是团队希望达到的目标；SLA 是对外约定的服务等级及可能的责任或补偿。面试中应说明统计窗口、请求范围和错误预算，而不是只报一个百分比。</p>
+<h4>追问 4：为什么告警太多也会造成问题？</h4>
+<p>告警疲劳会让真正重要的故障被淹没。告警应面向用户影响或可操作的风险，设置合理阈值、持续时间、分级和负责人；详细诊断信息可以放在仪表盘和日志中。</p>
+<h3 id="ch11-9">易错点</h3>
+<ul>
+<li>只收集日志，不做结构化字段和关联 ID；</li>
+<li>只监控 CPU/内存，不监控错误、延迟、线程池和依赖；</li>
+<li>用单个阈值告警所有波动；</li>
+<li>排障时直接重启，导致现场和证据丢失；</li>
+<li>忽视观测系统本身的成本、采样和敏感信息保护。</li>
+</ul>
+<h3 id="ch11-10">30 秒回答模板</h3>
+<blockquote>
+<p>日志回答具体发生了什么，指标回答整体趋势，Trace 回答一次请求在哪一跳变慢或失败。排障时我会先确认影响范围和时间，再对比发布、流量、资源和依赖变化，沿 Trace 下钻到日志，必要时先回滚、限流或降级止损，最后用成功率、尾延迟和队列积压验证恢复。SLI 是测量，SLO 是目标，SLA 是对外承诺。</p>
+</blockquote>
+<h3 id="ch11-11">学习停止线</h3>
+<p>本章不深入 Prometheus 存储、日志采集链路、采样算法或具体 APM 产品；能建立信号分工、基础指标和排障闭环即可。</p>
+<h2>第三部分 编程语言与计算机基础防守</h2>
+<h2 id="ch12">12. 程序从源码到运行</h2>
+<h3 id="ch12-1">题目</h3>
+<p>一段源代码是如何变成可以运行的程序的？编译、链接、加载、解释执行和 JIT 分别是什么？静态库和动态库有什么区别？</p>
+<h3 id="ch12-2">这道题在考什么</h3>
+<p>这道题用于建立“代码不是直接跑起来的”这条基础链路。对非主攻语言不需要记编译器内部算法，但要能分辨编译期错误、链接期错误、运行期错误，以及依赖如何被装配进最终程序。</p>
+<h3 id="ch12-3">面试核心结论</h3>
+<blockquote>
+<p>典型编译型语言会经历预处理、编译、汇编和链接：源文件先被转换为目标文件，再和库及其他目标文件链接成可执行文件或动态库；运行时由操作系统加载，建立虚拟地址空间、栈、堆和共享库映射后开始执行。解释器直接或间接执行中间表示，JIT 则在运行过程中把热点代码编译成本地机器码。静态链接把库代码复制进产物，部署相对简单但体积和升级成本更高；动态链接在运行时共享库，节省空间但引入版本和加载依赖。</p>
+</blockquote>
+<h3 id="ch12-4">一条最低限度的编译链</h3>
+<div class="codehilite"><pre><span></span><code>源代码 -&gt; 预处理 -&gt; 编译为汇编/目标文件 -&gt; 链接库和目标文件 -&gt; 可执行文件
+                                                         |
+                                                         v
+                                                   加载并运行
+</code></pre></div>
+
+<p>不同语言会有差异：Java 常见是源码编译为字节码，再由虚拟机解释或 JIT；Python 等语言通常先生成字节码并由运行时执行。面试回答时先说明“具体语言不同”，不要把所有语言硬套成 C/C++ 的流程。</p>
+<h3 id="ch12-5">四类错误放在哪一层</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>典型时机</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语法/类型错误</td>
+<td>编译或解释前检查</td>
+<td>括号不匹配、类型不兼容</td>
+</tr>
+<tr>
+<td>编译错误</td>
+<td>源码到目标代码</td>
+<td>不支持的语法或模板实例化失败</td>
+</tr>
+<tr>
+<td>链接错误</td>
+<td>组合目标文件和库</td>
+<td>找不到函数实现或符号冲突</td>
+</tr>
+<tr>
+<td>运行时错误</td>
+<td>程序执行后</td>
+<td>空指针、越界、权限或依赖缺失</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch12-6">栈、堆和虚拟地址空间只记用途</h3>
+<ul>
+<li><strong>栈</strong>：通常保存函数调用帧、局部变量和返回信息，生命周期与调用关系相关；</li>
+<li><strong>堆</strong>：动态分配的区域，生命周期由程序或运行时管理；</li>
+<li><strong>代码段/只读数据</strong>：保存指令和部分常量；</li>
+<li><strong>虚拟地址空间</strong>：进程看到的逻辑地址范围，由操作系统映射到物理内存，并提供隔离和权限控制。</li>
+</ul>
+<p>具体布局和优化会因平台、编译器与运行时而变化，基础回答不要把它们说成绝对固定。</p>
+<h3 id="ch12-7">高频追问</h3>
+<h4>追问 1：为什么编译能通过，运行时仍然会崩？</h4>
+<p>编译器只能检查语言规则和部分静态条件，无法穷尽所有输入、资源状态和并发交互。空指针、越界、文件不存在、网络超时和竞态都可能在运行时出现。</p>
+<h4>追问 2：静态库和动态库怎么选？</h4>
+<p>静态库在链接时把实现合并进产物，依赖更直接但体积可能变大，升级库通常要重新链接；动态库由多个程序共享，便于独立升级和节省空间，但要处理加载路径、ABI 兼容和版本冲突。选择取决于部署方式和依赖管理能力。</p>
+<h4>追问 3：编译器优化会不会改变程序结果？</h4>
+<p>在满足语言规则和可观察行为的前提下，优化可以重排或消除代码；如果程序依赖未定义行为、数据竞争或错误的内存假设，优化可能暴露问题。不能把“Debug 能跑”当成正确性的证明。</p>
+<h4>追问 4：为什么需要 ABI？</h4>
+<p>ABI 规定二进制层面的调用约定、数据布局、符号和异常等规则，使不同编译单元或库能够互相调用。源码兼容不一定代表二进制兼容，编译器、编译选项和标准库版本变化都可能影响 ABI。</p>
+<h3 id="ch12-8">易错点</h3>
+<ul>
+<li>把编译、链接和加载混为一个步骤；</li>
+<li>认为解释型语言完全不编译，或编译型语言完全没有运行时；</li>
+<li>把栈和堆的区别简化成“快和慢”；</li>
+<li>看到运行时崩溃就归因于编译器；</li>
+<li>只讲静态/动态库优点，不讲版本和部署代价。</li>
+</ul>
+<h3 id="ch12-9">30 秒回答模板</h3>
+<blockquote>
+<p>对典型编译型语言，源代码会经过预处理、编译、汇编和链接，生成可执行文件；运行时操作系统负责加载并建立进程地址空间。解释器执行中间表示，JIT 会把热点代码在运行时编译优化。静态库在构建时合入产物，依赖简单但体积和升级成本较高；动态库运行时共享，节省空间但要处理加载和 ABI 兼容。编译期、链接期和运行期错误要分开定位。</p>
+</blockquote>
+<h3 id="ch12-10">学习停止线</h3>
+<p>本章不深入编译器优化算法、链接器重定位格式、JIT 内联决策和具体 ABI 规范；能讲清从源码到运行的层次，以及常见错误所在阶段即可。</p>
+<h2 id="ch13">13. 数据结构与算法最低限度</h2>
+<h3 id="ch13-1">题目</h3>
+<p>常见数据结构怎么选？如何解释时间复杂度和空间复杂度？哈希表、堆、二叉树、图、二分查找和 BFS/DFS 分别适合什么问题？</p>
+<h3 id="ch13-2">这道题在考什么</h3>
+<p>非算法主攻方向不需要刷完所有高级算法，但面试官可能用基础题判断编程和问题拆解能力。最低目标是看到需求能想到合适的数据结构，能说出复杂度、边界条件和为什么这样选。</p>
+<h3 id="ch13-3">面试核心结论</h3>
+<blockquote>
+<p>数据结构的选择取决于主要操作：数组适合按下标访问，链表适合局部插入但随机访问差，哈希表适合按键快速查找，堆适合持续维护最大或最小元素，队列适合先进先出，栈适合后进先出，树和图用于表达层级与关系。复杂度是输入规模增长时资源消耗的数量级，不是一次运行的精确耗时。先明确操作和约束，再选择结构并说明最坏或平均复杂度。</p>
+</blockquote>
+<h3 id="ch13-4">最低限度对照表</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>结构</th>
+<th>典型操作/场景</th>
+<th>常见复杂度直觉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数组/向量</td>
+<td>下标访问、连续存储</td>
+<td>访问 O(1)，中间插入通常 O(n)</td>
+</tr>
+<tr>
+<td>链表</td>
+<td>已知节点附近插入删除</td>
+<td>查找 O(n)，局部修改可 O(1)</td>
+</tr>
+<tr>
+<td>哈希表</td>
+<td>key-value、去重、计数</td>
+<td>平均查找 O(1)，需考虑冲突和扩容</td>
+</tr>
+<tr>
+<td>栈</td>
+<td>括号匹配、撤销、递归模拟</td>
+<td>入栈出栈 O(1)</td>
+</tr>
+<tr>
+<td>队列</td>
+<td>BFS、任务排队</td>
+<td>入队出队 O(1)</td>
+</tr>
+<tr>
+<td>堆</td>
+<td>Top K、优先级任务</td>
+<td>插入/删除堆顶 O(log n)</td>
+</tr>
+<tr>
+<td>有序树</td>
+<td>范围查询、维护顺序</td>
+<td>平衡时查找约 O(log n)</td>
+</tr>
+<tr>
+<td>图</td>
+<td>依赖、路线、网络关系</td>
+<td>BFS/DFS 通常 O(V+E)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch13-5">高频模式只记用途</h3>
+<ul>
+<li><strong>哈希表</strong>：两数之和、频次统计、判断重复、缓存映射；</li>
+<li><strong>双指针/滑动窗口</strong>：连续区间、去重、左右边界；</li>
+<li><strong>二分查找</strong>：序列有序，或答案满足单调性；</li>
+<li><strong>栈</strong>：括号、单调栈、表达式和最近更大/更小元素；</li>
+<li><strong>堆</strong>：只需要维护前 K 个或当前最小/最大元素；</li>
+<li><strong>BFS</strong>：无权图最短步数、按层扩散；</li>
+<li><strong>DFS/回溯</strong>：遍历、连通性、枚举选择；</li>
+<li><strong>前缀和/差分</strong>：批量区间求和或区间更新；</li>
+<li><strong>排序</strong>：把复杂关系转成有序后的线性扫描。</li>
+</ul>
+<h3 id="ch13-6">复杂度回答的正确姿势</h3>
+<p>先说明输入规模和核心操作，再说时间与额外空间。例如：用哈希表保存已经出现的元素，一次遍历即可把查找从每次 O(n) 降到平均 O(1)，整体平均 O(n)，额外空间 O(n)；如果要求最坏情况保证，就要补充哈希冲突或换用有序结构的影响。</p>
+<h3 id="ch13-7">高频追问</h3>
+<h4>追问 1：哈希表为什么平均是 O(1)？</h4>
+<p>哈希函数把键映射到桶，理想情况下元素均匀分布，查找只需检查少量候选；冲突会让一个桶中有多个元素，扩容和好的哈希函数能降低冲突概率。O(1) 是平均或摊销意义，不是任何实现和输入下的绝对保证。</p>
+<h4>追问 2：什么时候用 BFS，什么时候用 DFS？</h4>
+<p>如果关心无权图从起点出发的最短层数，通常用 BFS；如果只需要遍历、判断连通或搜索一条路径，DFS 也常见。BFS 会保存一层队列，DFS 可以用递归或显式栈，空间特点也不同。</p>
+<h4>追问 3：二分查找为什么总写错？</h4>
+<p>因为边界定义不一致。写代码前要明确区间是闭区间还是半开区间、循环条件、目标不存在时返回什么，以及 <code>mid</code> 变化是否保证区间缩小。二分不只用于数组，也可用于满足单调性的答案空间。</p>
+<h4>追问 4：Top K 为什么常用小根堆？</h4>
+<p>维护大小为 K 的小根堆，堆顶是当前 K 个元素中最小的；新元素比堆顶大时替换，始终保留最大的 K 个。遍历 n 个元素的复杂度约为 O(n log K)，比完整排序 O(n log n) 更适合 K 远小于 n 的场景。</p>
+<h3 id="ch13-8">易错点</h3>
+<ul>
+<li>只背复杂度，不说明前提、平均/最坏和空间；</li>
+<li>把链表插入 O(1) 说成查找也 O(1)；</li>
+<li>认为哈希表永远 O(1)，忽略冲突和扩容；</li>
+<li>使用二分时没有明确边界；</li>
+<li>为了炫技使用复杂算法，却不考虑代码可读性和约束。</li>
+</ul>
+<h3 id="ch13-9">30 秒回答模板</h3>
+<blockquote>
+<p>我会先看主要操作和约束：按下标访问选数组，按 key 查找或去重选哈希表，维护最小/最大元素选堆，先进先出选队列，层级和关系选树或图。复杂度要说明输入规模、平均还是最坏，以及额外空间。常见题型可以用哈希、双指针、二分、栈、堆和 BFS/DFS 解决，但实现前会先统一边界和异常情况。</p>
+</blockquote>
+<h3 id="ch13-10">学习停止线</h3>
+<p>本章不展开高级动态规划、网络流、字符串算法和复杂证明；能完成常见数据结构选择、基础复杂度分析和简单题的边界设计即可。</p>
+<h2 id="ch14">14. 软件工程与代码质量基础</h2>
+<h3 id="ch14-1">题目</h3>
+<p>什么是高内聚低耦合？接口、抽象、重构、单元测试、集成测试、代码评审和持续集成分别解决什么问题？如何判断一段代码是否容易维护？</p>
+<h3 id="ch14-2">这道题在考什么</h3>
+<p>这道题考的是工程习惯，而不是背原则名词。面试官更关心你能否把需求拆成稳定边界，能否通过测试和评审降低改动风险，以及能否在速度、质量和复杂度之间做实际取舍。</p>
+<h3 id="ch14-3">面试核心结论</h3>
+<blockquote>
+<p>可维护代码通常具有清晰的职责边界、较少的隐式依赖、可测试的接口、可读的命名和足够但不过度的抽象。高内聚意味着一个模块内的代码围绕相近职责协同，低耦合意味着模块之间依赖少且依赖稳定契约。测试、代码评审、持续集成和可观测性共同降低变更风险；它们不能替代正确的需求理解和架构判断。</p>
+</blockquote>
+<h3 id="ch14-4">四个最实用的工程问题</h3>
+<p>写或改代码前，可以先问：</p>
+<ol>
+<li><strong>职责是什么</strong>：这个模块为什么存在，哪些事情不该由它负责？</li>
+<li><strong>依赖是什么</strong>：依赖的是具体实现还是稳定接口，失败如何处理？</li>
+<li><strong>变化在哪里</strong>：未来最可能变化的规则、数据源和策略是否被隔离？</li>
+<li><strong>如何验证</strong>：成功、失败、边界、并发和回滚路径如何测试和观察？</li>
+</ol>
+<h3 id="ch14-5">测试层次</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>关注点</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单元测试</td>
+<td>一个函数或小模块的逻辑</td>
+<td>快、定位准，通常隔离外部依赖</td>
+</tr>
+<tr>
+<td>集成测试</td>
+<td>多模块与真实依赖的协作</td>
+<td>更接近实际，成本和环境要求更高</td>
+</tr>
+<tr>
+<td>端到端测试</td>
+<td>从入口到用户可见结果</td>
+<td>覆盖真实链路，但慢且排查成本高</td>
+</tr>
+<tr>
+<td>回归测试</td>
+<td>修改后原有能力是否仍正常</td>
+<td>依赖稳定用例和自动化执行</td>
+</tr>
+</tbody>
+</table></div>
+<p>测试不是越多越好。高价值测试应覆盖核心业务、不变量、边界和历史故障；对外部依赖可以使用测试替身，但不能永远只测替身而不做集成验证。</p>
+<h3 id="ch14-6">抽象和重构的边界</h3>
+<p>抽象的价值是隔离变化和复用稳定概念，不是把每个类都包装成接口。过早抽象会增加跳转和理解成本；重复出现、变化方向明确、测试难写或职责明显混杂时，重构收益更高。</p>
+<p>重构应尽量小步进行：先补测试和观测，再做一个可回滚的结构改动，保持行为不变，最后再引入新功能。不要把功能变更、框架升级和大规模重构绑成一次不可定位的提交。</p>
+<h3 id="ch14-7">高频追问</h3>
+<h4>追问 1：高内聚低耦合是不是模块越小越好？</h4>
+<p>不是。模块太小会产生大量跳转和胶水代码，反而增加理解成本。合理边界应围绕职责、变化方向和事务边界划分，并让接口稳定、依赖可控。</p>
+<h4>追问 2：单元测试为什么需要 Mock？</h4>
+<p>Mock 可以隔离网络、数据库、时间和随机性，让测试快速、稳定并聚焦当前逻辑。但 Mock 过多会测到实现细节、掩盖真实集成问题，所以仍需要少量高价值集成测试。</p>
+<h4>追问 3：代码评审主要看什么？</h4>
+<p>先看需求和行为是否正确，再看边界、异常、并发、资源释放、数据安全、可观测性和测试是否充分，最后看可读性与维护成本。评审不是只挑格式问题。</p>
+<h4>追问 4：如何处理技术债？</h4>
+<p>把它与线上故障、交付风险、开发效率或安全风险关联，记录影响和偿还成本，在需求迭代、专项治理或重构窗口中逐步处理。不是所有旧代码都值得重写，也不能因为“以后可能用到”就无限扩张抽象。</p>
+<h3 id="ch14-8">易错点</h3>
+<ul>
+<li>把设计原则当成不可违背的口号；</li>
+<li>用接口、工厂和层次包装掩盖真实的职责混乱；</li>
+<li>只写成功路径测试，不测异常和边界；</li>
+<li>认为测试覆盖率高就代表系统正确；</li>
+<li>重构时没有小步提交、回滚方案和行为验证。</li>
+</ul>
+<h3 id="ch14-9">30 秒回答模板</h3>
+<blockquote>
+<p>我理解的代码质量首先是职责清晰、依赖稳定、行为可验证，而不是类和接口越多越好。高内聚低耦合要结合变化方向和边界判断；单元测试保证局部逻辑，集成和端到端测试验证真实协作，评审和 CI 降低变更风险。重构通常先补测试和观测，再小步改动、保持可回滚，避免把多个高风险变化绑在一起。</p>
+</blockquote>
+<h3 id="ch14-10">学习停止线</h3>
+<p>本章不深入形式化方法、复杂组织流程和某种敏捷框架；能说清模块边界、测试层次、重构策略和代码评审重点即可。</p>
+<h2>第四部分 安全基础</h2>
+<h2 id="ch15">15. 安全与密码学最低限度</h2>
+<h3 id="ch15-1">题目</h3>
+<p>认证和授权有什么区别？哈希、加密、签名分别做什么？HTTPS、密码存储、SQL 注入、XSS、CSRF 和 SSRF 如何用最基础的话解释？</p>
+<h3 id="ch15-2">这道题在考什么</h3>
+<p>安全题通常不是考你推导密码学，而是看你是否有基本的威胁模型和防御意识。回答应先区分保护目标，再说明攻击面、验证位置和失败后的影响。</p>
+<h3 id="ch15-3">面试核心结论</h3>
+<blockquote>
+<p>安全的最低限度目标可以记成机密性、完整性、可用性，并在此基础上做身份认证、权限控制、输入校验、最小权限、审计和密钥管理。哈希是单向摘要，适合完整性校验和密码验证；加密是可逆地保护机密性；数字签名用私钥签名、公钥验证来源和完整性。HTTPS 通过 TLS 保护传输过程，但不能替代服务端授权、输入校验和终端安全。</p>
+</blockquote>
+<h3 id="ch15-4">认证、授权和会话</h3>
+<ul>
+<li><strong>认证 Authentication</strong>：你是谁，例如密码、证书、一次性验证码；</li>
+<li><strong>授权 Authorization</strong>：你能做什么，例如角色、资源和租户权限；</li>
+<li><strong>审计 Audit</strong>：谁在什么时候对什么资源做了什么操作；</li>
+<li><strong>会话 Session</strong>：服务端如何识别连续请求属于哪个已认证主体。</li>
+</ul>
+<p>Cookie、Session、JWT 都是会话实现方式或载体，不应把“使用 JWT”直接等同于安全。仍需要过期、撤销、签名密钥保护、权限校验和防重放策略。</p>
+<h3 id="ch15-5">四个密码学概念</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>主要目标</th>
+<th>最低限度理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>哈希</td>
+<td>摘要、完整性、不可逆验证</td>
+<td>同一输入得到固定摘要，不能当加密使用</td>
+</tr>
+<tr>
+<td>对称加密</td>
+<td>机密性</td>
+<td>加解密使用同一把密钥，速度快</td>
+</tr>
+<tr>
+<td>非对称加密</td>
+<td>密钥交换或机密性</td>
+<td>公钥和私钥成对，计算成本通常更高</td>
+</tr>
+<tr>
+<td>数字签名</td>
+<td>来源认证和完整性</td>
+<td>私钥签名，公钥验证，不等于加密</td>
+</tr>
+</tbody>
+</table></div>
+<p>密码不能直接存明文，也不应使用裸哈希；通常使用专门的密码哈希算法和随机盐，并通过参数控制计算成本。密钥管理往往比“选哪个算法名字”更容易成为实际短板。</p>
+<h3 id="ch15-6">常见 Web 风险的最低限度</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>风险</th>
+<th>本质</th>
+<th>基础防御</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL 注入</td>
+<td>用户输入改变 SQL 语义</td>
+<td>参数化查询、最小权限、输入约束</td>
+</tr>
+<tr>
+<td>XSS</td>
+<td>恶意脚本进入页面并执行</td>
+<td>输出编码、内容安全策略、Cookie 属性</td>
+</tr>
+<tr>
+<td>CSRF</td>
+<td>借助用户已有会话伪造请求</td>
+<td>CSRF Token、SameSite、关键操作再验证</td>
+</tr>
+<tr>
+<td>SSRF</td>
+<td>服务端被诱导访问不该访问的地址</td>
+<td>URL 白名单、网络隔离、限制内网访问</td>
+</tr>
+<tr>
+<td>越权</td>
+<td>用户访问不属于自己的资源</td>
+<td>服务端按资源和主体做授权校验</td>
+</tr>
+<tr>
+<td>重放</td>
+<td>合法请求被再次发送</td>
+<td>nonce、时间窗、幂等键和状态校验</td>
+</tr>
+</tbody>
+</table></div>
+<p>安全校验必须在服务端完成。前端隐藏按钮只能改善体验，不能作为授权依据。</p>
+<h3 id="ch15-7">HTTPS 只记握手目标</h3>
+<p>HTTPS 是 HTTP 运行在 TLS 之上。TLS 通过证书验证服务端身份，协商会话密钥，并用对称加密保护后续通信，同时检测篡改。它主要解决传输链路中的窃听、伪装和篡改；如果服务端本身越权、日志泄露密钥或客户端已被攻陷，HTTPS 不能兜底。</p>
+<h3 id="ch15-8">高频追问</h3>
+<h4>追问 1：哈希和加密有什么区别？</h4>
+<p>哈希是单向摘要，通常无法从摘要还原原文，适合校验和密码验证；加密强调机密性，持有密钥的一方可以解密。密码存储通常不应使用可逆加密来代替专用密码哈希。</p>
+<h4>追问 2：JWT 一定比 Session 安全或先进吗？</h4>
+<p>不一定。JWT 便于跨服务携带声明，但撤销、过期、大小和泄露后的处理需要额外设计；Session 由服务端保存状态，撤销直接但需要共享或粘性存储。应根据部署、会话生命周期和安全要求选择。</p>
+<h4>追问 3：为什么参数化查询能防 SQL 注入？</h4>
+<p>它把 SQL 模板和用户数据分开传递，用户输入被当作值而不是 SQL 语法的一部分。拼接字符串、只在前端校验或使用黑名单替换都不如参数化可靠。</p>
+<h4>追问 4：授权为什么必须在服务端每次校验？</h4>
+<p>客户端提交的身份、角色和资源 ID 都可能被篡改；服务端才是可信边界。授权要校验当前主体对当前资源和当前操作的权限，并防止通过修改 ID 访问他人数据。</p>
+<h3 id="ch15-9">易错点</h3>
+<ul>
+<li>把 Base64、编码或哈希说成加密；</li>
+<li>认为 HTTPS 后端就不需要鉴权和输入校验；</li>
+<li>只做登录认证，不做资源级授权；</li>
+<li>把 JWT 当成自动可撤销的登录状态；</li>
+<li>为了排障在日志中输出密码、Token 或完整敏感数据。</li>
+</ul>
+<h3 id="ch15-10">30 秒回答模板</h3>
+<blockquote>
+<p>安全基础可以从机密性、完整性和可用性出发，再落实到认证、授权、审计、最小权限和输入校验。哈希是单向摘要，加密保护机密性，签名用私钥证明来源和完整性；HTTPS 保护传输但不能替代服务端权限控制。常见 Web 风险要在服务端用参数化查询、输出编码、CSRF 防护、SSRF 限制和资源级授权处理，同时做好密码哈希、密钥管理和敏感信息脱敏。</p>
+</blockquote>
+<h3 id="ch15-11">学习停止线</h3>
+<p>本章不深入密码学证明、TLS 协议字段、渗透测试工具和合规条款；能正确区分保护目标、常见攻击面和基础防御即可。</p>
+<h2>第五部分 选读主题</h2>
+<h2 id="ch16">16. 大数据与搜索基础</h2>
+<h3 id="ch16-1">题目</h3>
+<p>什么是 OLTP、OLAP、数据仓库、数据湖、批处理和流处理？搜索引擎为什么需要倒排索引？Elasticsearch 和关系型数据库如何分工？</p>
+<h3 id="ch16-2">这道题在考什么</h3>
+<p>这一章只负责开拓眼界，防止面试中出现“大数据、实时数仓、全文检索、倒排索引”等词时完全陌生。重点是知道数据写入、分析和搜索的目标不同，不要把所有数据都塞进同一个数据库。</p>
+<h3 id="ch16-3">面试核心结论</h3>
+<blockquote>
+<p>OLTP 面向在线业务交易，强调单条或少量记录的并发读写、事务和低延迟；OLAP 面向分析，通常扫描大量数据并做聚合。数据仓库更强调结构化分析模型，数据湖以较低成本保存多种原始数据。批处理按批次处理历史数据，流处理持续处理事件。全文搜索常用倒排索引，把词项映射到包含它的文档，从而避免每次逐文档扫描；搜索引擎适合检索和相关性排序，关系型数据库通常仍是业务事实来源。</p>
+</blockquote>
+<h3 id="ch16-4">OLTP 和 OLAP 的直观区别</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>OLTP</th>
+<th>OLAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>完成业务交易</td>
+<td>分析趋势和汇总</td>
+</tr>
+<tr>
+<td>数据访问</td>
+<td>少量行、频繁并发</td>
+<td>大量行、聚合扫描</td>
+</tr>
+<tr>
+<td>典型问题</td>
+<td>下单、扣库存、更新用户</td>
+<td>销售报表、指标分析</td>
+</tr>
+<tr>
+<td>主要关注</td>
+<td>事务、并发、低延迟</td>
+<td>扫描效率、模型和成本</td>
+</tr>
+</tbody>
+</table></div>
+<p>同一份业务数据常从交易库同步到分析系统，不能为了报表直接对线上主库执行大范围复杂扫描。</p>
+<h3 id="ch16-5">倒排索引怎么理解</h3>
+<p>正排可以理解为“文档 → 内容”，倒排是“词 → 包含该词的文档列表”。建立倒排后，搜索“分布式 系统”可以分别找到候选文档，再结合词频、位置、字段权重和其他算法排序。搜索引擎还会做分词、分析、索引刷新和分片，因此“写入成功”与“立刻可搜索”可能存在短暂延迟。</p>
+<h3 id="ch16-6">批处理和流处理</h3>
+<ul>
+<li><strong>批处理</strong>：积累一批数据再运行，吞吐高、重算和历史修复相对直观，延迟通常较高；</li>
+<li><strong>流处理</strong>：事件到达后持续处理，延迟低，但要处理乱序、重复、迟到、状态和故障恢复；</li>
+<li><strong>Lambda/Kappa 等架构</strong>：尝试组合或统一批流路径，解决实时与历史重算之间的取舍，具体方案要看团队能力和业务要求。</li>
+</ul>
+<h3 id="ch16-7">Elasticsearch 的定位</h3>
+<p>只记四个词：<strong>文档、索引、分片、副本</strong>。业务数据写入关系库后，可以通过同步任务或消息更新搜索索引；搜索索引通常是可重建的派生数据，因此要设计全量重建、增量失败重试和版本兼容。不要把搜索引擎当成天然的唯一事实源，除非业务明确选择了它并承担相应的一致性和运维成本。</p>
+<h3 id="ch16-8">高频追问</h3>
+<h4>追问 1：为什么不能直接用 <code>LIKE '%关键词%'</code> 做大规模搜索？</h4>
+<p>前缀通配和包含匹配可能无法有效利用普通 B+ 树索引，容易扫描大量数据；全文搜索还需要分词、相关性、词项组合和高亮等能力，倒排索引更适合。小数据量和简单条件仍可直接使用数据库查询。</p>
+<h4>追问 2：搜索结果为什么可能不是最新的？</h4>
+<p>业务库到搜索索引通常是异步同步，索引刷新也可能有延迟；消息丢失、重复或消费失败会造成更久的不一致。需要监控同步延迟、失败重试和全量校准，而不是简单地假设写库就立即可搜。</p>
+<h4>追问 3：数据仓库和数据库有什么区别？</h4>
+<p>数据库可以泛指数据管理系统；在这个语境下，业务数据库主要服务在线交易，数据仓库主要面向跨主题、历史数据和分析查询。二者在模型、负载、存储布局和查询习惯上不同，通常通过数据管道连接。</p>
+<h4>追问 4：流处理一定比批处理好？</h4>
+<p>不一定。流处理降低延迟，但状态管理、乱序、重放和运维复杂度更高。如果业务只需要小时级或天级报表，批处理更简单可靠。应按时效性、数据量、修正方式和团队能力选择。</p>
+<h3 id="ch16-9">易错点</h3>
+<ul>
+<li>把“大数据”简单等同于某个产品；</li>
+<li>把 OLAP 查询直接压到线上交易库；</li>
+<li>认为搜索引擎写入后一定立即可见；</li>
+<li>把搜索索引当成不可丢失的唯一事实数据；</li>
+<li>只谈实时性，不谈乱序、重放、校准和成本。</li>
+</ul>
+<h3 id="ch16-10">30 秒回答模板</h3>
+<blockquote>
+<p>OLTP 负责在线交易，重视事务和低延迟；OLAP 负责大规模分析，重视扫描和聚合。批处理按批次运行，流处理持续处理事件，但要处理乱序、重复和状态恢复。全文搜索用倒排索引把词映射到文档，适合检索和排序；搜索引擎通常是业务库数据的派生索引，需要考虑同步延迟、失败重试和全量重建。</p>
+</blockquote>
+<h3 id="ch16-11">学习停止线</h3>
+<p>本章不深入 Hadoop/Spark/Flink 内核、搜索相关性算法和数仓建模全套方法；能区分交易、分析、搜索、批处理和流处理的定位即可。</p>
+<h2 id="ch17">17. AI、LLM 与 Agent 最小地图</h2>
+<h3 id="ch17-1">题目</h3>
+<p>什么是大语言模型、Token、Embedding、RAG、微调和 Agent？为什么模型会幻觉？如何从效果、延迟、成本和安全角度评价一个 LLM 应用？</p>
+<h3 id="ch17-2">这道题在考什么</h3>
+<p>本章不是替代已有的 LLM 与 Agent 专题笔记，而是提供非主攻方向的最低限度连接。面试官可能并不要求你训练模型，但希望你能区分模型能力、外部知识、工具调用、工作流编排和评测治理。</p>
+<h3 id="ch17-3">面试核心结论</h3>
+<blockquote>
+<p>LLM 根据上下文中的 Token 预测后续 Token，擅长语言生成和模式归纳，但不天然保证事实正确、长期记忆或实时知识。Embedding 把文本映射为向量，用于相似度检索；RAG 先从外部知识库检索相关内容，再把证据放入上下文生成答案；微调改变模型参数以适应任务风格或能力。Agent 通常是在模型决策外增加工具、状态、循环和执行约束的系统，不等于简单调用一次模型。</p>
+</blockquote>
+<h3 id="ch17-4">这些概念不要混淆</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>解决的问题</th>
+<th>最低限度理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt</td>
+<td>指导当前请求的行为</td>
+<td>不会凭空增加模型已学会的事实能力</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>当前可见的输入和历史</td>
+<td>受长度、成本和信息噪声限制</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>表示语义相似性</td>
+<td>常用于检索、聚类和匹配</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>让回答参考外部知识</td>
+<td>质量取决于切分、检索、重排和引用</td>
+</tr>
+<tr>
+<td>微调</td>
+<td>调整模型参数和行为</td>
+<td>适合稳定任务模式，不等于实时知识库</td>
+</tr>
+<tr>
+<td>Tool Calling</td>
+<td>让模型调用外部能力</td>
+<td>工具参数和权限必须由程序校验</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>让模型参与多步决策与执行</td>
+<td>需要状态、停止条件、重试和观测</td>
+</tr>
+<tr>
+<td>Evaluation</td>
+<td>衡量回答和系统是否可靠</td>
+<td>不能只看单个示例的主观效果</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch17-5">为什么会幻觉</h3>
+<p>模型的基本目标是生成概率上合理的文本，不是访问一个永远正确的事实数据库。幻觉可能来自知识缺失、上下文冲突、检索错误、提示歧义、长上下文噪声和生成随机性。基础治理包括提供可靠上下文、要求引用或拒答、结构化输出校验、工具结果验证、敏感场景人工审核和离线/在线评测。</p>
+<h3 id="ch17-6">LLM 应用的基本链路</h3>
+<p>用户请求 → 输入安全检查 → Prompt/上下文组装 → 可选检索和工具调用 → 模型生成 → 输出解析与事实/权限校验 → 返回或进入人工审核 → 记录成本、延迟、质量和失败原因。</p>
+<p>这里的“模型回答正确”只是链路中的一个环节。检索召回错误、工具权限过大、上下文泄露和输出没有结构化校验，都可能造成系统级故障。</p>
+<h3 id="ch17-7">高频追问</h3>
+<h4>追问 1：RAG 和微调怎么选？</h4>
+<p>需要引用不断变化的外部知识、希望可追溯时，优先考虑 RAG；需要稳定地改变输出格式、风格或任务行为时，可以考虑微调。二者也可以组合。微调不适合替代频繁更新的事实库，RAG 也不能解决模型全部推理和表达问题。</p>
+<h4>追问 2：Agent 和工作流有什么区别？</h4>
+<p>工作流通常由程序预先定义步骤和分支，确定性更强；Agent 让模型根据目标和当前状态选择下一步工具或行动，灵活性更高但不确定性和安全风险也更大。很多生产系统会把模型决策限制在可控工作流中。</p>
+<h4>追问 3：如何降低 LLM 应用延迟和成本？</h4>
+<p>减少无效上下文和检索量，选择合适模型，缓存可复用结果，流式返回，控制工具调用次数，设置超时和降级，并用真实流量统计 Token、P95/P99 延迟和失败率。不能只盯单次模型价格，还要算检索、工具、存储和人工审核成本。</p>
+<h4>追问 4：如何评价一个 RAG 系统？</h4>
+<p>至少分开看检索和生成：检索是否召回了正确证据，答案是否忠于证据、完整、可引用，系统是否满足延迟、成本、安全和拒答要求。离线测试集、人工评审、模型辅助评审和线上反馈应结合使用。</p>
+<h3 id="ch17-8">易错点</h3>
+<ul>
+<li>把 LLM 当成实时、确定且永远正确的数据库；</li>
+<li>把 RAG、微调和 Agent 当成同一件事；</li>
+<li>允许模型直接执行未经校验的高权限工具；</li>
+<li>只看 Demo 效果，不看幻觉、延迟、成本和数据泄露；</li>
+<li>把增加 Prompt 长度当成解决所有问题的方法。</li>
+</ul>
+<h3 id="ch17-9">30 秒回答模板</h3>
+<blockquote>
+<p>LLM 是基于上下文预测 Token 的生成模型，能力强但不保证事实正确。Embedding 用于语义表示，RAG 通过检索外部知识增强回答，微调主要改变稳定的任务行为，Agent 则在模型外增加工具、状态和多步执行。做应用时我会把检索、工具权限、输出校验、拒答、评测、延迟、成本和数据安全一起设计，而不是只看模型能否生成一段流畅文字。</p>
+</blockquote>
+<h3 id="ch17-10">学习停止线</h3>
+<p>本章不深入 Transformer 推导、训练并行、量化内核和 Agent 框架源码；能辨认模型、检索、工具、工作流和评测治理的边界即可，深入内容见对应专题笔记。</p>
+<h2 id="ch18">18. 技术选型速查表</h2>
+<h3 id="ch18-1">题目</h3>
+<p>面对一个新需求，如何选择数据库、缓存、消息队列、同步/异步通信、单体/微服务和部署方式？如果面试官问“为什么不用另一个技术”，怎么回答？</p>
+<h3 id="ch18-2">这道题在考什么</h3>
+<p>技术选型题考的是约束分析和取舍能力，不是产品排行榜。成熟回答应该先确认业务目标、数据特性、规模和团队条件，再比较一致性、延迟、吞吐、故障恢复、运维成本和迁移成本。</p>
+<h3 id="ch18-3">面试核心结论</h3>
+<blockquote>
+<p>选型没有脱离场景的最优答案。先确定核心事实、读写模式、规模增长、延迟和一致性要求，再选择最简单且能满足约束的方案；如果引入缓存、消息队列、搜索或微服务，应同时说明它们带来的失效、重复、最终一致性、运维和排障成本。面试中应先讲当前方案，再说明什么时候会切换到更复杂的方案。</p>
+</blockquote>
+<h3 id="ch18-4">常见场景的最低限度选择</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>常见起点</th>
+<th>需要补充的判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事务、关联查询、强约束</td>
+<td>关系型数据库</td>
+<td>索引、事务边界、容量和读写分离</td>
+</tr>
+<tr>
+<td>高速热点读取</td>
+<td>缓存</td>
+<td>失效、一致性、击穿和容量</td>
+</tr>
+<tr>
+<td>异步解耦、削峰</td>
+<td>消息队列</td>
+<td>投递、幂等、顺序、积压和重试</td>
+</tr>
+<tr>
+<td>文档结构灵活、特定访问模式</td>
+<td>NoSQL</td>
+<td>一致性、查询能力、迁移和运维</td>
+</tr>
+<tr>
+<td>全文检索和相关性排序</td>
+<td>搜索引擎</td>
+<td>索引同步、刷新延迟和重建</td>
+</tr>
+<tr>
+<td>必须立即得到结果</td>
+<td>同步 RPC/HTTP</td>
+<td>超时、重试、依赖隔离</td>
+</tr>
+<tr>
+<td>可延后或可重试的副作用</td>
+<td>异步事件/任务</td>
+<td>最终一致、死信和幂等</td>
+</tr>
+<tr>
+<td>业务规模较小、边界未稳定</td>
+<td>单体优先</td>
+<td>模块化、测试和未来拆分边界</td>
+</tr>
+<tr>
+<td>团队和领域边界成熟</td>
+<td>服务化/微服务</td>
+<td>部署、网络、观测和数据一致性成本</td>
+</tr>
+<tr>
+<td>环境一致性和快速交付</td>
+<td>容器化</td>
+<td>镜像、资源、网络、持久化和安全</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch18-5">一套通用的选型顺序</h3>
+<ol>
+<li><strong>目标</strong>：要解决的是正确性、延迟、吞吐、可用性还是交付效率？</li>
+<li><strong>数据</strong>：结构、关系、读写比例、增长速度、保留周期和删除要求是什么？</li>
+<li><strong>一致性</strong>：哪些操作必须立即正确，哪些可以最终一致，是否需要事务？</li>
+<li><strong>规模</strong>：当前和未来的 QPS、数据量、热点、并发和峰值是多少？</li>
+<li><strong>故障</strong>：组件失败、重复、积压、数据损坏和网络分区时怎么办？</li>
+<li><strong>运维</strong>：团队是否会用、监控告警是否具备、备份恢复和升级谁负责？</li>
+<li><strong>成本</strong>：资源、托管、开发、迁移、培训和长期复杂度如何？</li>
+</ol>
+<h3 id="ch18-6">“为什么不用 X” 的回答方式</h3>
+<p>不要回答“X 不好”，而要回答“在当前约束下，Y 的收益更匹配”。例如：</p>
+<blockquote>
+<p>目前数据量和团队规模不大，核心需求是事务和关联查询，所以先用关系型数据库，保持模型简单。若将来全文检索成为独立性能瓶颈，再把搜索能力拆到专门的搜索引擎；但业务库仍作为事实来源，并补上索引同步、重建和一致性处理。</p>
+</blockquote>
+<p>这种回答同时说明了当前选择、替代方案的适用条件，以及引入新组件的成本。</p>
+<h3 id="ch18-7">面试防守的五层回答法</h3>
+<p>面对不熟悉的技术，可以按下面顺序回答：</p>
+<ol>
+<li><strong>定义</strong>：它是什么；</li>
+<li><strong>问题</strong>：主要解决什么痛点；</li>
+<li><strong>流程</strong>：最基本的工作方式；</li>
+<li><strong>风险</strong>：一个常见坑和一个故障边界；</li>
+<li><strong>边界</strong>：自己掌握到哪里，实际项目会如何继续验证。</li>
+</ol>
+<p>例如被问到消息队列，不必从某个产品源码开始，而是先说异步解耦和削峰，再讲生产确认、持久化、消费确认、重复幂等和积压，最后说明具体产品差异需要结合吞吐、顺序、运维和团队经验评估。</p>
+<h3 id="ch18-8">高频追问</h3>
+<h4>追问 1：是不是组件越多，系统越先进？</h4>
+<p>不是。每个组件都增加部署、监控、升级、故障和数据一致性成本。应优先使用能满足当前约束的最简单方案，再根据可观测的瓶颈演进，而不是为想象中的规模提前堆复杂度。</p>
+<h4>追问 2：什么时候该拆微服务？</h4>
+<p>当领域边界、团队职责、发布节奏、扩缩容需求或故障隔离确实不同，且组织已经能承担分布式运维成本时再考虑。代码目录拆开但数据库、发布和责任仍完全耦合，不一定带来真正收益。</p>
+<h4>追问 3：如何比较两个中间件？</h4>
+<p>从语义和约束比较：数据模型、读写模式、吞吐和延迟、顺序与一致性、持久化和恢复、扩缩容、监控运维、生态和团队熟悉度。不要只比较宣传中的峰值 QPS。</p>
+<h4>追问 4：面试时不会的技术怎么回答？</h4>
+<p>先说已知的抽象定位和相邻概念，再明确不确定的细节，不编造源码行为；可以给出验证路径，例如查官方文档、做最小实验、看监控指标或确认团队已有约束。基础防守的目标是避免概念混乱，不是伪装成专家。</p>
+<h3 id="ch18-9">易错点</h3>
+<ul>
+<li>用“高并发”三个字替代具体 QPS、数据量和一致性要求；</li>
+<li>把成熟产品的默认架构当成所有场景的答案；</li>
+<li>只比较性能，不比较故障恢复和运维成本；</li>
+<li>为了展示知识引入不必要的缓存、队列和微服务；</li>
+<li>不会时硬背细节，导致在追问中前后矛盾。</li>
+</ul>
+<h3 id="ch18-10">30 秒回答模板</h3>
+<blockquote>
+<p>我会先确认业务目标、数据模型、读写模式、规模、延迟和一致性，再比较方案的吞吐、故障恢复、运维成本和团队能力。关系型数据库适合事务和关联查询，缓存适合热点读取，消息队列适合异步解耦，搜索引擎适合检索；但每引入一个组件都要补上失效、重复、积压、同步和观测方案。当前优先选满足约束的最简单方案，等瓶颈被数据证明后再演进。</p>
+</blockquote>
+<h3 id="ch18-11">学习停止线</h3>
+<p>本章不提供产品排名，也不要求记住所有中间件参数；能用统一的约束—收益—风险框架回答“为什么选它、什么时候换它”即可。</p>
+<hr />
+<h2>基础参考资料</h2>
+<p>这份文档用于建立面试地图，具体细节建议回到官方文档或系统教材验证。博客和八股资料适合快速发现问题，不应作为唯一依据。</p>
+<ul>
+<li><a href="https://github.com/CyC2018/CS-Notes">CS-Notes：计算机基础与面试知识总结</a>：适合快速建立计算机基础和面试题索引；</li>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/">MySQL Reference Manual</a>：SQL、索引、事务和锁的权威资料；</li>
+<li><a href="https://redis.io/docs/latest/">Redis Documentation</a>：数据类型、持久化、集群和命令语义；</li>
+<li><a href="https://kafka.apache.org/documentation/">Apache Kafka Documentation</a>：主题、分区、消费者组和投递语义；</li>
+<li><a href="https://kubernetes.io/docs/home/">Kubernetes Documentation</a>：容器编排对象、部署和服务发现；</li>
+<li><a href="https://docs.docker.com/">Docker Documentation</a>：镜像、容器和运行时基础；</li>
+<li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a>：常见 Web 安全风险；</li>
+<li><a href="https://sre.google/books/">Google SRE</a>：可靠性、服务等级和故障治理；</li>
+<li><a href="https://dataintensive.net/">Designing Data-Intensive Applications</a>：数据系统和分布式系统的整体视角；</li>
+<li><a href="https://developer.mozilla.org/">MDN Web Docs</a>：Web、HTTP、浏览器和安全基础。</li>
+</ul>
+<h3>最后复习清单</h3>
+<p>在正式面试前，至少应能不看资料回答：</p>
+<ul>
+<li>一个请求从客户端到数据库和异步任务的大致路径；</li>
+<li>缓存、数据库、消息队列和搜索引擎各自解决什么问题；</li>
+<li>超时、重试、限流、熔断、降级的差异；</li>
+<li>CAP、强一致和最终一致的基本边界；</li>
+<li>日志、指标、Trace 如何配合排障；</li>
+<li>认证、授权、哈希、加密、签名的区别；</li>
+<li>面对不会的组件，如何用“定义—问题—流程—风险—边界”回答。</li>
+</ul>
+<p>达到这个程度，就已经具备了非主攻方向的基础防守能力；之后应把时间优先投入真正决定面试结果的主攻方向和项目深挖。</p></main>
+</div>
+<button id="topBtn" type="button" aria-label="返回顶部">&#8593;</button>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+/* 主题 */
+var root=document.documentElement;
+var saved=null; try{saved=localStorage.getItem('bagu-theme')}catch(e){}
+root.dataset.theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+function themeLabel(){
+  var dark=root.dataset.theme==='dark';
+  $('#themeBtn').innerHTML=dark?'&#9681; 浅色':'&#9681; 深色';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.content=dark?'#0e1116':'#f5f6f8';
+}
+themeLabel();
+$('#themeBtn').onclick=function(){
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  try{localStorage.setItem('bagu-theme',root.dataset.theme)}catch(e){}
+  themeLabel();
+};
+/* 移动端目录 */
+var menuBtn=$('#menuBtn'),sidebar=$('#sidebar');
+var mobileQuery=matchMedia('(max-width:960px)');
+function setNav(open){
+  open=mobileQuery.matches&&open;
+  document.body.classList.toggle('nav-open',open);
+  menuBtn.setAttribute('aria-expanded',String(open));
+  menuBtn.setAttribute('aria-label',open?'关闭目录':'打开目录');
+  if(mobileQuery.matches&&!open){sidebar.setAttribute('aria-hidden','true');sidebar.inert=true;}
+  else{sidebar.removeAttribute('aria-hidden');sidebar.inert=false;}
+}
+menuBtn.onclick=function(){setNav(!document.body.classList.contains('nav-open'))};
+$('#backdrop').onclick=function(){setNav(false);menuBtn.focus()};
+$$('#sidebar a').forEach(function(a){a.addEventListener('click',function(){
+  if(mobileQuery.matches)setTimeout(function(){setNav(false)},0);
+})});
+if(mobileQuery.addEventListener)mobileQuery.addEventListener('change',function(){setNav(false)});
+setNav(false);
+/* 小节展开按钮 */
+function setSecsOpen(secs,btn,open){
+  if(!secs)return;
+  secs.classList.toggle('open',open);
+  secs.setAttribute('aria-hidden',String(!open));
+  if(btn){btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',String(open));}
+}
+$$('.twisty').forEach(function(btn){btn.addEventListener('click',function(e){
+  e.preventDefault();
+  var chap=btn.closest('.chap');
+  var secs=document.querySelector('.secs[data-for="'+chap.dataset.ch+'"]');
+  if(secs)setSecsOpen(secs,btn,!secs.classList.contains('open'));
+});});
+/* 滚动定位 */
+var headings=$$('.content h2[id], .content h3[id]');
+var tops=[],activeId=null;
+function computeTops(){tops=headings.map(function(h){return [h.offsetTop,h.id]})}
+function setActive(id){
+  if(id===activeId)return; activeId=id;
+  $$('#sidebar .active').forEach(function(el){el.classList.remove('active')});
+  if(!id)return;
+  var chId=id.split('-')[0];
+  var chap=document.querySelector('.chap[data-ch="'+chId+'"]');
+  var searching=document.body.classList.contains('searching');
+  if(chap){
+    chap.classList.add('active');
+    var part=chap.closest('details.part'); if(part)part.open=true;
+    if(!searching){
+      $$('.secs.open').forEach(function(s){
+        if(s.dataset.for!==chId){s.classList.remove('open');
+          var t=document.querySelector('.chap[data-ch="'+s.dataset.for+'"] .twisty');
+          setSecsOpen(s,t,false);}
+      });
+      var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+      if(secs){var tw=chap.querySelector('.twisty');setSecsOpen(secs,tw,true);}
+    }
+  }
+  var link=document.querySelector('#sidebar .secs a[href="#'+id+'"]');
+  if(link)link.classList.add('active');
+  var target=link||chap;
+  if(target){
+    var sb=$('#sidebar-scroll'),r=target.getBoundingClientRect(),sr=sb.getBoundingClientRect();
+    if(r.top<sr.top+50||r.bottom>sr.bottom-50){
+      /* Keep sidebar navigation from changing the document scroll position. */
+      sb.scrollTop += r.top-sr.top-(sr.height-r.height)/2;
+    }
+  }
+}
+var ticking=false;
+function onScroll(){
+  if(ticking)return; ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var y=window.scrollY+92,id=null,lo=0,hi=tops.length-1;
+    while(lo<=hi){var m=(lo+hi)>>1;
+      if(tops[m][0]<=y){id=tops[m][1];lo=m+1;}else hi=m-1;}
+    setActive(id);
+    var doc=document.documentElement;
+    var p=window.scrollY/(doc.scrollHeight-window.innerHeight||1);
+    $('#progress').style.width=(p*100)+'%';
+    $('#topBtn').classList.toggle('show',window.scrollY>600);
+  });
+}
+computeTops();
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',function(){computeTops();onScroll()});
+window.addEventListener('load',function(){computeTops();onScroll()});
+onScroll();
+$('#topBtn').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+/* 搜索 */
+var box=$('#search');
+box.addEventListener('input',function(){
+  var q=box.value.trim().toLowerCase();
+  var searching=q.length>0;
+  document.body.classList.toggle('searching',searching);
+  $$('.chap').forEach(function(chap){
+    var chId=chap.dataset.ch;
+    var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+    var secHit=false;
+    if(secs){secs.querySelectorAll('li').forEach(function(li){
+      var hit=!searching||li.dataset.text.indexOf(q)>=0;
+      li.classList.toggle('hide',searching&&!hit);
+      if(searching&&hit)secHit=true;
+    });}
+    var chapHit=chap.dataset.text.indexOf(q)>=0;
+    var visible=!searching||chapHit||secHit;
+    chap.classList.toggle('hide',!visible);
+    if(secs){
+      var t=chap.querySelector('.twisty');
+      if(searching)setSecsOpen(secs,t,secHit);
+      else setSecsOpen(secs,t,false);
+    }
+  });
+  $$('details.part').forEach(function(p){
+    var any=p.querySelector('.chap:not(.hide)');
+    p.classList.toggle('hide',searching&&!any);
+    if(searching)p.open=true;
+  });
+  var anyVisible=$('.chap:not(.hide)');
+  $('#emptySearch').classList.toggle('show',searching&&!anyVisible);
+  if(!searching){activeId=null;onScroll();}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='/'&&document.activeElement!==box){e.preventDefault();box.focus();box.select();}
+  if(e.key==='Escape'&&document.activeElement===box){box.value='';box.dispatchEvent(new Event('input'));box.blur();}
+  else if(e.key==='Escape'&&document.body.classList.contains('nav-open')){setNav(false);menuBtn.focus();}
+});
+})();
+</script>
+</body>
+</html>
