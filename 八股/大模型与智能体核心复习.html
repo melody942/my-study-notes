@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f6f8">
+<title>LLM 与 Agent 核心复习</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%230f766e'/%3E%3C/svg%3E">
+<style>
+:root{
+  --accent:#0f766e;
+  --bg:#f5f6f8; --panel:#ffffff; --panel-trans:rgba(255,255,255,.85);
+  --fg:#1e2430; --muted:#69707d; --border:#e4e7ec; --hover:#eef1f5;
+  --accent-soft:color-mix(in srgb, var(--accent) 10%, transparent);
+  --code-bg:#f2f4f7; --quote-bg:color-mix(in srgb, var(--accent) 6%, var(--panel));
+  --shadow:0 1px 3px rgba(16,24,40,.07);
+}
+html[data-theme="dark"]{
+  --bg:#0e1116; --panel:#151a22; --panel-trans:rgba(21,26,34,.85);
+  --fg:#d6dae2; --muted:#8a93a2; --border:#252c39; --hover:#1c2330;
+  --code-bg:#1a202b; --quote-bg:color-mix(in srgb, var(--accent) 12%, var(--panel));
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  overflow-wrap:break-word}
+.skip-link{position:fixed;left:14px;top:8px;z-index:100;transform:translateY(-160%);
+  padding:7px 12px;border-radius:6px;background:var(--panel);color:var(--fg);
+  border:2px solid var(--accent);text-decoration:none;transition:transform .15s}
+.skip-link:focus-visible{transform:none}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:60;transition:width .1s}
+/* ---------- 侧边栏 ---------- */
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:min(302px,86vw);background:var(--panel);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50}
+.sb-head{padding:16px 14px 10px;border-bottom:1px solid var(--border)}
+.sb-title{font-weight:700;font-size:1.02rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sb-title a{color:var(--fg);text-decoration:none}
+.sb-title .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);flex:none}
+#search{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg);color:var(--fg);font-size:.88rem}
+#search:focus-visible{border-color:var(--accent)}
+.search-empty{display:none;padding:16px 10px;color:var(--muted);font-size:.86rem;text-align:center}
+.search-empty.show{display:block}
+.sb-hint{font-size:.74rem;color:var(--muted);margin-top:6px}
+.sb-siblinks{display:none;margin-top:9px}
+.sb-siblinks a{color:var(--accent);text-decoration:none;font-size:.85rem;margin-right:14px;white-space:nowrap}
+#sidebar-scroll{overflow-y:auto;flex:1;padding:8px 6px 30px;scrollbar-width:thin}
+details.part>summary{list-style:none;cursor:pointer;user-select:none;padding:9px 10px 4px;
+  font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.03em}
+details.part>summary::-webkit-details-marker{display:none}
+details.part>summary::before{content:"\25B8";display:inline-block;margin-right:6px;
+  transition:transform .15s;font-size:.7rem}
+details.part[open]>summary::before{transform:rotate(90deg)}
+.chap{display:flex;align-items:center;border-radius:8px;margin:1px 4px}
+.chap:hover{background:var(--hover)}
+.chap.active{background:var(--accent-soft)}
+.chap.active .chap-title{color:var(--accent);font-weight:600}
+.chap-link{flex:1;display:flex;gap:8px;padding:6px 2px 6px 10px;color:var(--fg);
+  text-decoration:none;font-size:.9rem;line-height:1.4;min-width:0}
+.chap-num{color:var(--muted);font-size:.82em;min-width:1.5em;text-align:right;
+  font-variant-numeric:tabular-nums;padding-top:.15em;flex:none}
+.chap-title{overflow-wrap:anywhere}
+.twisty{width:36px;height:36px;border:none;background:none;color:var(--muted);cursor:pointer;
+  padding:0;font-size:.78rem;transition:transform .15s;flex:none}
+.twisty.open{transform:rotate(90deg)}
+.secs{display:none;margin:0 4px 5px 0;padding:0 0 0 32px;list-style:none}
+.secs.open{display:block}
+.secs a{display:block;padding:3.5px 8px;font-size:.84rem;color:var(--muted);
+  text-decoration:none;border-left:2px solid var(--border);line-height:1.45;overflow-wrap:anywhere}
+.secs a:hover{color:var(--fg);border-left-color:var(--muted)}
+.secs a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.hide{display:none!important}
+/* ---------- 顶栏与正文 ---------- */
+.main{margin-left:302px}
+.topbar{position:fixed;top:0;left:302px;right:0;height:52px;z-index:40;
+  display:flex;align-items:center;gap:14px;padding:0 22px;
+  background:var(--panel-trans);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+#menuBtn{display:none;border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 10px;font-size:1rem;cursor:pointer}
+.tb-title{font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-spacer{flex:1}
+.tb-link{color:var(--accent);text-decoration:none;font-size:.88rem;white-space:nowrap}
+.tb-link:hover{text-decoration:underline}
+#themeBtn{border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 12px;font-size:.85rem;cursor:pointer;white-space:nowrap}
+#themeBtn:hover{border-color:var(--accent);color:var(--accent)}
+.content{max-width:900px;margin:0 auto;padding:84px 44px 140px}
+/* 标题层级 */
+.content h1{font-size:1.9rem;line-height:1.35;margin:.4rem 0 1.2rem}
+.content h1:not(:first-child){margin-top:3.6rem;padding-top:2.4rem;border-top:3px solid var(--accent-soft)}
+.content h2{font-size:1.55rem;line-height:1.4;margin:3rem 0 1.1rem;padding-top:2.4rem;
+  border-top:2px solid var(--border)}
+.content h3{font-size:1.22rem;margin:2.3rem 0 .8rem;padding-left:.72rem;
+  border-left:4px solid var(--accent);line-height:1.45}
+.content h4{display:inline-block;font-size:.98rem;margin:1.7rem 0 .55rem;
+  background:var(--accent-soft);border-radius:7px;padding:.28rem .7rem;line-height:1.5}
+h1,h2,h3,h4{scroll-margin-top:76px;text-wrap:balance}
+a.alias{scroll-margin-top:76px}
+.content a{color:var(--accent)}
+.content hr{border:none;border-top:1px solid var(--border);margin:2.4rem 0}
+.content strong{font-weight:650}
+/* 引用块（核心结论 / 回答模板 / 前置说明） */
+.content blockquote{margin:1.1rem 0;padding:.85rem 1.1rem;background:var(--quote-bg);
+  border-left:4px solid var(--accent);border-radius:0 10px 10px 0}
+.content blockquote p{margin:.3rem 0}
+/* 行内代码与代码块 */
+.content code{font-family:Consolas,"JetBrains Mono","Cascadia Code",Menlo,monospace;
+  background:var(--code-bg);padding:.14em .42em;border-radius:5px;font-size:.88em}
+.codehilite{border:1px solid var(--border);border-radius:10px;overflow:auto;
+  margin:1.1rem 0;box-shadow:var(--shadow)}
+.codehilite pre{margin:0;padding:14px 17px;line-height:1.62;font-size:.86rem}
+.codehilite code{background:none;padding:0;font-size:inherit;border-radius:0}
+/* Mermaid 图 */
+.mermaid{margin:1.2rem 0;padding:18px;overflow-x:auto;border:1px solid var(--border);
+  border-radius:8px;background:#fff;color:#1f2937;text-align:center;box-shadow:var(--shadow);
+  white-space:normal;overflow-wrap:normal}
+.mermaid svg{display:block;max-width:100%;height:auto;margin:0 auto}
+/* 表格 */
+.tblwrap{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--border);
+  border-radius:10px;box-shadow:var(--shadow)}
+.content table{border-collapse:collapse;width:100%;font-size:.92rem;line-height:1.6}
+.content th{background:var(--hover);text-align:left;font-weight:650;white-space:nowrap}
+.content th,.content td{padding:8px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+.content tr:last-child td{border-bottom:none}
+.content tbody tr:nth-child(even){background:color-mix(in srgb, var(--hover) 55%, transparent)}
+/* 列表 */
+.content ul,.content ol{padding-left:1.5em}
+.content li{margin:.28rem 0}
+/* 返回顶部 */
+#topBtn{position:fixed;right:28px;bottom:30px;width:42px;height:42px;border-radius:12px;
+  border:1px solid var(--border);background:var(--panel);color:var(--muted);font-size:1.1rem;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s,color .2s,border-color .2s;box-shadow:var(--shadow);z-index:45}
+#topBtn.show{opacity:1;pointer-events:auto}
+#topBtn:hover{color:var(--accent);border-color:var(--accent)}
+#backdrop{display:none;border:0;padding:0}
+/* 移动端 */
+@media (max-width:960px){
+  #sidebar{transform:translateX(-100%);transition:transform .22s}
+  body.nav-open #sidebar{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  body.nav-open #backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:49}
+  .main{margin-left:0}
+  .topbar{left:0;padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:max(14px,env(safe-area-inset-right));gap:10px}
+  #menuBtn{display:block}
+  .topbar .tb-link{display:none}
+  .sb-siblinks{display:block}
+  .content{padding:76px max(18px,env(safe-area-inset-right)) 110px max(18px,env(safe-area-inset-left))}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+::selection{background:var(--accent-soft)}
+/* pygments */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #ffffff; }
+.codehilite .c { color: #177500 } /* Comment */
+.codehilite .err { color: #000 } /* Error */
+.codehilite .k { color: #A90D91 } /* Keyword */
+.codehilite .l { color: #1C01CE } /* Literal */
+.codehilite .n { color: #000 } /* Name */
+.codehilite .o { color: #000 } /* Operator */
+.codehilite .ch { color: #177500 } /* Comment.Hashbang */
+.codehilite .cm { color: #177500 } /* Comment.Multiline */
+.codehilite .cp { color: #633820 } /* Comment.Preproc */
+.codehilite .cpf { color: #177500 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #177500 } /* Comment.Single */
+.codehilite .cs { color: #177500 } /* Comment.Special */
+.codehilite .kc { color: #A90D91 } /* Keyword.Constant */
+.codehilite .kd { color: #A90D91 } /* Keyword.Declaration */
+.codehilite .kn { color: #A90D91 } /* Keyword.Namespace */
+.codehilite .kp { color: #A90D91 } /* Keyword.Pseudo */
+.codehilite .kr { color: #A90D91 } /* Keyword.Reserved */
+.codehilite .kt { color: #A90D91 } /* Keyword.Type */
+.codehilite .ld { color: #1C01CE } /* Literal.Date */
+.codehilite .m { color: #1C01CE } /* Literal.Number */
+.codehilite .s { color: #C41A16 } /* Literal.String */
+.codehilite .na { color: #836C28 } /* Name.Attribute */
+.codehilite .nb { color: #A90D91 } /* Name.Builtin */
+.codehilite .nc { color: #3F6E75 } /* Name.Class */
+.codehilite .no { color: #000 } /* Name.Constant */
+.codehilite .nd { color: #000 } /* Name.Decorator */
+.codehilite .ni { color: #000 } /* Name.Entity */
+.codehilite .ne { color: #000 } /* Name.Exception */
+.codehilite .nf { color: #000 } /* Name.Function */
+.codehilite .nl { color: #000 } /* Name.Label */
+.codehilite .nn { color: #000 } /* Name.Namespace */
+.codehilite .nx { color: #000 } /* Name.Other */
+.codehilite .py { color: #000 } /* Name.Property */
+.codehilite .nt { color: #000 } /* Name.Tag */
+.codehilite .nv { color: #000 } /* Name.Variable */
+.codehilite .ow { color: #000 } /* Operator.Word */
+.codehilite .mb { color: #1C01CE } /* Literal.Number.Bin */
+.codehilite .mf { color: #1C01CE } /* Literal.Number.Float */
+.codehilite .mh { color: #1C01CE } /* Literal.Number.Hex */
+.codehilite .mi { color: #1C01CE } /* Literal.Number.Integer */
+.codehilite .mo { color: #1C01CE } /* Literal.Number.Oct */
+.codehilite .sa { color: #C41A16 } /* Literal.String.Affix */
+.codehilite .sb { color: #C41A16 } /* Literal.String.Backtick */
+.codehilite .sc { color: #2300CE } /* Literal.String.Char */
+.codehilite .dl { color: #C41A16 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #C41A16 } /* Literal.String.Doc */
+.codehilite .s2 { color: #C41A16 } /* Literal.String.Double */
+.codehilite .se { color: #C41A16 } /* Literal.String.Escape */
+.codehilite .sh { color: #C41A16 } /* Literal.String.Heredoc */
+.codehilite .si { color: #C41A16 } /* Literal.String.Interpol */
+.codehilite .sx { color: #C41A16 } /* Literal.String.Other */
+.codehilite .sr { color: #C41A16 } /* Literal.String.Regex */
+.codehilite .s1 { color: #C41A16 } /* Literal.String.Single */
+.codehilite .ss { color: #C41A16 } /* Literal.String.Symbol */
+.codehilite .bp { color: #5B269A } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #000 } /* Name.Function.Magic */
+.codehilite .vc { color: #000 } /* Name.Variable.Class */
+.codehilite .vg { color: #000 } /* Name.Variable.Global */
+.codehilite .vi { color: #000 } /* Name.Variable.Instance */
+.codehilite .vm { color: #000 } /* Name.Variable.Magic */
+.codehilite .il { color: #1C01CE } /* Literal.Number.Integer.Long */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+html[data-theme="dark"] .codehilite .hll { background-color: #49483e }
+html[data-theme="dark"] .codehilite { background: #272822; color: #F8F8F2 }
+html[data-theme="dark"] .codehilite .c { color: #959077 } /* Comment */
+html[data-theme="dark"] .codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+html[data-theme="dark"] .codehilite .esc { color: #F8F8F2 } /* Escape */
+html[data-theme="dark"] .codehilite .g { color: #F8F8F2 } /* Generic */
+html[data-theme="dark"] .codehilite .k { color: #66D9EF } /* Keyword */
+html[data-theme="dark"] .codehilite .l { color: #AE81FF } /* Literal */
+html[data-theme="dark"] .codehilite .n { color: #F8F8F2 } /* Name */
+html[data-theme="dark"] .codehilite .o { color: #FF4689 } /* Operator */
+html[data-theme="dark"] .codehilite .x { color: #F8F8F2 } /* Other */
+html[data-theme="dark"] .codehilite .p { color: #F8F8F2 } /* Punctuation */
+html[data-theme="dark"] .codehilite .ch { color: #959077 } /* Comment.Hashbang */
+html[data-theme="dark"] .codehilite .cm { color: #959077 } /* Comment.Multiline */
+html[data-theme="dark"] .codehilite .cp { color: #959077 } /* Comment.Preproc */
+html[data-theme="dark"] .codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+html[data-theme="dark"] .codehilite .c1 { color: #959077 } /* Comment.Single */
+html[data-theme="dark"] .codehilite .cs { color: #959077 } /* Comment.Special */
+html[data-theme="dark"] .codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+html[data-theme="dark"] .codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+html[data-theme="dark"] .codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+html[data-theme="dark"] .codehilite .gr { color: #F8F8F2 } /* Generic.Error */
+html[data-theme="dark"] .codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+html[data-theme="dark"] .codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+html[data-theme="dark"] .codehilite .go { color: #66D9EF } /* Generic.Output */
+html[data-theme="dark"] .codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+html[data-theme="dark"] .codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+html[data-theme="dark"] .codehilite .gu { color: #959077 } /* Generic.Subheading */
+html[data-theme="dark"] .codehilite .gt { color: #F8F8F2 } /* Generic.Traceback */
+html[data-theme="dark"] .codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+html[data-theme="dark"] .codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+html[data-theme="dark"] .codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+html[data-theme="dark"] .codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+html[data-theme="dark"] .codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+html[data-theme="dark"] .codehilite .kt { color: #66D9EF } /* Keyword.Type */
+html[data-theme="dark"] .codehilite .ld { color: #E6DB74 } /* Literal.Date */
+html[data-theme="dark"] .codehilite .m { color: #AE81FF } /* Literal.Number */
+html[data-theme="dark"] .codehilite .s { color: #E6DB74 } /* Literal.String */
+html[data-theme="dark"] .codehilite .na { color: #A6E22E } /* Name.Attribute */
+html[data-theme="dark"] .codehilite .nb { color: #F8F8F2 } /* Name.Builtin */
+html[data-theme="dark"] .codehilite .nc { color: #A6E22E } /* Name.Class */
+html[data-theme="dark"] .codehilite .no { color: #66D9EF } /* Name.Constant */
+html[data-theme="dark"] .codehilite .nd { color: #A6E22E } /* Name.Decorator */
+html[data-theme="dark"] .codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+html[data-theme="dark"] .codehilite .ne { color: #A6E22E } /* Name.Exception */
+html[data-theme="dark"] .codehilite .nf { color: #A6E22E } /* Name.Function */
+html[data-theme="dark"] .codehilite .nl { color: #F8F8F2 } /* Name.Label */
+html[data-theme="dark"] .codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+html[data-theme="dark"] .codehilite .nx { color: #A6E22E } /* Name.Other */
+html[data-theme="dark"] .codehilite .py { color: #F8F8F2 } /* Name.Property */
+html[data-theme="dark"] .codehilite .nt { color: #FF4689 } /* Name.Tag */
+html[data-theme="dark"] .codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+html[data-theme="dark"] .codehilite .ow { color: #FF4689 } /* Operator.Word */
+html[data-theme="dark"] .codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+html[data-theme="dark"] .codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+html[data-theme="dark"] .codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+html[data-theme="dark"] .codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+html[data-theme="dark"] .codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+html[data-theme="dark"] .codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+html[data-theme="dark"] .codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+html[data-theme="dark"] .codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+html[data-theme="dark"] .codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+html[data-theme="dark"] .codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+html[data-theme="dark"] .codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+html[data-theme="dark"] .codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+html[data-theme="dark"] .codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+html[data-theme="dark"] .codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+html[data-theme="dark"] .codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+html[data-theme="dark"] .codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+html[data-theme="dark"] .codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+html[data-theme="dark"] .codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+html[data-theme="dark"] .codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+html[data-theme="dark"] .codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+html[data-theme="dark"] .codehilite .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+html[data-theme="dark"] .codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+html[data-theme="dark"] .codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+html[data-theme="dark"] .codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+html[data-theme="dark"] .codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+html[data-theme="dark"] .codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+html[data-theme="dark"] .codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */
+.codehilite{background:var(--code-bg)}
+html[data-theme="dark"] .codehilite{background:var(--code-bg)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<div id="progress"></div>
+<nav id="sidebar" aria-label="章节目录">
+  <div class="sb-head">
+    <div class="sb-title"><span class="dot" aria-hidden="true"></span><a href="#top">LLM 与 Agent 核心复习</a></div>
+    <input id="search" name="chapter-search" type="search" aria-label="搜索章节和小节"
+      placeholder="搜索章节 / 小节…" autocomplete="off" spellcheck="false">
+    <div class="sb-hint">共 29 章 · 按 / 快速聚焦搜索</div>
+    <div class="sb-siblinks"><a class="tb-link" href="传统计算机与后端核心复习.html">传统计算机与后端篇 →</a><a class="tb-link" href="大模型面试八股笔记.html">LLM 深入笔记 →</a><a class="tb-link" href="智能体面试八股笔记.html">Agent 深入笔记 →</a></div>
+  </div>
+  <div id="sidebar-scroll"><details class="part" open><summary>第一部分 LLM 基础原理</summary><div class="plist"><div class="chap" data-ch="ch1" data-text="llm 全景与生命周期"><a class="chap-link" href="#ch1"><span class="chap-num">1</span><span class="chap-title">LLM 全景与生命周期</span></a><button class="twisty" aria-label="展开第 1 章小节" aria-controls="secs-ch1" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch1" data-for="ch1" aria-hidden="true"><li data-text="核心概念"><a href="#ch1-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch1-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch1-3">易错点</a></li></ul><div class="chap" data-ch="ch2" data-text="数学与深度学习基础"><a class="chap-link" href="#ch2"><span class="chap-num">2</span><span class="chap-title">数学与深度学习基础</span></a><button class="twisty" aria-label="展开第 2 章小节" aria-controls="secs-ch2" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch2" data-for="ch2" aria-hidden="true"><li data-text="核心概念"><a href="#ch2-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch2-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch2-3">易错点</a></li></ul><div class="chap" data-ch="ch3" data-text="tokenizer 与 embedding"><a class="chap-link" href="#ch3"><span class="chap-num">3</span><span class="chap-title">Tokenizer 与 Embedding</span></a><button class="twisty" aria-label="展开第 3 章小节" aria-controls="secs-ch3" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch3" data-for="ch3" aria-hidden="true"><li data-text="核心概念"><a href="#ch3-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch3-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch3-3">易错点</a></li></ul><div class="chap" data-ch="ch4" data-text="attention 与 transformer"><a class="chap-link" href="#ch4"><span class="chap-num">4</span><span class="chap-title">Attention 与 Transformer</span></a><button class="twisty" aria-label="展开第 4 章小节" aria-controls="secs-ch4" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch4" data-for="ch4" aria-hidden="true"><li data-text="核心概念"><a href="#ch4-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch4-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch4-3">易错点</a></li></ul><div class="chap" data-ch="ch5" data-text="模型架构、位置编码与 moe"><a class="chap-link" href="#ch5"><span class="chap-num">5</span><span class="chap-title">模型架构、位置编码与 MoE</span></a><button class="twisty" aria-label="展开第 5 章小节" aria-controls="secs-ch5" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch5" data-for="ch5" aria-hidden="true"><li data-text="核心概念"><a href="#ch5-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch5-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch5-3">易错点</a></li></ul></div></details><details class="part" open><summary>第二部分 训练、对齐与推理能力</summary><div class="plist"><div class="chap" data-ch="ch6" data-text="预训练与规模化训练"><a class="chap-link" href="#ch6"><span class="chap-num">6</span><span class="chap-title">预训练与规模化训练</span></a><button class="twisty" aria-label="展开第 6 章小节" aria-controls="secs-ch6" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch6" data-for="ch6" aria-hidden="true"><li data-text="核心概念"><a href="#ch6-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch6-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch6-3">易错点</a></li></ul><div class="chap" data-ch="ch7" data-text="后训练、偏好对齐与推理能力"><a class="chap-link" href="#ch7"><span class="chap-num">7</span><span class="chap-title">后训练、偏好对齐与推理能力</span></a><button class="twisty" aria-label="展开第 7 章小节" aria-controls="secs-ch7" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch7" data-for="ch7" aria-hidden="true"><li data-text="核心概念"><a href="#ch7-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch7-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch7-3">易错点</a></li></ul><div class="chap" data-ch="ch8" data-text="参数高效微调"><a class="chap-link" href="#ch8"><span class="chap-num">8</span><span class="chap-title">参数高效微调</span></a><button class="twisty" aria-label="展开第 8 章小节" aria-controls="secs-ch8" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch8" data-for="ch8" aria-hidden="true"><li data-text="核心概念"><a href="#ch8-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch8-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch8-3">易错点</a></li></ul></div></details><details class="part" open><summary>第三部分 推理优化与模型服务</summary><div class="plist"><div class="chap" data-ch="ch9" data-text="解码、prefill、decode 与 kv cache"><a class="chap-link" href="#ch9"><span class="chap-num">9</span><span class="chap-title">解码、Prefill、Decode 与 KV Cache</span></a><button class="twisty" aria-label="展开第 9 章小节" aria-controls="secs-ch9" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch9" data-for="ch9" aria-hidden="true"><li data-text="核心概念"><a href="#ch9-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch9-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch9-3">易错点</a></li></ul><div class="chap" data-ch="ch10" data-text="高性能推理、量化与 serving"><a class="chap-link" href="#ch10"><span class="chap-num">10</span><span class="chap-title">高性能推理、量化与 Serving</span></a><button class="twisty" aria-label="展开第 10 章小节" aria-controls="secs-ch10" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch10" data-for="ch10" aria-hidden="true"><li data-text="核心概念"><a href="#ch10-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch10-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch10-3">易错点</a></li></ul></div></details><details class="part" open><summary>第四部分 Prompt、Context 与 RAG</summary><div class="plist"><div class="chap" data-ch="ch11" data-text="prompt 与结构化输出"><a class="chap-link" href="#ch11"><span class="chap-num">11</span><span class="chap-title">Prompt 与结构化输出</span></a><button class="twisty" aria-label="展开第 11 章小节" aria-controls="secs-ch11" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch11" data-for="ch11" aria-hidden="true"><li data-text="核心概念"><a href="#ch11-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch11-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch11-3">易错点</a></li></ul><div class="chap" data-ch="ch12" data-text="context engineering"><a class="chap-link" href="#ch12"><span class="chap-num">12</span><span class="chap-title">Context Engineering</span></a><button class="twisty" aria-label="展开第 12 章小节" aria-controls="secs-ch12" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch12" data-for="ch12" aria-hidden="true"><li data-text="核心概念"><a href="#ch12-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch12-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch12-3">易错点</a></li></ul><div class="chap" data-ch="ch13" data-text="rag 基础链路"><a class="chap-link" href="#ch13"><span class="chap-num">13</span><span class="chap-title">RAG 基础链路</span></a><button class="twisty" aria-label="展开第 13 章小节" aria-controls="secs-ch13" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch13" data-for="ch13" aria-hidden="true"><li data-text="核心概念"><a href="#ch13-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch13-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch13-3">易错点</a></li></ul><div class="chap" data-ch="ch14" data-text="高级 rag 与 rag 排障"><a class="chap-link" href="#ch14"><span class="chap-num">14</span><span class="chap-title">高级 RAG 与 RAG 排障</span></a><button class="twisty" aria-label="展开第 14 章小节" aria-controls="secs-ch14" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch14" data-for="ch14" aria-hidden="true"><li data-text="核心概念"><a href="#ch14-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch14-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch14-3">易错点</a></li></ul></div></details><details class="part" open><summary>第五部分 评测、安全与 LLM 系统</summary><div class="plist"><div class="chap" data-ch="ch15" data-text="llm 评测、幻觉与不确定性"><a class="chap-link" href="#ch15"><span class="chap-num">15</span><span class="chap-title">LLM 评测、幻觉与不确定性</span></a><button class="twisty" aria-label="展开第 15 章小节" aria-controls="secs-ch15" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch15" data-for="ch15" aria-hidden="true"><li data-text="核心概念"><a href="#ch15-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch15-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch15-3">易错点</a></li></ul><div class="chap" data-ch="ch16" data-text="llm 安全与治理"><a class="chap-link" href="#ch16"><span class="chap-num">16</span><span class="chap-title">LLM 安全与治理</span></a><button class="twisty" aria-label="展开第 16 章小节" aria-controls="secs-ch16" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch16" data-for="ch16" aria-hidden="true"><li data-text="核心概念"><a href="#ch16-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch16-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch16-3">易错点</a></li></ul><div class="chap" data-ch="ch17" data-text="llmops、模型选型与系统设计"><a class="chap-link" href="#ch17"><span class="chap-num">17</span><span class="chap-title">LLMOps、模型选型与系统设计</span></a><button class="twisty" aria-label="展开第 17 章小节" aria-controls="secs-ch17" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch17" data-for="ch17" aria-hidden="true"><li data-text="核心概念"><a href="#ch17-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch17-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch17-3">易错点</a></li></ul></div></details><details class="part" open><summary>第六部分 Agent 工程</summary><div class="plist"><div class="chap" data-ch="ch18" data-text="agent 定义与核心边界"><a class="chap-link" href="#ch18"><span class="chap-num">18</span><span class="chap-title">Agent 定义与核心边界</span></a><button class="twisty" aria-label="展开第 18 章小节" aria-controls="secs-ch18" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch18" data-for="ch18" aria-hidden="true"><li data-text="核心概念"><a href="#ch18-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch18-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch18-3">易错点</a></li></ul><div class="chap" data-ch="ch19" data-text="agent 运行时与控制循环"><a class="chap-link" href="#ch19"><span class="chap-num">19</span><span class="chap-title">Agent 运行时与控制循环</span></a><button class="twisty" aria-label="展开第 19 章小节" aria-controls="secs-ch19" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch19" data-for="ch19" aria-hidden="true"><li data-text="核心概念"><a href="#ch19-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch19-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch19-3">易错点</a></li></ul><div class="chap" data-ch="ch20" data-text="agent 推理、规划与自我修正"><a class="chap-link" href="#ch20"><span class="chap-num">20</span><span class="chap-title">Agent 推理、规划与自我修正</span></a><button class="twisty" aria-label="展开第 20 章小节" aria-controls="secs-ch20" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch20" data-for="ch20" aria-hidden="true"><li data-text="核心概念"><a href="#ch20-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch20-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch20-3">易错点</a></li></ul><div class="chap" data-ch="ch21" data-text="工具调用、执行环境与协议"><a class="chap-link" href="#ch21"><span class="chap-num">21</span><span class="chap-title">工具调用、执行环境与协议</span></a><button class="twisty" aria-label="展开第 21 章小节" aria-controls="secs-ch21" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch21" data-for="ch21" aria-hidden="true"><li data-text="核心概念"><a href="#ch21-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch21-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch21-3">易错点</a></li></ul><div class="chap" data-ch="ch22" data-text="agent 记忆与知识访问"><a class="chap-link" href="#ch22"><span class="chap-num">22</span><span class="chap-title">Agent 记忆与知识访问</span></a><button class="twisty" aria-label="展开第 22 章小节" aria-controls="secs-ch22" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch22" data-for="ch22" aria-hidden="true"><li data-text="核心概念"><a href="#ch22-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch22-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch22-3">易错点</a></li></ul><div class="chap" data-ch="ch23" data-text="workflow、持久执行与人工介入"><a class="chap-link" href="#ch23"><span class="chap-num">23</span><span class="chap-title">Workflow、持久执行与人工介入</span></a><button class="twisty" aria-label="展开第 23 章小节" aria-controls="secs-ch23" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch23" data-for="ch23" aria-hidden="true"><li data-text="核心概念"><a href="#ch23-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch23-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch23-3">易错点</a></li></ul><div class="chap" data-ch="ch24" data-text="多智能体系统"><a class="chap-link" href="#ch24"><span class="chap-num">24</span><span class="chap-title">多智能体系统</span></a><button class="twisty" aria-label="展开第 24 章小节" aria-controls="secs-ch24" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch24" data-for="ch24" aria-hidden="true"><li data-text="核心概念"><a href="#ch24-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch24-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch24-3">易错点</a></li></ul><div class="chap" data-ch="ch25" data-text="agent 生产工程"><a class="chap-link" href="#ch25"><span class="chap-num">25</span><span class="chap-title">Agent 生产工程</span></a><button class="twisty" aria-label="展开第 25 章小节" aria-controls="secs-ch25" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch25" data-for="ch25" aria-hidden="true"><li data-text="核心概念"><a href="#ch25-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch25-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch25-3">易错点</a></li></ul><div class="chap" data-ch="ch26" data-text="agent 评测、安全与系统设计"><a class="chap-link" href="#ch26"><span class="chap-num">26</span><span class="chap-title">Agent 评测、安全与系统设计</span></a><button class="twisty" aria-label="展开第 26 章小节" aria-controls="secs-ch26" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch26" data-for="ch26" aria-hidden="true"><li data-text="核心概念"><a href="#ch26-1">核心概念</a></li><li data-text="关键关系与答案"><a href="#ch26-2">关键关系与答案</a></li><li data-text="易错点"><a href="#ch26-3">易错点</a></li></ul></div></details><details class="part" open><summary>第七部分 最后冲刺</summary><div class="plist"><div class="chap" data-ch="ch27" data-text="llm 与 agent 高频概念对比"><a class="chap-link" href="#ch27"><span class="chap-num">27</span><span class="chap-title">LLM 与 Agent 高频概念对比</span></a></div><div class="chap" data-ch="ch28" data-text="高频故障排查"><a class="chap-link" href="#ch28"><span class="chap-num">28</span><span class="chap-title">高频故障排查</span></a></div><div class="chap" data-ch="ch29" data-text="llm 与 agent 自测"><a class="chap-link" href="#ch29"><span class="chap-num">29</span><span class="chap-title">LLM 与 Agent 自测</span></a></div></div></details><div id="emptySearch" class="search-empty" aria-live="polite">未找到匹配内容</div></div>
+</nav>
+<button id="backdrop" type="button" aria-label="关闭目录" tabindex="-1"></button>
+<div class="main">
+  <header class="topbar">
+    <button id="menuBtn" type="button" aria-label="打开目录" aria-controls="sidebar"
+      aria-expanded="false">&#9776;</button>
+    <span class="tb-title">LLM 与 Agent 核心复习</span>
+    <span class="tb-spacer"></span>
+    <a class="tb-link" href="传统计算机与后端核心复习.html">传统计算机与后端篇 →</a><a class="tb-link" href="大模型面试八股笔记.html">LLM 深入笔记 →</a><a class="tb-link" href="智能体面试八股笔记.html">Agent 深入笔记 →</a>
+    <button id="themeBtn" type="button">&#9681; 深色</button>
+  </header>
+  <main id="main-content" class="content"><h1 id="top">LLM 与 Agent 核心复习</h1>
+<blockquote>
+<p>本册把 LLM 原理、训练、推理、RAG、评测、安全和 Agent 工程压缩成一份复习入口。每个主题只保留核心概念、关键关系及答案、易错点。</p>
+<p>版本变化快的模型、框架和协议只作为工程坐标；真正需要掌握的是数据流、状态、权限、可靠性和评测方法。</p>
+</blockquote>
+<h2>目录</h2>
+<ul>
+<li>第一部分：LLM 基础原理</li>
+<li>第二部分：训练、对齐与推理能力</li>
+<li>第三部分：推理优化与模型服务</li>
+<li>第四部分：Prompt、Context 与 RAG</li>
+<li>第五部分：评测、安全与 LLM 系统</li>
+<li>第六部分：Agent 工程</li>
+<li>第七部分：最后冲刺</li>
+</ul>
+<h2>第一部分 LLM 基础原理</h2>
+<h2 id="ch1">1. LLM 全景与生命周期</h2>
+<h3 id="ch1-1">核心概念</h3>
+<ul>
+<li>LLM 根据上下文中的 Token 分布预测后续 Token，本质上是概率生成模型。</li>
+<li>基础模型通过大规模预训练获得通用语言和模式能力。</li>
+<li>指令模型和对话模型通过后训练获得更好的遵循指令和交互能力。</li>
+<li>Embedding 模型把内容映射到向量空间，Reranker 对候选结果重新排序。</li>
+<li>完整生命周期包括数据、预训练、后训练、评测、部署、监控和反馈闭环。</li>
+<li>模型能力、外部知识、工具执行和业务规则是不同层次。</li>
+</ul>
+<h3 id="ch1-2">关键关系与答案</h3>
+<h4>LLM 为什么会产生幻觉？</h4>
+<p>模型的训练目标是生成概率上合理的文本，不是查询一个永远正确的事实数据库。知识缺失、上下文冲突、检索错误、提示歧义和随机采样都可能导致幻觉。</p>
+<h4>Prompt 能不能增加模型没有的知识？</h4>
+<p>Prompt 可以组织和约束已有能力，不能凭空写入可靠的新知识。实时知识通常通过 RAG、工具或数据库查询提供。</p>
+<h4>模型、应用和 Agent 如何区分？</h4>
+<p>模型负责生成和判断；应用负责组织输入输出和业务规则；Agent 在应用中增加状态、工具、多步决策和执行控制。</p>
+<h3 id="ch1-3">易错点</h3>
+<ul>
+<li>参数量大不等于所有任务都更好。</li>
+<li>模型回答流畅不等于事实正确。</li>
+<li>RAG、微调和 Agent 解决的是不同问题。</li>
+</ul>
+<h2 id="ch2">2. 数学与深度学习基础</h2>
+<h3 id="ch2-1">核心概念</h3>
+<ul>
+<li>向量和矩阵用于表示 Token、隐藏状态和参数。</li>
+<li>Softmax 把 Logits 转成概率分布。</li>
+<li>交叉熵衡量目标分布与模型分布的差异，语言模型常用下一个 Token 的交叉熵训练。</li>
+<li>困惑度是交叉熵的指数形式，反映模型对序列的不确定程度。</li>
+<li>梯度下降根据损失对参数的梯度更新模型。</li>
+<li>反向传播使用链式法则计算梯度。</li>
+<li>Adam/AdamW 使用一阶和二阶梯度统计，AdamW 将权重衰减与梯度更新解耦。</li>
+</ul>
+<h3 id="ch2-2">关键关系与答案</h3>
+<h4>交叉熵和 KL 散度有什么关系？</h4>
+<p>交叉熵可以拆成目标分布的熵加上 KL 散度。目标分布固定时，最小化交叉熵等价于最小化模型分布与目标分布之间的 KL 散度。</p>
+<h4>为什么需要 Softmax？</h4>
+<p>模型输出的是未归一化的 Logits，Softmax 把它们转换成和为 1 的概率分布，便于计算交叉熵和进行采样。</p>
+<h4>为什么训练中会出现梯度爆炸或消失？</h4>
+<p>深层网络反复相乘的梯度可能变得极大或极小。残差连接、归一化、合适初始化、梯度裁剪和稳定优化器可以缓解这些问题。</p>
+<h3 id="ch2-3">易错点</h3>
+<ul>
+<li>困惑度只能反映特定数据分布上的预测难度，不等于所有任务的质量。</li>
+<li>Loss 下降不代表业务能力一定提升。</li>
+<li>KL 散度不对称，方向不同含义不同。</li>
+</ul>
+<h2 id="ch3">3. Tokenizer 与 Embedding</h2>
+<h3 id="ch3-1">核心概念</h3>
+<ul>
+<li>Token 是模型处理文本的基本单位，不一定等于一个汉字或一个单词。</li>
+<li>BPE、WordPiece、SentencePiece 通过子词或字节组合平衡词表大小和序列长度。</li>
+<li>特殊 Token 用于区分开始、结束、角色、填充等结构。</li>
+<li>Embedding 层把 Token ID 映射为向量。</li>
+<li>位置表示让模型区分 Token 的顺序。</li>
+<li>权重绑定可以让输入 Embedding 和输出词表投影共享参数。</li>
+</ul>
+<h3 id="ch3-2">关键关系与答案</h3>
+<h4>为什么不直接按词切分？</h4>
+<p>纯词级词表会遇到未登录词、词表过大和跨语言泛化问题；子词或字节级 Token 可以组合未见过的词，但可能产生更长序列。</p>
+<h4>Token 数量为什么重要？</h4>
+<p>Token 数量直接影响上下文长度、Attention 计算量、KV Cache 显存、推理延迟和 API 成本。</p>
+<h4>Embedding 和 Reranker 有什么区别？</h4>
+<p>Embedding 通常独立编码查询和文档，适合高效召回；Reranker 通常同时读取查询和候选文档，判断相关性更精细，但计算成本更高。</p>
+<h3 id="ch3-3">易错点</h3>
+<ul>
+<li>Token 不等于字符数，中文、英文、代码和特殊符号的 Token 比例不同。</li>
+<li>向量相似不等于事实正确。</li>
+<li>Embedding 模型和生成模型的训练目标不同，不能直接互换。</li>
+</ul>
+<h2 id="ch4">4. Attention 与 Transformer</h2>
+<h3 id="ch4-1">核心概念</h3>
+<ul>
+<li>Query 表示当前查询，Key 用于匹配，Value 携带被聚合的信息。</li>
+<li>Attention 通过 Query 与 Key 的相似度计算权重，再加权求和 Value。</li>
+<li>Self-Attention 的 Q/K/V 来自同一序列；Cross-Attention 的 Q 和 K/V 来自不同序列。</li>
+<li>Causal Mask 防止当前位置看到未来 Token。</li>
+<li>MHA 使用多组独立的 Q/K/V 头。</li>
+<li>MQA/GQA 共享部分 K/V 头，降低 KV Cache 和推理开销。</li>
+<li>FFN 提供逐 Token 的非线性变换，残差和归一化帮助训练稳定。</li>
+</ul>
+<h3 id="ch4-2">关键关系与答案</h3>
+<h4>为什么 Attention 需要缩放？</h4>
+<p>当维度增大时，点积结果的方差可能变大，Softmax 容易饱和，梯度变小。除以维度平方根可以改善数值稳定性。</p>
+<h4>为什么 Decoder-only 模型使用 Causal Mask？</h4>
+<p>自回归训练要求当前位置只能依赖过去 Token，不能偷看目标 Token；这样训练目标和生成过程保持一致。</p>
+<h4>MHA、MQA、GQA 如何取舍？</h4>
+<p>MHA 表达能力和头部独立性更强，但 KV Cache 大；MQA 共享所有 K/V，推理更省显存；GQA 在质量和效率之间折中。</p>
+<h3 id="ch4-3">易错点</h3>
+<ul>
+<li>Attention 不是简单的全局平均，而是基于 Query 的动态加权。</li>
+<li>Mask 的作用取决于训练或推理目标，不是所有 Attention 都使用同一种 Mask。</li>
+<li>MQA/GQA 主要减少 K/V 规模，不是把所有计算都减少。</li>
+</ul>
+<h2 id="ch5">5. 模型架构、位置编码与 MoE</h2>
+<h3 id="ch5-1">核心概念</h3>
+<ul>
+<li>Encoder 更擅长理解，Decoder 更擅长自回归生成，Encoder-Decoder 适合输入输出转换。</li>
+<li>绝对位置编码把位置向量直接加入表示；相对位置方法关注 Token 间的相对距离。</li>
+<li>RoPE 通过旋转变换把位置信息融入 Q/K 的相对关系。</li>
+<li>ALiBi 通过注意力偏置表达距离关系。</li>
+<li>Dense 模型每次激活大部分参数；MoE 每次只选择部分 Expert。</li>
+<li>MoE 需要 Router 和负载均衡，否则会出现专家拥塞或训练不稳定。</li>
+</ul>
+<h3 id="ch5-2">关键关系与答案</h3>
+<h4>长上下文为什么不只是扩大最大长度？</h4>
+<p>还要处理位置外推、Attention 计算量、KV Cache 显存、训练数据覆盖、检索噪声和 Lost in the Middle 等问题。</p>
+<h4>MoE 为什么能提升参数规模而控制计算量？</h4>
+<p>每个 Token 只激活少数 Expert，参数总量可以很大，但单 Token 的计算量主要由被选中的 Expert 决定。代价是路由、通信、负载均衡和部署更复杂。</p>
+<h3 id="ch5-3">易错点</h3>
+<ul>
+<li>最大上下文长度不等于模型能同样有效地利用所有位置。</li>
+<li>MoE 的总参数量和每 Token 激活参数量不是同一个概念。</li>
+<li>位置编码外推效果依赖训练方式和具体实现。</li>
+</ul>
+<h2>第二部分 训练、对齐与推理能力</h2>
+<h2 id="ch6">6. 预训练与规模化训练</h2>
+<h3 id="ch6-1">核心概念</h3>
+<ul>
+<li>Causal LM 预测后续 Token，MLM 预测被遮盖 Token，FIM 适合代码补全。</li>
+<li>训练数据需要采集、清洗、去重、过滤、配比和质量评估。</li>
+<li>数据污染会导致评测结果虚高，重复数据会降低有效信息密度。</li>
+<li>Scaling Law 研究模型规模、数据规模和计算量之间的关系。</li>
+<li>In-Context Learning 通过上下文示例影响当前推理，不等于更新参数。</li>
+<li>分布式训练包括数据并行、张量并行、流水线并行、序列并行和专家并行。</li>
+<li>混合精度、ZeRO、FSDP 用于降低显存和通信成本。</li>
+</ul>
+<h3 id="ch6-2">关键关系与答案</h3>
+<h4>数据质量和数据规模如何取舍？</h4>
+<p>规模扩大可以增加覆盖面，但低质量、重复和污染数据会稀释训练信号。应结合去重、质量过滤、配比和能力评测，而不是只追求数据量。</p>
+<h4>数据并行、模型并行和流水线并行有什么区别？</h4>
+<p>数据并行复制模型、切分 Batch；模型/张量并行把单层或张量切到多个设备；流水线并行把不同层放到不同设备，通过微批次流水执行。</p>
+<h4>混合精度为什么能提高效率？</h4>
+<p>低精度计算和存储减少显存、带宽和计算成本，同时保留部分高精度状态以维持训练稳定性。</p>
+<h3 id="ch6-3">易错点</h3>
+<ul>
+<li>训练速度不只由 FLOPs 决定，还受数据读取、通信、负载均衡和显存带宽影响。</li>
+<li>训练 Loss 下降不代表数据、评测或泛化没有问题。</li>
+<li>并行度增加可能带来通信开销和同步等待。</li>
+</ul>
+<h2 id="ch7">7. 后训练、偏好对齐与推理能力</h2>
+<h3 id="ch7-1">核心概念</h3>
+<ul>
+<li>继续预训练让模型适应领域语料，SFT 让模型学习指定输入输出格式和任务行为。</li>
+<li>偏好数据通常比较多个回答，Reward Model 学习相对偏好。</li>
+<li>RLHF 通常包含 SFT、奖励模型和策略优化；PPO 使用概率比率和裁剪控制更新幅度。</li>
+<li>DPO 直接用偏好数据优化策略，不显式训练在线 RL 策略流程。</li>
+<li>GRPO 等方法通过组内相对奖励减少部分价值模型依赖。</li>
+<li>过程监督关注推理步骤，结果监督只关注最终结果。</li>
+<li>Reward Hacking 是模型通过钻奖励函数漏洞获得高分。</li>
+</ul>
+<h3 id="ch7-2">关键关系与答案</h3>
+<h4>SFT、RLHF、DPO 如何区分？</h4>
+<p>SFT 学习人工示范；RLHF 先学习偏好奖励，再通过强化学习优化策略；DPO 直接利用偏好对比较策略概率，流程更简单但仍依赖高质量偏好数据。</p>
+<h4>为什么偏好数据容易有偏差？</h4>
+<p>标注者标准不一致、问题难度分布不均、长度和格式偏好、奖励模型过拟合都会导致偏差，因此需要标注规范、交叉校验和分布外评测。</p>
+<h4>Test-time Compute 为什么能提升推理？</h4>
+<p>通过多次采样、验证、搜索或更长推理过程增加推理阶段计算，再选择或修正结果；代价是延迟、成本和错误累积可能增加。</p>
+<h3 id="ch7-3">易错点</h3>
+<ul>
+<li>偏好分数高不等于事实正确。</li>
+<li>SFT 不是简单把知识写入模型，数据格式和 Loss 作用区域很重要。</li>
+<li>增加推理长度不一定提升质量，必须有验证或选择机制。</li>
+</ul>
+<h2 id="ch8">8. 参数高效微调</h2>
+<h3 id="ch8-1">核心概念</h3>
+<ul>
+<li>全量微调更新全部模型参数，成本高但表达能力完整。</li>
+<li>Adapter 在模型旁增加少量可训练模块。</li>
+<li>LoRA 用低秩矩阵表示参数更新，只训练低秩参数。</li>
+<li>QLoRA 在量化基础模型上训练 LoRA 参数，降低显存占用。</li>
+<li>Rank、Alpha、Target Module 影响 LoRA 的容量和作用范围。</li>
+<li>多 Adapter 可以按任务加载，但要处理合并、冲突和版本管理。</li>
+</ul>
+<h3 id="ch8-2">关键关系与答案</h3>
+<h4>LoRA 为什么省显存？</h4>
+<p>它冻结基础模型，只训练低秩增量矩阵，不需要为全部参数保存梯度和优化器状态，因此训练参数和显存明显减少。</p>
+<h4>QLoRA 比 LoRA 多解决什么问题？</h4>
+<p>QLoRA 进一步量化冻结的基础模型，使其占用更少显存；训练质量取决于量化格式、适配层和任务数据。</p>
+<h4>什么时候不适合只做 LoRA？</h4>
+<p>需要大幅改变模型能力、模型结构或多个层面都要调整时，低秩更新容量可能不足；仍要根据数据规模和效果评测决定。</p>
+<h3 id="ch8-3">易错点</h3>
+<ul>
+<li>LoRA 只改变适配器参数，不能自动解决数据质量和任务定义问题。</li>
+<li>量化降低显存但可能影响精度和推理兼容性。</li>
+<li>不同 Adapter 合并后可能出现能力冲突或遗忘。</li>
+</ul>
+<h2>第三部分 推理优化与模型服务</h2>
+<h2 id="ch9">9. 解码、Prefill、Decode 与 KV Cache</h2>
+<h3 id="ch9-1">核心概念</h3>
+<ul>
+<li>Greedy 每次选概率最大 Token；Beam Search 维护多个候选序列。</li>
+<li>Temperature 调整分布尖锐程度；Top-k、Top-p、Min-p 限制候选集合。</li>
+<li>Prefill 处理输入上下文，通常计算密集；Decode 逐 Token 生成，通常访存和延迟敏感。</li>
+<li>KV Cache 保存历史 Token 的 Key/Value，避免每一步重复计算。</li>
+<li>TTFT 是首 Token 延迟，ITL 是生成 Token 之间的间隔。</li>
+</ul>
+<h3 id="ch9-2">关键关系与答案</h3>
+<h4>为什么 Decode 阶段要使用 KV Cache？</h4>
+<p>生成新 Token 时，历史 Token 的 K/V 不变。缓存后只需为新 Token 计算 Q/K/V，再与历史 K/V 交互，避免重复计算整段上下文。</p>
+<h4>Temperature 越高越好吗？</h4>
+<p>不是。Temperature 高会增加随机性和多样性，低则更确定；事实问答、代码和创作任务需要不同取值，并通过评测选择。</p>
+<h4>为什么长上下文会增加显存？</h4>
+<p>上下文越长，需要保存的 KV 越多；并发越高，所有请求的 KV Cache 共同占用显存。</p>
+<h3 id="ch9-3">易错点</h3>
+<ul>
+<li>TTFT 和生成阶段延迟不是同一个指标。</li>
+<li>KV Cache 节省重复计算，但会增加显存占用。</li>
+<li>解码策略只能改变生成行为，不能修复检索错误或事实缺失。</li>
+</ul>
+<h2 id="ch10">10. 高性能推理、量化与 Serving</h2>
+<h3 id="ch10-1">核心概念</h3>
+<ul>
+<li>FlashAttention 优化 Attention 的显存访问和中间矩阵存储。</li>
+<li>PagedAttention 将 KV Cache 分页管理，减少碎片和动态分配问题。</li>
+<li>Continuous Batching 在请求不断到达时动态合并不同阶段的请求。</li>
+<li>Chunked Prefill 把长输入分块，避免单个请求长期占用调度资源。</li>
+<li>Speculative Decoding 用小模型提出候选，大模型验证，提高生成速度。</li>
+<li>PTQ 在训练后量化，QAT 在训练中模拟量化。</li>
+<li>量化、剪枝、蒸馏通过精度换取显存、吞吐或延迟收益。</li>
+<li>Serving 通常包含 Gateway、Scheduler、Engine、模型副本和监控。</li>
+</ul>
+<h3 id="ch10-2">关键关系与答案</h3>
+<h4>吞吐和延迟为什么可能互相冲突？</h4>
+<p>增大 Batch 可以提高硬件利用率和整体吞吐，但会增加排队和单请求等待；低延迟通常需要更快调度、更小批次或更合理的请求分层。</p>
+<h4>PTQ 和 QAT 如何选择？</h4>
+<p>PTQ 成本低、部署快，适合已有模型快速压缩；QAT 在训练中考虑量化误差，通常更有机会保持精度，但训练成本更高。</p>
+<h4>如何估算 LLM 服务容量？</h4>
+<p>需要同时估算权重显存、KV Cache、运行时开销和并发请求，再结合输入输出长度、TTFT、ITL、吞吐和峰值流量压测，不能只看模型参数量。</p>
+<h3 id="ch10-3">易错点</h3>
+<ul>
+<li>量化位数越低不代表所有硬件都更快。</li>
+<li>只优化模型计算而忽略调度、网络、队列和数据拷贝，端到端延迟仍可能不变。</li>
+<li>平均延迟正常时，P95/P99 仍可能严重恶化。</li>
+</ul>
+<h2>第四部分 Prompt、Context 与 RAG</h2>
+<h2 id="ch11">11. Prompt 与结构化输出</h2>
+<h3 id="ch11-1">核心概念</h3>
+<ul>
+<li>System 消息通常表达全局行为约束，User 消息表达当前任务，具体优先级取决于模型和应用实现。</li>
+<li>Zero-shot 不提供示例，Few-shot 提供示范输入输出。</li>
+<li>Prompt 需要明确任务、输入、约束、输出格式和失败处理。</li>
+<li>结构化输出依赖 Schema、Grammar、解析和校验，不能只要求“请输出 JSON”。</li>
+<li>Prompt 应版本化并通过固定评测集验证。</li>
+</ul>
+<h3 id="ch11-2">关键关系与答案</h3>
+<h4>Few-shot 为什么可能有效？</h4>
+<p>示例向模型展示任务格式、推理模式和边界，降低指令歧义；但示例错误、风格偏差或上下文过长也会降低效果。</p>
+<h4>为什么结构化输出仍需要程序校验？</h4>
+<p>模型生成具有概率性，可能漏字段、类型错误、增加额外文本或违反业务约束。Schema 校验、重试和修复仍必须由程序控制。</p>
+<h4>Prompt Injection 是什么？</h4>
+<p>不可信输入试图改变系统原本的指令、诱导模型泄露信息或调用不该调用的工具。不能只依赖一条提示语防御，必须配合权限隔离和输出校验。</p>
+<h3 id="ch11-3">易错点</h3>
+<ul>
+<li>把 Prompt 写得更长不等于信息更有效。</li>
+<li>System 指令不是绝对安全边界，工具权限必须由程序控制。</li>
+<li>结构化输出格式正确不等于内容正确。</li>
+</ul>
+<h2 id="ch12">12. Context Engineering</h2>
+<h3 id="ch12-1">核心概念</h3>
+<ul>
+<li>Context 是模型当前可见的输入，包括指令、历史、检索结果、工具结果和状态。</li>
+<li>Context Engineering 关注信息选择、排序、压缩、更新和隔离。</li>
+<li>上下文有长度、成本、延迟和注意力分配限制。</li>
+<li>长对话需要摘要、状态提取、历史裁剪或分层存储。</li>
+<li><code>Lost in the Middle</code> 表示关键信息位于长上下文中间时可能被利用较差。</li>
+</ul>
+<h3 id="ch12-2">关键关系与答案</h3>
+<h4>Context 和 Memory 有什么区别？</h4>
+<p>Context 是当前请求直接提供给模型的可见信息；Memory 是跨请求保存和管理的信息，需要经过选择、召回和更新后才能进入 Context。</p>
+<h4>为什么不能把所有历史对话都塞给模型？</h4>
+<p>会增加 Token 成本、延迟和噪声，也可能导致关键信息被稀释或泄露。应根据任务保留近期对话、摘要、结构化状态和相关记忆。</p>
+<h4>如何降低长上下文噪声？</h4>
+<p>先识别任务需要的信息，再进行检索、排序、压缩和去重；对不同来源设置优先级，并在输出中要求引用或依据。</p>
+<h3 id="ch12-3">易错点</h3>
+<ul>
+<li>上下文长度大不等于有效利用率高。</li>
+<li>摘要会丢失细节，重要状态应结构化保存而不是只依赖摘要。</li>
+<li>不可信文档和工具结果进入上下文后仍可能影响模型行为。</li>
+</ul>
+<h2 id="ch13">13. RAG 基础链路</h2>
+<h3 id="ch13-1">核心概念</h3>
+<ul>
+<li>RAG 先从外部知识库检索证据，再把证据放入上下文生成回答。</li>
+<li>离线链路包括文档解析、清洗、切分、Embedding、索引和元数据管理。</li>
+<li>在线链路包括 Query 分析、召回、过滤、重排、上下文组装、生成和引用。</li>
+<li>向量检索适合语义相似，BM25 适合关键词匹配，混合检索结合两者。</li>
+<li>Search Index 通常是业务数据的派生数据，需要同步、重建和校准机制。</li>
+</ul>
+<h3 id="ch13-2">关键关系与答案</h3>
+<h4>RAG 和微调如何选择？</h4>
+<p>需要引用频繁变化、可追溯的外部知识时优先 RAG；需要稳定改变输出格式、风格或任务行为时考虑微调。二者可以组合。</p>
+<h4>为什么切分会影响 RAG 效果？</h4>
+<p>切得过小会丢失上下文，切得过大则降低检索精度并浪费上下文。应结合文档结构、问题类型、模型上下文和评测数据选择。</p>
+<h4>为什么搜索引擎不是天然事实源？</h4>
+<p>索引可能异步更新、延迟刷新、同步失败或被误删。业务数据库或原始文档通常保留事实，索引需要支持增量修复和全量重建。</p>
+<h3 id="ch13-3">易错点</h3>
+<ul>
+<li>Embedding 相似度高不等于证据一定回答了问题。</li>
+<li>只优化召回率而不检查生成忠实性，系统仍可能幻觉。</li>
+<li>RAG 不是简单地“向量库 + Prompt”。</li>
+</ul>
+<h2 id="ch14">14. 高级 RAG 与 RAG 排障</h2>
+<h3 id="ch14-1">核心概念</h3>
+<ul>
+<li>Query 改写、查询扩展和查询分解用于改善问题表达。</li>
+<li>Reranker 对初始候选重新排序，通常比纯向量相似更精细。</li>
+<li>MMR 兼顾相关性和结果多样性。</li>
+<li>HyDE 先生成假设文档，再用其向量检索真实文档。</li>
+<li>Multi-hop、Corrective RAG、Self-RAG、Adaptive RAG 处理复杂检索流程。</li>
+<li>GraphRAG 利用实体、关系和图结构处理跨文档关联问题。</li>
+<li>RAG 评测要拆分检索召回、证据相关、答案正确和答案忠实。</li>
+</ul>
+<h3 id="ch14-2">关键关系与答案</h3>
+<h4>检索为空、检索错误、答案错误如何区分？</h4>
+<p>检索为空是没有召回候选；检索错误是召回内容与问题不相关；答案错误可能是证据正确但模型理解或生成错误。应分别记录 Query、候选、重排结果、最终上下文和答案。</p>
+<h4>为什么需要 Rerank？</h4>
+<p>初始检索适合高召回，但排序可能不够精确。Reranker 读取 Query 和候选文本的交互关系，对较小候选集做精排，以提高证据质量。</p>
+<h4>如何判断答案是否忠于证据？</h4>
+<p>检查答案中的每个关键主张是否能被引用证据支持，区分证据相关性、答案正确性和引用完整性，并使用人工评测或经过校准的 Judge 辅助。</p>
+<h3 id="ch14-3">易错点</h3>
+<ul>
+<li>引用存在不等于引用支持了结论。</li>
+<li>LLM-as-a-Judge 也会有偏差，需要 Rubric、校准和人工抽检。</li>
+<li>GraphRAG 不是所有问题都优于向量检索，维护图结构也有成本。</li>
+</ul>
+<h2>第五部分 评测、安全与 LLM 系统</h2>
+<h2 id="ch15">15. LLM 评测、幻觉与不确定性</h2>
+<h3 id="ch15-1">核心概念</h3>
+<ul>
+<li>评测可分为模型、组件、系统和业务四层。</li>
+<li>Benchmark 适合横向比较，Golden Set 更接近真实业务。</li>
+<li>人工评测、Pointwise、Pairwise、Ranking 和 LLM-as-a-Judge 各有适用场景。</li>
+<li>幻觉可能来自参数知识缺失、上下文冲突、检索错误、提示歧义和随机性。</li>
+<li>LogProb、ECE、Brier、拒答和选择性预测用于研究不确定性。</li>
+<li>在线评测还要关注成本、延迟、错误率、用户反馈和数据漂移。</li>
+</ul>
+<h3 id="ch15-2">关键关系与答案</h3>
+<h4>为什么不能只看一个 Benchmark？</h4>
+<p>Benchmark 可能与真实任务分布不同，还可能存在数据污染、饱和和指标偏差。应结合代表性 Golden Set、切片评测、人工抽检和线上指标。</p>
+<h4>LLM-as-a-Judge 有什么问题？</h4>
+<p>Judge 可能偏好更长、更像自己的答案，受位置、格式、模型能力和提示影响。需要明确 Rubric、随机化顺序、校准和人工抽样。</p>
+<h4>如何让模型在不知道时拒答？</h4>
+<p>提供可靠证据、定义拒答条件、要求引用、使用置信度或分类器校验，并在敏感场景引入人工审核。只在 Prompt 中说“不要胡编”通常不够。</p>
+<h3 id="ch15-3">易错点</h3>
+<ul>
+<li>质量提升可能伴随成本和延迟上升，要看 Pareto 取舍。</li>
+<li>准确率高不代表长尾或安全场景可靠。</li>
+<li>线上用户反馈需要去噪和分层，不能直接当作真值。</li>
+</ul>
+<h2 id="ch16">16. LLM 安全与治理</h2>
+<h3 id="ch16-1">核心概念</h3>
+<ul>
+<li>Jailbreak 试图绕过模型或系统安全约束。</li>
+<li>Prompt Injection 通过不可信输入影响指令和工具行为。</li>
+<li>RAG 投毒会污染检索证据，工具投毒会影响执行结果。</li>
+<li>模型窃取、隐私泄露和敏感信息回显属于数据与模型风险。</li>
+<li>防御需要纵深：输入过滤、上下文隔离、权限控制、输出校验、审计、人工审批和 Kill Switch。</li>
+<li>合规治理包括数据来源、权限、留痕、删除、版本和责任边界。</li>
+</ul>
+<h3 id="ch16-2">关键关系与答案</h3>
+<h4>为什么不能只靠 Prompt 防 Prompt Injection？</h4>
+<p>模型看到指令和不可信内容后可能无法稳定区分优先级。真正的安全边界应由程序权限、工具白名单、参数校验、沙箱和人工审批提供。</p>
+<h4>RAG 系统如何防止数据泄露？</h4>
+<p>检索前做租户和资源级权限过滤，禁止模型自行扩大查询范围，对上下文和日志做脱敏，并对输出进行敏感信息检测和审计。</p>
+<h4>工具调用为什么必须由程序校验？</h4>
+<p>模型只是在预测参数，不能直接拥有真实世界权限。程序必须检查身份、资源范围、参数合法性、幂等性、副作用和审批状态。</p>
+<h3 id="ch16-3">易错点</h3>
+<ul>
+<li>内容安全和执行安全不是一回事。</li>
+<li>过滤词表不能替代权限和隔离。</li>
+<li>只保护 Prompt，不保护工具和数据源，系统仍然不安全。</li>
+</ul>
+<h2 id="ch17">17. LLMOps、模型选型与系统设计</h2>
+<h3 id="ch17-1">核心概念</h3>
+<ul>
+<li>模型选型要比较质量、延迟、成本、上下文、工具能力、隐私和可运维性。</li>
+<li>LLMOps 管理数据、模型、Prompt、评测集、配置和部署 Artifact 的版本。</li>
+<li>可观测性需要记录 Trace、Token、延迟、错误、模型版本、检索和工具调用。</li>
+<li>生产系统需要超时、重试、限流、降级、缓存、灰度、回滚和 SLO。</li>
+<li>API、私有部署和混合部署分别在交付速度、控制力、成本和隐私上取舍。</li>
+<li>多模态系统还要处理图像/音频/视频解析、Token、分辨率和跨模态评测。</li>
+</ul>
+<h3 id="ch17-2">关键关系与答案</h3>
+<h4>如何选择 API 模型还是自部署？</h4>
+<p>先确认数据合规、QPS、延迟、质量、模型定制和团队运维能力。API 交付快、初始运维低；自部署控制力和隐私更强，但承担 GPU、升级、容量和故障成本。</p>
+<h4>LLM 系统为什么需要 Trace？</h4>
+<p>一次回答可能经过路由、Prompt、检索、Rerank、多个模型和工具。只有 Trace 能把这些阶段串起来，定位延迟、质量下降或错误来源。</p>
+<h4>如何设计企业知识助手？</h4>
+<p>业务数据作为事实源，构建带权限过滤的文档接入和检索链路，生成时要求引用和拒答；同时记录评测、成本、延迟、反馈和删除传播状态。</p>
+<h3 id="ch17-3">易错点</h3>
+<ul>
+<li>不能只按单次 Token 价格估算成本，还要计算检索、工具、存储、重试和人工审核。</li>
+<li>模型升级可能改变 Prompt、工具调用和评测结果，需要灰度和回滚。</li>
+<li>多模态输入的分辨率、压缩和解析错误会直接影响后续生成。</li>
+</ul>
+<h2>第六部分 Agent 工程</h2>
+<h2 id="ch18">18. Agent 定义与核心边界</h2>
+<h3 id="ch18-1">核心概念</h3>
+<ul>
+<li>Agent 是让模型参与目标驱动的多步决策和执行的系统。</li>
+<li>Agent 通常包含模型、状态、工具、环境、权限、循环和停止条件。</li>
+<li>Workflow 由程序预先定义步骤和分支，Agent 让模型根据状态选择下一步。</li>
+<li>Copilot 强调辅助人完成任务，RPA 强调固定流程自动化，多智能体强调多个角色协作。</li>
+<li>Agent 的核心问题不是“能不能调用模型”，而是“谁决定下一步、动作有什么副作用、如何判断完成”。</li>
+</ul>
+<h3 id="ch18-2">关键关系与答案</h3>
+<h4>Agent 和普通 LLM 应用有什么区别？</h4>
+<p>普通 LLM 应用通常是一次输入到一次输出；Agent 增加状态、工具、多步循环和执行反馈，能根据中间结果决定下一步，但不确定性和安全风险也更高。</p>
+<h4>Agent 和 Workflow 如何选择？</h4>
+<p>步骤稳定、约束明确时优先 Workflow；路径需要根据环境动态选择时使用 Agent。生产系统常把 Agent 的决策限制在可控 Workflow 和工具集合中。</p>
+<h4>Agent 为什么必须有停止条件？</h4>
+<p>模型可能重复调用工具、不断修改答案或在错误状态中循环。停止条件、最大步数、预算、超时和人工接管是运行时必须具备的控制。</p>
+<h3 id="ch18-3">易错点</h3>
+<ul>
+<li>Agent 不等于给 LLM 套一个无限 <code>while</code> 循环。</li>
+<li>工具数量增加不一定提升能力，可能增加选择错误和攻击面。</li>
+<li>自主性越高，越需要状态、权限、评测和人工兜底。</li>
+</ul>
+<h2 id="ch19">19. Agent 运行时与控制循环</h2>
+<h3 id="ch19-1">核心概念</h3>
+<ul>
+<li><code>Run</code> 表示一次完整任务，<code>Step</code> 表示一次决策或动作，<code>Attempt</code> 表示一次尝试。</li>
+<li>典型循环：观察状态 → 规划或推理 → 调用工具 → 获取结果 → 验证 → 继续或结束。</li>
+<li>控制面负责策略、预算、权限和状态迁移；数据面负责工具和外部资源访问。</li>
+<li>状态应区分用户输入、任务状态、工具结果、错误信息和最终产物。</li>
+<li>运行时要记录步骤、输入输出、耗时、成本、重试和副作用。</li>
+</ul>
+<h3 id="ch19-2">关键关系与答案</h3>
+<h4>为什么要区分 Run、Step 和 Attempt？</h4>
+<p>Run 便于追踪一项任务的整体结果，Step 表示任务进展，Attempt 区分同一步骤的重试。这样才能分析失败位置、重试次数和成本。</p>
+<h4>为什么 Agent 需要预算？</h4>
+<p>预算可以限制最大步数、Token、工具调用次数、时间和金钱，防止循环、误调用和成本失控。</p>
+<h4>状态和上下文有什么关系？</h4>
+<p>状态是系统保存的事实和进展；上下文是某次模型调用实际看到的内容。运行时需要从状态中选择、压缩和排序上下文，而不是把所有状态原样塞给模型。</p>
+<h3 id="ch19-3">易错点</h3>
+<ul>
+<li>工具返回成功不代表任务成功，还要检查结果是否满足目标。</li>
+<li>重试前必须判断动作是否有副作用，不能盲目重复执行。</li>
+<li>只记录最终答案会丢失最有价值的轨迹信息。</li>
+</ul>
+<h2 id="ch20">20. Agent 推理、规划与自我修正</h2>
+<h3 id="ch20-1">核心概念</h3>
+<ul>
+<li>ReAct 交替进行思考和行动，根据观察结果继续决策。</li>
+<li>Plan-and-Execute 先生成计划，再执行子任务。</li>
+<li>任务分解把复杂目标拆成有依赖关系的子任务。</li>
+<li>动态重规划根据工具结果、失败和新信息调整计划。</li>
+<li>Reflection 让模型检查或批评自己的结果，Verifier 使用规则、模型或外部执行结果验证。</li>
+<li>停止决策判断目标是否完成、是否需要重试或转人工。</li>
+</ul>
+<h3 id="ch20-2">关键关系与答案</h3>
+<h4>ReAct 和 Plan-and-Execute 如何取舍？</h4>
+<p>ReAct 适合环境变化大、需要边观察边行动的任务；Plan-and-Execute 适合任务结构相对清晰、希望减少反复规划的场景。复杂系统常结合二者。</p>
+<h4>Reflection 一定能提高质量吗？</h4>
+<p>不一定。如果没有新的证据、明确的检查标准或独立验证，Reflection 可能只是重复生成。更可靠的做法是让 Verifier 检查格式、事实、执行结果或约束。</p>
+<h4>什么是好的停止条件？</h4>
+<p>不仅要判断模型说“完成”，还应验证目标状态、必需字段、工具结果、引用证据和副作用是否真正完成。</p>
+<h3 id="ch20-3">易错点</h3>
+<ul>
+<li>规划文本写得很完整不代表计划可执行。</li>
+<li>自我反思不是独立验证，容易重复同一个错误。</li>
+<li>子任务拆得过细会增加上下文、调用和失败成本。</li>
+</ul>
+<h2 id="ch21">21. 工具调用、执行环境与协议</h2>
+<h3 id="ch21-1">核心概念</h3>
+<ul>
+<li>Function Calling 让模型输出结构化工具名和参数，真正执行由程序完成。</li>
+<li>工具 Schema 定义名称、参数类型、必填字段、约束和错误格式。</li>
+<li>工具系统需要超时、重试、幂等、权限、审计和副作用控制。</li>
+<li>代码执行和 Computer Use 必须有沙箱、资源限制和人工审批。</li>
+<li>MCP 提供模型与工具、资源、Prompt 之间的标准化连接方式。</li>
+<li>A2A/Agent Card 用于描述 Agent 能力和 Agent 之间的任务交互。</li>
+</ul>
+<h3 id="ch21-2">关键关系与答案</h3>
+<h4>为什么不能让模型直接执行工具？</h4>
+<p>模型只负责提出动作建议，参数可能错误、越权或重复。程序需要验证身份、资源范围、参数、风险和审批状态，再决定是否执行。</p>
+<h4>工具幂等是什么意思？</h4>
+<p>同一动作重复执行不会造成额外错误结果，例如通过幂等键避免重复下单、重复扣款或重复发送通知。</p>
+<h4>MCP 和 Function Calling 是什么关系？</h4>
+<p>Function Calling 更像模型调用工具的结构化能力；MCP 进一步定义了发现、连接和暴露工具、资源、Prompt 的协议边界，二者不在同一抽象层。</p>
+<h4>代码执行为什么需要沙箱？</h4>
+<p>代码可能访问文件、网络、进程、密钥或消耗过多资源。沙箱通过权限隔离、网络限制、CPU/内存/时间配额降低风险。</p>
+<h3 id="ch21-3">易错点</h3>
+<ul>
+<li>Schema 正确不等于权限正确。</li>
+<li>工具重试必须考虑副作用。</li>
+<li>浏览器和 Computer Use 的截图、点击和页面内容都可能包含不可信指令。</li>
+</ul>
+<h2 id="ch22">22. Agent 记忆与知识访问</h2>
+<h3 id="ch22-1">核心概念</h3>
+<ul>
+<li>State 保存任务当前事实和进展；Context 是当前模型调用可见内容；Memory 是跨步骤或跨会话保留的信息。</li>
+<li>短期记忆服务于当前任务，长期记忆服务于未来任务。</li>
+<li>记忆系统需要写入、召回、更新、过期、删除和权限控制。</li>
+<li>Agentic RAG 让 Agent 根据任务决定是否检索、查什么、是否继续检索和如何验证。</li>
+<li>结构化数据库适合精确查询，向量检索适合语义召回，图结构适合关系遍历。</li>
+</ul>
+<h3 id="ch22-2">关键关系与答案</h3>
+<h4>为什么不能把所有对话都当长期记忆？</h4>
+<p>对话中可能有临时信息、错误信息和敏感信息。长期记忆需要经过抽取、确认、权限判断和过期管理，否则会污染后续任务。</p>
+<h4>Agentic RAG 和普通 RAG 有什么区别？</h4>
+<p>普通 RAG 通常由固定流程完成检索；Agentic RAG 让 Agent 根据任务动态选择查询、工具、检索轮次和验证步骤，灵活性更高但成本和不确定性也更高。</p>
+<h4>记忆删除为什么困难？</h4>
+<p>信息可能同时存在于原始文档、向量索引、摘要、缓存、日志和模型上下文中。删除需要定义传播范围、异步同步和验证机制。</p>
+<h3 id="ch22-3">易错点</h3>
+<ul>
+<li>摘要不是完美记忆，会丢失细节或引入错误。</li>
+<li>记忆召回相似不等于当前任务相关。</li>
+<li>多租户系统必须在检索前做权限过滤，而不是让模型自己判断。</li>
+</ul>
+<h2 id="ch23">23. Workflow、持久执行与人工介入</h2>
+<h3 id="ch23-1">核心概念</h3>
+<ul>
+<li>Workflow 用状态图、节点和边描述可执行流程。</li>
+<li>Durable Execution 把任务状态和执行进度持久化，使进程重启后可以恢复。</li>
+<li>Checkpoint 保存可恢复状态，重放时需要保证动作幂等。</li>
+<li>Human-in-the-Loop 在高风险、低置信度或需要审批时暂停等待人类决定。</li>
+<li>外部副作用应有明确的提交点、补偿策略和审计记录。</li>
+</ul>
+<h3 id="ch23-2">关键关系与答案</h3>
+<h4>为什么 Agent 不能只依赖内存状态？</h4>
+<p>进程重启、网络故障或长任务等待会丢失内存状态。持久化状态和 Checkpoint 让任务可以恢复、重试和审计。</p>
+<h4>断点恢复为什么要求幂等？</h4>
+<p>恢复时可能重复执行上一个步骤。如果工具动作不可重复，就可能重复扣款、发货或发送通知，因此需要幂等键、状态检查或补偿操作。</p>
+<h4>哪些情况需要人工介入？</h4>
+<p>高风险副作用、权限提升、敏感数据访问、证据不足、模型不确定或多次失败时，应暂停并请求人工审批或接管。</p>
+<h3 id="ch23-3">易错点</h3>
+<ul>
+<li>保存了状态不等于保存了外部副作用的真实结果。</li>
+<li>重放执行必须区分纯计算和不可重复的外部动作。</li>
+<li>人工审批节点也需要超时、撤销和审计。</li>
+</ul>
+<h2 id="ch24">24. 多智能体系统</h2>
+<h3 id="ch24-1">核心概念</h3>
+<ul>
+<li>Supervisor 负责分派和汇总，Router 负责选择 Agent，Handoff 负责任务转交。</li>
+<li>Blackboard 让多个 Agent 通过共享状态协作。</li>
+<li>专家 Agent 可以按领域、工具或任务阶段分工。</li>
+<li>多 Agent 协作需要通信协议、共享状态、超时、冲突解决和失败处理。</li>
+<li>并行执行可以降低总延迟，但会增加合并、重复和资源竞争复杂度。</li>
+</ul>
+<h3 id="ch24-2">关键关系与答案</h3>
+<h4>什么时候值得使用多智能体？</h4>
+<p>当任务具有相对稳定的专业分工、可以并行或需要不同权限隔离时，多 Agent 可能有价值。仅仅为了增加角色数量而拆分，通常只会增加通信和调试成本。</p>
+<h4>多 Agent 如何处理冲突？</h4>
+<p>定义角色权限、结果格式和优先级，由 Supervisor、规则或独立 Verifier 合并；不能让多个 Agent 无限制地互相覆盖结果。</p>
+<h4>多 Agent 的主要风险是什么？</h4>
+<p>通信膨胀、循环转交、错误传播、状态不一致、成本失控和权限扩散。</p>
+<h3 id="ch24-3">易错点</h3>
+<ul>
+<li>多智能体不一定比单 Agent 更聪明。</li>
+<li>并行执行需要处理部分失败和结果合并。</li>
+<li>Agent 之间传递的数据同样需要权限和可信度控制。</li>
+</ul>
+<h2 id="ch25">25. Agent 生产工程</h2>
+<h3 id="ch25-1">核心概念</h3>
+<ul>
+<li>生产 Agent 需要记录 Run、Step、Tool Call、输入输出、耗时、Token、成本和错误。</li>
+<li>Trace 用于定位循环、错误工具和慢步骤，Trajectory 用于评估决策过程。</li>
+<li>可靠性依赖超时、重试、幂等、断点恢复、降级和人工接管。</li>
+<li>性能优化包括模型路由、上下文压缩、缓存、并行工具调用和结果复用。</li>
+<li>部署要考虑隔离、多租户、密钥、资源上限和版本兼容。</li>
+</ul>
+<h3 id="ch25-2">关键关系与答案</h3>
+<h4>Agent 评测为什么不能只看最终答案？</h4>
+<p>最终答案可能碰巧正确，也可能工具调用错误但被后续步骤掩盖。还要评估任务成功、规划、工具选择、参数、轨迹、成本和安全违规。</p>
+<h4>如何控制 Agent 成本？</h4>
+<p>限制步数和工具次数，进行模型路由、缓存、上下文压缩和并行执行，并按任务统计 Token、外部 API、重试和人工审核成本。</p>
+<h4>如何排查 Agent 无限循环？</h4>
+<p>查看 Trace 中重复的状态、工具和错误，加入最大步数、状态去重、进展检测、结果验证和明确的失败退出条件。</p>
+<h3 id="ch25-3">易错点</h3>
+<ul>
+<li>只记录最终答案会让 Agent 很难排障。</li>
+<li>重试、并发和人工恢复都可能导致重复副作用。</li>
+<li>Agent 的可靠性不能只靠更换模型解决。</li>
+</ul>
+<h2 id="ch26">26. Agent 评测、安全与系统设计</h2>
+<h3 id="ch26-1">核心概念</h3>
+<ul>
+<li>Agent 评测关注任务成功率、轨迹质量、工具选择、参数正确率、成本和安全性。</li>
+<li>离线测试验证稳定场景，在线评测验证真实流量、长尾和版本变化。</li>
+<li>安全风险包括 Prompt Injection、工具越权、恶意工具、数据外泄、隐私泄露和供应链风险。</li>
+<li>企业知识助手、Coding Agent、Deep Research、数据分析和 Computer Use 是典型系统设计场景。</li>
+<li>系统设计必须说明状态、工具、权限、失败恢复、评测和观测。</li>
+</ul>
+<h3 id="ch26-2">关键关系与答案</h3>
+<h4>如何设计企业知识助手 Agent？</h4>
+<p>先做身份和权限过滤，再由 Agent 判断是否检索、改写 Query、召回和重排；生成时要求引用和拒答，工具只开放白名单能力，并记录完整 Trace 和审计。</p>
+<h4>如何设计 Coding Agent？</h4>
+<p>让 Agent 在隔离工作区中读取代码、修改文件、运行测试并根据结果迭代；代码执行需要资源和网络限制，修改需要 diff、测试和人工确认，不能直接操作生产环境。</p>
+<h4>如何设计 Deep Research Agent？</h4>
+<p>拆分问题、检索多来源资料、去重和交叉验证，保存来源与引用，最后由 Verifier 检查结论是否被证据支持，并对研究时间和调用次数设置预算。</p>
+<h3 id="ch26-3">易错点</h3>
+<ul>
+<li>工具白名单不等于工具参数安全。</li>
+<li>研究报告有引用不等于结论被引用支持。</li>
+<li>Agent 系统设计不能只描述 Prompt，还要描述运行时和故障路径。</li>
+</ul>
+<h2>第七部分 最后冲刺</h2>
+<h2 id="ch27">27. LLM 与 Agent 高频概念对比</h2>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>对比</th>
+<th>记忆重点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt / Context / Memory</td>
+<td>当前指令 / 当前可见信息 / 跨请求保存的信息</td>
+</tr>
+<tr>
+<td>RAG / 微调 / 长上下文</td>
+<td>外部知识 / 稳定行为 / 更大输入空间</td>
+</tr>
+<tr>
+<td>Embedding / Reranker / LLM</td>
+<td>召回表示 / 候选精排 / 生成与推理</td>
+</tr>
+<tr>
+<td>SFT / RLHF / DPO</td>
+<td>示范学习 / 奖励优化 / 偏好直接优化</td>
+</tr>
+<tr>
+<td>Prefill / Decode</td>
+<td>处理输入 / 逐 Token 生成</td>
+</tr>
+<tr>
+<td>MHA / MQA / GQA</td>
+<td>质量与表达 / KV 共享 / 中间折中</td>
+</tr>
+<tr>
+<td>Workflow / Agent</td>
+<td>程序确定流程 / 模型参与动态决策</td>
+</tr>
+<tr>
+<td>Function Calling / MCP / A2A</td>
+<td>工具调用结构 / 工具资源协议 / Agent 互操作</td>
+</tr>
+<tr>
+<td>Reflection / Verifier</td>
+<td>自我检查 / 外部或独立验证</td>
+</tr>
+<tr>
+<td>State / Context / Memory</td>
+<td>系统事实 / 当前输入 / 跨任务信息</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ch28">28. 高频故障排查</h2>
+<ol>
+<li>训练异常：先看数据、Loss、梯度、学习率、显存和通信。</li>
+<li>推理变慢：拆分排队、Prefill、Decode、KV Cache、网络和后处理。</li>
+<li>RAG 无效：依次检查解析、切分、Embedding、召回、重排、上下文和生成。</li>
+<li>答案幻觉：确认是否有证据、证据是否相关、引用是否支持结论、模型是否应该拒答。</li>
+<li>Agent 循环：查看状态变化、重复工具、错误重试、预算和停止条件。</li>
+<li>工具失败：检查 Schema、参数、权限、超时、幂等和外部服务状态。</li>
+</ol>
+<h2 id="ch29">29. LLM 与 Agent 自测</h2>
+<ul>
+<li>Transformer 中 Q、K、V 分别解决什么问题？</li>
+<li>为什么要使用 KV Cache？它的代价是什么？</li>
+<li>SFT、RLHF、DPO 分别改变什么？</li>
+<li>RAG 和微调如何选择？</li>
+<li>如何判断 RAG 是召回错还是生成错？</li>
+<li>为什么不能只靠 Prompt 防止工具越权？</li>
+<li>Agent 和 Workflow 的边界是什么？</li>
+<li>ReAct、Plan-and-Execute、Reflection 如何组合？</li>
+<li>为什么 Agent 需要状态、预算、停止条件和幂等？</li>
+<li>MCP、Function Calling、A2A 分别处于什么层次？</li>
+<li>多智能体系统为什么可能更慢、更贵、更难排障？</li>
+<li>如何设计一个可评测、可观测、可恢复的 Agent？</li>
+</ul>
+<h2>参考资料</h2>
+<ul>
+<li><a href="./大模型面试八股笔记.md">LLM 原始笔记</a></li>
+<li><a href="./智能体面试八股笔记.md">Agent 原始笔记</a></li>
+</ul></main>
+</div>
+<button id="topBtn" type="button" aria-label="返回顶部">&#8593;</button>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+/* 主题 */
+var root=document.documentElement;
+var saved=null; try{saved=localStorage.getItem('bagu-theme')}catch(e){}
+root.dataset.theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+function themeLabel(){
+  var dark=root.dataset.theme==='dark';
+  $('#themeBtn').innerHTML=dark?'&#9681; 浅色':'&#9681; 深色';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.content=dark?'#0e1116':'#f5f6f8';
+}
+themeLabel();
+$('#themeBtn').onclick=function(){
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  try{localStorage.setItem('bagu-theme',root.dataset.theme)}catch(e){}
+  themeLabel();
+};
+/* 移动端目录 */
+var menuBtn=$('#menuBtn'),sidebar=$('#sidebar');
+var mobileQuery=matchMedia('(max-width:960px)');
+function setNav(open){
+  open=mobileQuery.matches&&open;
+  document.body.classList.toggle('nav-open',open);
+  menuBtn.setAttribute('aria-expanded',String(open));
+  menuBtn.setAttribute('aria-label',open?'关闭目录':'打开目录');
+  if(mobileQuery.matches&&!open){sidebar.setAttribute('aria-hidden','true');sidebar.inert=true;}
+  else{sidebar.removeAttribute('aria-hidden');sidebar.inert=false;}
+}
+menuBtn.onclick=function(){setNav(!document.body.classList.contains('nav-open'))};
+$('#backdrop').onclick=function(){setNav(false);menuBtn.focus()};
+$$('#sidebar a').forEach(function(a){a.addEventListener('click',function(){
+  if(mobileQuery.matches)setTimeout(function(){setNav(false)},0);
+})});
+if(mobileQuery.addEventListener)mobileQuery.addEventListener('change',function(){setNav(false)});
+setNav(false);
+/* 小节展开按钮 */
+function setSecsOpen(secs,btn,open){
+  if(!secs)return;
+  secs.classList.toggle('open',open);
+  secs.setAttribute('aria-hidden',String(!open));
+  if(btn){btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',String(open));}
+}
+$$('.twisty').forEach(function(btn){btn.addEventListener('click',function(e){
+  e.preventDefault();
+  var chap=btn.closest('.chap');
+  var secs=document.querySelector('.secs[data-for="'+chap.dataset.ch+'"]');
+  if(secs)setSecsOpen(secs,btn,!secs.classList.contains('open'));
+});});
+/* 滚动定位 */
+var headings=$$('.content h2[id], .content h3[id]');
+var tops=[],activeId=null;
+function computeTops(){tops=headings.map(function(h){return [h.offsetTop,h.id]})}
+function setActive(id){
+  if(id===activeId)return; activeId=id;
+  $$('#sidebar .active').forEach(function(el){el.classList.remove('active')});
+  if(!id)return;
+  var chId=id.split('-')[0];
+  var chap=document.querySelector('.chap[data-ch="'+chId+'"]');
+  var searching=document.body.classList.contains('searching');
+  if(chap){
+    chap.classList.add('active');
+    var part=chap.closest('details.part'); if(part)part.open=true;
+    if(!searching){
+      $$('.secs.open').forEach(function(s){
+        if(s.dataset.for!==chId){s.classList.remove('open');
+          var t=document.querySelector('.chap[data-ch="'+s.dataset.for+'"] .twisty');
+          setSecsOpen(s,t,false);}
+      });
+      var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+      if(secs){var tw=chap.querySelector('.twisty');setSecsOpen(secs,tw,true);}
+    }
+  }
+  var link=document.querySelector('#sidebar .secs a[href="#'+id+'"]');
+  if(link)link.classList.add('active');
+  var target=link||chap;
+  if(target){
+    var sb=$('#sidebar-scroll'),r=target.getBoundingClientRect(),sr=sb.getBoundingClientRect();
+    if(r.top<sr.top+50||r.bottom>sr.bottom-50){
+      /* Keep sidebar navigation from changing the document scroll position. */
+      sb.scrollTop += r.top-sr.top-(sr.height-r.height)/2;
+    }
+  }
+}
+var ticking=false;
+function onScroll(){
+  if(ticking)return; ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var y=window.scrollY+92,id=null,lo=0,hi=tops.length-1;
+    while(lo<=hi){var m=(lo+hi)>>1;
+      if(tops[m][0]<=y){id=tops[m][1];lo=m+1;}else hi=m-1;}
+    setActive(id);
+    var doc=document.documentElement;
+    var p=window.scrollY/(doc.scrollHeight-window.innerHeight||1);
+    $('#progress').style.width=(p*100)+'%';
+    $('#topBtn').classList.toggle('show',window.scrollY>600);
+  });
+}
+computeTops();
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',function(){computeTops();onScroll()});
+window.addEventListener('load',function(){computeTops();onScroll()});
+onScroll();
+$('#topBtn').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+/* 搜索 */
+var box=$('#search');
+box.addEventListener('input',function(){
+  var q=box.value.trim().toLowerCase();
+  var searching=q.length>0;
+  document.body.classList.toggle('searching',searching);
+  $$('.chap').forEach(function(chap){
+    var chId=chap.dataset.ch;
+    var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+    var secHit=false;
+    if(secs){secs.querySelectorAll('li').forEach(function(li){
+      var hit=!searching||li.dataset.text.indexOf(q)>=0;
+      li.classList.toggle('hide',searching&&!hit);
+      if(searching&&hit)secHit=true;
+    });}
+    var chapHit=chap.dataset.text.indexOf(q)>=0;
+    var visible=!searching||chapHit||secHit;
+    chap.classList.toggle('hide',!visible);
+    if(secs){
+      var t=chap.querySelector('.twisty');
+      if(searching)setSecsOpen(secs,t,secHit);
+      else setSecsOpen(secs,t,false);
+    }
+  });
+  $$('details.part').forEach(function(p){
+    var any=p.querySelector('.chap:not(.hide)');
+    p.classList.toggle('hide',searching&&!any);
+    if(searching)p.open=true;
+  });
+  var anyVisible=$('.chap:not(.hide)');
+  $('#emptySearch').classList.toggle('show',searching&&!anyVisible);
+  if(!searching){activeId=null;onScroll();}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='/'&&document.activeElement!==box){e.preventDefault();box.focus();box.select();}
+  if(e.key==='Escape'&&document.activeElement===box){box.value='';box.dispatchEvent(new Event('input'));box.blur();}
+  else if(e.key==='Escape'&&document.body.classList.contains('nav-open')){setNav(false);menuBtn.focus();}
+});
+})();
+</script>
+</body>
+</html>

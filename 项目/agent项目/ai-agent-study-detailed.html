@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Agent 社保项目详细背诵</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23176b87'/%3E%3Cpath d='M8 10h16v2H8zm0 5h16v2H8zm0 5h10v2H8z' fill='white'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --panel-2: #f0f4f8;
+      --text: #17202a;
+      --muted: #637083;
+      --line: #d9e0e8;
+      --brand: #176b87;
+      --brand-2: #0f4c5c;
+      --accent: #bf7b30;
+      --ok: #247a4d;
+      --warn: #9a5a11;
+      --topbar-bg: rgba(255, 255, 255, 0.94);
+      --input-bg: #ffffff;
+      --hover-bg: #f8fafc;
+      --soft-bg: #f3f8fa;
+      --code-bg: #15212b;
+      --code-text: #edf6ff;
+      --mark-bg: #ffe4a8;
+      --focus-ring: rgba(23, 107, 135, 0.2);
+      --border-strong: #a9b7c7;
+      --active-bg: #e5f2f5;
+      --active-border: #9bc5d0;
+      --badge-bg: #eef3f7;
+      --badge-text: #46576a;
+      --badge-border: #dae3ea;
+      --done-bg: #e7f5ee;
+      --done-border: #c7e6d5;
+      --star-bg: #fff3df;
+      --star-border: #f0d5aa;
+      --hidden-bg: #fbfcfd;
+      --inline-code-bg: #eef2f5;
+      --inline-code-border: #dfe6ed;
+      --table-head-bg: #f3f6f9;
+      --shadow: 0 18px 45px rgba(20, 38, 54, 0.12);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101418;
+      --panel: #171d23;
+      --panel-2: #202832;
+      --text: #edf2f7;
+      --muted: #9daaba;
+      --line: #2d3742;
+      --brand: #66b6c8;
+      --brand-2: #9bd6e4;
+      --accent: #e6aa64;
+      --ok: #79d2a2;
+      --warn: #f0bd75;
+      --topbar-bg: rgba(23, 29, 35, 0.94);
+      --input-bg: #11171d;
+      --hover-bg: #202832;
+      --soft-bg: #1d2b32;
+      --code-bg: #0c1116;
+      --code-text: #e8f1f9;
+      --mark-bg: #6d551e;
+      --focus-ring: rgba(102, 182, 200, 0.24);
+      --border-strong: #566473;
+      --active-bg: #19333d;
+      --active-border: #397889;
+      --badge-bg: #242d36;
+      --badge-text: #c7d2df;
+      --badge-border: #35414d;
+      --done-bg: #173629;
+      --done-border: #2d6b4d;
+      --star-bg: #3b2b16;
+      --star-border: #755424;
+      --hidden-bg: #141a20;
+      --inline-code-bg: #222b34;
+      --inline-code-border: #374554;
+      --table-head-bg: #202832;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: 0;
+      transition: background 160ms ease, color 160ms ease;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--line);
+      background: var(--topbar-bg);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 11px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 36px;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      border-color: var(--border-strong);
+      background: var(--hover-bg);
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+
+    .btn.active {
+      background: var(--active-bg);
+      color: var(--brand-2);
+      border-color: var(--active-border);
+    }
+
+    .resume-panel {
+      display: none;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+      padding: 16px 22px;
+    }
+
+    .resume-panel.open {
+      display: block;
+    }
+
+    .resume-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .resume-inner h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .resume-text {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-2);
+      padding: 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      min-height: calc(100vh - 72px);
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      min-height: calc(100vh - 72px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-controls {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    .search:focus {
+      outline: 2px solid var(--focus-ring);
+      border-color: var(--brand);
+    }
+
+    .select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px 10px;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 9px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .filters .btn {
+      padding: 7px 6px;
+      font-size: 13px;
+    }
+
+    .question-list {
+      overflow: auto;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      max-height: calc(100vh - 300px);
+    }
+
+    .q-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: var(--radius);
+      padding: 10px;
+      cursor: pointer;
+      color: var(--text);
+      display: grid;
+      gap: 5px;
+    }
+
+    .q-item:hover {
+      background: var(--hover-bg);
+      border-color: var(--line);
+    }
+
+    .q-item.current {
+      background: var(--active-bg);
+      border-color: var(--active-border);
+    }
+
+    .q-title {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .q-meta {
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .content-area {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .reader {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .reader-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .crumb {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .answer-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .answer-head {
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer-head h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      border: 1px solid var(--badge-border);
+    }
+
+    .badge.done {
+      background: var(--done-bg);
+      color: var(--ok);
+      border-color: var(--done-border);
+    }
+
+    .badge.star {
+      background: var(--star-bg);
+      color: var(--warn);
+      border-color: var(--star-border);
+    }
+
+    .answer-body {
+      padding: 24px;
+      font-size: 16px;
+      line-height: 1.78;
+    }
+
+    .answer-body.hidden {
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      background: var(--hidden-bg);
+    }
+
+    .answer-body h3, .answer-body h4, .answer-body h5 {
+      margin: 1.4em 0 0.45em;
+      line-height: 1.35;
+    }
+
+    .answer-body p {
+      margin: 0.75em 0;
+    }
+
+    .answer-body blockquote {
+      margin: 16px 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--brand);
+      background: var(--soft-bg);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .answer-body blockquote p {
+      margin: 0.45em 0;
+    }
+
+    .answer-body code {
+      background: var(--inline-code-bg);
+      border: 1px solid var(--inline-code-border);
+      border-radius: 5px;
+      padding: 1px 5px;
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    .answer-body pre {
+      overflow: auto;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: var(--code-bg);
+      color: var(--code-text);
+      line-height: 1.55;
+    }
+
+    .answer-body pre code {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    .answer-body ul, .answer-body ol {
+      padding-left: 1.4em;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+      background: var(--input-bg);
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--table-head-bg);
+      font-weight: 700;
+    }
+
+    mark {
+      background: var(--mark-bg);
+      color: inherit;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+
+    .empty {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      background: var(--input-bg);
+    }
+
+    @media (max-width: 900px) {
+      .topbar {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 13px 14px;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .question-list {
+        max-height: 360px;
+      }
+
+      .content-area {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .brand h1 {
+        font-size: 18px;
+      }
+
+      .brand p {
+        font-size: 12px;
+      }
+
+      .btn {
+        min-height: 38px;
+        padding: 8px 9px;
+      }
+
+      .topbar .top-actions .btn {
+        flex: 1 1 calc(50% - 6px);
+      }
+
+      .resume-panel {
+        padding: 12px;
+      }
+
+      .resume-text {
+        padding: 11px;
+        font-size: 13px;
+        line-height: 1.68;
+      }
+
+      .side-controls {
+        padding: 12px;
+        gap: 9px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .stat {
+        padding: 8px 6px;
+      }
+
+      .stat strong {
+        font-size: 16px;
+      }
+
+      .stat span {
+        font-size: 11px;
+      }
+
+      .filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .filters .btn {
+        font-size: 12px;
+      }
+
+      .question-list {
+        max-height: 320px;
+        padding: 8px;
+      }
+
+      .q-item {
+        padding: 9px;
+      }
+
+      .q-title {
+        font-size: 13px;
+      }
+
+      .reader-toolbar {
+        align-items: stretch;
+      }
+
+      .reader-toolbar .top-actions .btn {
+        flex: 1 1 calc(50% - 6px);
+      }
+
+      .answer-head {
+        padding: 18px 16px;
+      }
+
+      .answer-head h2 {
+        font-size: 22px;
+      }
+
+      .answer-body {
+        padding: 17px 16px;
+        font-size: 15px;
+        line-height: 1.72;
+      }
+
+      .answer-body blockquote {
+        margin: 12px 0;
+        padding: 10px 12px;
+      }
+
+      table {
+        min-width: 560px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>AI Agent 社保项目详细背诵</h1>
+      <p>详细逐字稿版：回答更完整，适合重点背诵和模拟追问</p>
+    </div>
+    <div class="top-actions">
+      <a class="btn" href="ai-agent-study-full.html">切换到全量扫题版</a>
+      <button class="btn" id="resumeToggle" type="button" aria-expanded="false">简历原文</button>
+      <button class="btn" id="themeToggle" type="button" aria-pressed="false">暗色模式</button>
+      <button class="btn" id="resetProgress" type="button">重置进度</button>
+    </div>
+  </header>
+
+  <section class="resume-panel" id="resumePanel" aria-label="简历原文">
+    <div class="resume-inner">
+      <h2>简历原文</h2>
+      <pre class="resume-text">面向社保规划的可信政策问答Agent系统                                                    2026.04-2026.06
+Agent 架构：构建面向社保退休规划咨询场景的可信政策Agent，引入Plan-and-Execute工作流，根据用户意图生成结构化Execution Plan，将个人化测算、官方政策解释等不同请求拆解为可执行步骤，约束模型按计划完成推理与回答。
+工具链路：设计并编排人物画像抽取、信息完整性校验、规则引擎测算、政策依据召回和回答安全校验等工具链路；将退休年龄、最低缴费年限、弹性退休提示等政策逻辑沉淀为确定性规则，由规则引擎负责个人化测算，并通过校验工具调用状态与回答内容，防止模型在缺失关键信息时直接输出政策数字。
+记忆与上下文：设计长期结构化记忆机制，将多轮对话中分散提供的个人信息沉淀为可跨会话恢复的用户画像；同时实现上下文压缩、会话摘要和工具事实保留机制，在长对话场景下保留关键信息，并隔离用户显式信息、模型推断信息与工具派生结果，避免污染长期记忆。
+政策信息RAG：构建覆盖最低缴费年限、延迟退休、弹性退休、4050补贴等场景的政策依据召回链路，支持回答中引用可追溯政策来源；设计RAG benchmark验证政策召回效果，政策来源Recall@3达到 94%，官方来源命中率达到98%，提升政策类Agent输出的可解释性、可追溯性和可信度。</pre>
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-controls">
+        <input id="searchInput" class="search" type="search" placeholder="搜索问题、关键词、答案内容" />
+        <select id="chapterSelect" class="select" aria-label="章节筛选"></select>
+        <div class="stats">
+          <div class="stat"><strong id="totalCount">0</strong><span>当前题目</span></div>
+          <div class="stat"><strong id="doneCount">0</strong><span>已掌握</span></div>
+          <div class="stat"><strong id="starCount">0</strong><span>收藏</span></div>
+        </div>
+        <div class="filters">
+          <button class="btn active" data-filter="all" type="button">全部</button>
+          <button class="btn" data-filter="todo" type="button">未掌握</button>
+          <button class="btn" data-filter="star" type="button">收藏</button>
+        </div>
+      </div>
+      <div id="questionList" class="question-list"></div>
+    </aside>
+
+    <main class="content-area">
+      <section class="reader">
+        <div class="reader-toolbar">
+          <div class="crumb" id="crumb"></div>
+          <div class="top-actions">
+            <button class="btn" id="prevBtn" type="button">上一题</button>
+            <button class="btn" id="nextBtn" type="button">下一题</button>
+            <button class="btn" id="toggleAnswerBtn" type="button">只看问题</button>
+            <button class="btn" id="starBtn" type="button">收藏</button>
+            <button class="btn primary" id="doneBtn" type="button">标记掌握</button>
+          </div>
+        </div>
+        <article class="answer-card" id="readerCard"></article>
+      </section>
+    </main>
+  </div>
+
+  <script id="study-data" type="application/json">{"sourceTitle":"AI Agent 岗位面试逐字稿：社保 Agent 项目终极全复习详细版","chapters":[{"id":"chapter-0","title":"文档开场","index":0,"count":1},{"id":"s1-0-总体回答方法","title":"0. 总体回答方法","index":1,"count":2},{"id":"s2-1-项目介绍与整体架构","title":"1. 项目介绍与整体架构","index":2,"count":6},{"id":"s3-2-plan-and-execute-工作流","title":"2. Plan-and-Execute 工作流","index":3,"count":6},{"id":"s4-3-工具链路与规则引擎","title":"3. 工具链路与规则引擎","index":4,"count":8},{"id":"s5-4-记忆与上下文","title":"4. 记忆与上下文","index":5,"count":5},{"id":"s6-5-政策信息-rag","title":"5. 政策信息 RAG","index":6,"count":7},{"id":"s7-6-评测体系详细版","title":"6. 评测体系详细版","index":7,"count":10},{"id":"s8-7-bad-case-复盘详细版","title":"7. Bad Case 复盘详细版","index":8,"count":7},{"id":"s9-8-mcp-skills-langgraph-与多智能体","title":"8. MCP、Skills、LangGraph 与多智能体","index":9,"count":4},{"id":"s10-9-泛-agent-高频题-详细回答","title":"9. 泛 Agent 高频题：详细回答","index":10,"count":9},{"id":"s11-10-尖锐问题防守","title":"10. 尖锐问题防守","index":11,"count":6},{"id":"s12-11-如果做到最好-生产级评测-15-问逐字稿","title":"11. 如果做到最好：生产级评测 15 问逐字稿","index":12,"count":8},{"id":"s13-12-快速背诵版","title":"12. 快速背诵版","index":13,"count":5}],"items":[{"id":"intro","index":0,"number":"","title":"文档说明与使用方式","chapterId":"chapter-0","chapterTitle":"文档开场","markdown":"# AI Agent 岗位面试逐字稿：社保 Agent 项目终极全复习详细版\n\n> 这版解决上一版的问题：题量不再只是“覆盖到”，而是把回答写到能在面试里撑住追问的程度。  \n> 面试官默认只看到你的原始简历描述，不知道代码实现；你的回答要围绕简历四段展开：Agent 架构、工具链路、记忆与上下文、政策信息 RAG。  \n> 口径提醒：本文包含“当前项目可说版本”和“如果做到生产级可说版本”。真实面试时不要把规划中内容说成已经上线。","contentHtml":"<h2>AI Agent 岗位面试逐字稿：社保 Agent 项目终极全复习详细版</h2>\n<blockquote><p>这版解决上一版的问题：题量不再只是“覆盖到”，而是把回答写到能在面试里撑住追问的程度。  </p><p>面试官默认只看到你的原始简历描述，不知道代码实现；你的回答要围绕简历四段展开：Agent 架构、工具链路、记忆与上下文、政策信息 RAG。  </p><p>口径提醒：本文包含“当前项目可说版本”和“如果做到生产级可说版本”。真实面试时不要把规划中内容说成已经上线。</p></blockquote>","searchText":"# AI Agent 岗位面试逐字稿：社保 Agent 项目终极全复习详细版 > 这版解决上一版的问题：题量不再只是“覆盖到”，而是把回答写到能在面试里撑住追问的程度。 > 面试官默认只看到你的原始简历描述，不知道代码实现；你的回答要围绕简历四段展开：Agent 架构、工具链路、记忆与上下文、政策信息 RAG。 > 口径提醒：本文包含“当前项目可说版本”和“如果做到生产级可说版本”。真实面试时不要把规划中内容说成已经上线。"},{"id":"s2-0-1-面试官看到简历后-脑子里会怎么拆","index":1,"number":"","title":"0.1 面试官看到简历后，脑子里会怎么拆","chapterId":"s1-0-总体回答方法","chapterTitle":"0. 总体回答方法","markdown":"面试官看到你的项目描述，会自然产生这几类问题：\n\n| 简历关键词 | 面试官会追问 | 你要证明什么 |\n|---|---|---|\n| 可信政策 Agent | 为什么可信，不是普通聊天机器人 | 规则、RAG、校验、评测共同约束 |\n| Plan-and-Execute | Plan 长什么样，怎么执行 | 结构化计划和工具链路可校验 |\n| 人物画像抽取 | 抽哪些字段，错了怎么办 | profile schema、来源标记、冲突处理 |\n| 信息完整性校验 | 缺什么信息不能答 | 缺信息追问优先于强行回答 |\n| 规则引擎测算 | 为什么不用 LLM 算 | 政策数字确定性、可测试、可追溯 |\n| 政策依据召回 | RAG 怎么做，指标怎么算 | source-level Recall@3、官方来源 |\n| 长期结构化记忆 | 怎么跨会话恢复，怎么避免污染 | 用户显式信息、模型推断、工具事实隔离 |\n| 上下文压缩 | 长对话怎么保留关键事实 | profile、summary、tool facts 分层 |\n| benchmark | 94%/98% 是否可信 | 指标口径清楚，不能说成最终准确率 |","contentHtml":"<p>面试官看到你的项目描述，会自然产生这几类问题：</p>\n<div class=\"table-wrap\"><table><thead><tr><th>简历关键词</th><th>面试官会追问</th><th>你要证明什么</th></tr></thead><tbody><tr><td>可信政策 Agent</td><td>为什么可信，不是普通聊天机器人</td><td>规则、RAG、校验、评测共同约束</td></tr><tr><td>Plan-and-Execute</td><td>Plan 长什么样，怎么执行</td><td>结构化计划和工具链路可校验</td></tr><tr><td>人物画像抽取</td><td>抽哪些字段，错了怎么办</td><td>profile schema、来源标记、冲突处理</td></tr><tr><td>信息完整性校验</td><td>缺什么信息不能答</td><td>缺信息追问优先于强行回答</td></tr><tr><td>规则引擎测算</td><td>为什么不用 LLM 算</td><td>政策数字确定性、可测试、可追溯</td></tr><tr><td>政策依据召回</td><td>RAG 怎么做，指标怎么算</td><td>source-level Recall@3、官方来源</td></tr><tr><td>长期结构化记忆</td><td>怎么跨会话恢复，怎么避免污染</td><td>用户显式信息、模型推断、工具事实隔离</td></tr><tr><td>上下文压缩</td><td>长对话怎么保留关键事实</td><td>profile、summary、tool facts 分层</td></tr><tr><td>benchmark</td><td>94%/98% 是否可信</td><td>指标口径清楚，不能说成最终准确率</td></tr></tbody></table></div>","searchText":"0.1 面试官看到简历后，脑子里会怎么拆 0. 总体回答方法 面试官看到你的项目描述，会自然产生这几类问题： | 简历关键词 | 面试官会追问 | 你要证明什么 | |---|---|---| | 可信政策 Agent | 为什么可信，不是普通聊天机器人 | 规则、RAG、校验、评测共同约束 | | Plan-and-Execute | Plan 长什么样，怎么执行 | 结构化计划和工具链路可校验 | | 人物画像抽取 | 抽哪些字段，错了怎么办 | profile schema、来源标记、冲突处理 | | 信息完整性校验 | 缺什么信息不能答 | 缺信息追问优先于强行回答 | | 规则引擎测算 | 为什么不用 LLM 算 | 政策数字确定性、可测试、可追溯 | | 政策依据召回 | RAG 怎么做，指标怎么算 | source-level Recall@3、官方来源 | | 长期结构化记忆 | 怎么跨会话恢复，怎么避免污染 | 用户显式信息、模型推断、工具事实隔离 | | 上下文压缩 | 长对话怎么保留关键事实 | profile、summary、tool facts 分层 | | benchmark | 94%/98% 是否可信 | 指标口径清楚，不能说成最终准确率 |"},{"id":"s3-0-2-一个万能回答结构","index":2,"number":"","title":"0.2 一个万能回答结构","chapterId":"s1-0-总体回答方法","chapterTitle":"0. 总体回答方法","markdown":"面试中遇到任何项目问题，都按这个顺序答：\n\n1. 先给结论：我为什么这么设计。\n2. 讲场景风险：这个政策场景有什么坑。\n3. 讲系统做法：我怎么用 Agent、工具、规则、RAG、记忆解决。\n4. 讲评测或 bad case：怎么验证不是纸上设计。\n5. 讲边界：当前做到哪里，后续怎么优化。\n\n示例：\n\n> 我当时不是把它当成普通问答系统做，而是当成一个高风险政策咨询 Agent。因为用户问的是退休时间、最低缴费够不够这类会影响决策的问题，所以我把模型自由生成的范围压缩了：模型负责理解意图和编排流程，政策数字交给规则引擎，政策依据交给 RAG，缺信息和无依据输出由校验链路拦截。这样系统的重点不是“回答得像专家”，而是“结论能追溯、错误能定位、链路能回归”。","contentHtml":"<p>面试中遇到任何项目问题，都按这个顺序答：</p>\n<ol><li>先给结论：我为什么这么设计。</li><li>讲场景风险：这个政策场景有什么坑。</li><li>讲系统做法：我怎么用 Agent、工具、规则、RAG、记忆解决。</li><li>讲评测或 bad case：怎么验证不是纸上设计。</li><li>讲边界：当前做到哪里，后续怎么优化。</li></ol>\n<p>示例：</p>\n<blockquote><p>我当时不是把它当成普通问答系统做，而是当成一个高风险政策咨询 Agent。因为用户问的是退休时间、最低缴费够不够这类会影响决策的问题，所以我把模型自由生成的范围压缩了：模型负责理解意图和编排流程，政策数字交给规则引擎，政策依据交给 RAG，缺信息和无依据输出由校验链路拦截。这样系统的重点不是“回答得像专家”，而是“结论能追溯、错误能定位、链路能回归”。</p></blockquote>","searchText":"0.2 一个万能回答结构 0. 总体回答方法 面试中遇到任何项目问题，都按这个顺序答： 1. 先给结论：我为什么这么设计。 2. 讲场景风险：这个政策场景有什么坑。 3. 讲系统做法：我怎么用 Agent、工具、规则、RAG、记忆解决。 4. 讲评测或 bad case：怎么验证不是纸上设计。 5. 讲边界：当前做到哪里，后续怎么优化。 示例： > 我当时不是把它当成普通问答系统做，而是当成一个高风险政策咨询 Agent。因为用户问的是退休时间、最低缴费够不够这类会影响决策的问题，所以我把模型自由生成的范围压缩了：模型负责理解意图和编排流程，政策数字交给规则引擎，政策依据交给 RAG，缺信息和无依据输出由校验链路拦截。这样系统的重点不是“回答得像专家”，而是“结论能追溯、错误能定位、链路能回归”。"},{"id":"s4-q1-请你详细介绍一下这个项目","index":3,"number":"Q1","title":"Q1. 请你详细介绍一下这个项目","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 这个项目是一个面向社保退休规划咨询的可信政策问答 Agent。它解决的不是普通知识问答，而是政策咨询里更难的两个问题：第一，用户会问个人化问题，比如“我什么时候退休”“我最低缴费够不够”；第二，用户需要官方依据，而不是模型凭记忆给一个说法。  \n>  \n> 所以我在架构上没有采用单轮 RAG 问答，而是用了 Plan-and-Execute workflow。系统先识别用户意图，判断这是个人化测算、政策解释，还是两者混合。然后生成结构化 Execution Plan，把任务拆成可执行步骤，比如画像抽取、信息完整性校验、规则引擎测算、政策依据召回、回答安全校验。  \n>  \n> 在工具链路上，最重要的设计是把政策数字从 LLM 里拿出来。退休年龄、最低缴费年限、缴费缺口、弹性退休提示这些逻辑，都沉淀为规则引擎，由规则引擎根据结构化画像计算。模型不能在缺少出生月份、缴费月数、女性身份类型等关键信息时直接输出政策数字。  \n>  \n> 在记忆和上下文方面，我把多轮对话里分散提供的信息沉淀为长期结构化用户画像，比如出生年月、性别、地区、缴费月数，同时保留会话摘要和工具事实。这里我特别注意隔离用户显式信息、模型推断信息和工具派生结果，避免模型猜测污染长期记忆。  \n>  \n> 在政策 RAG 方面，我构建了覆盖最低缴费年限、延迟退休、弹性退休、4050 补贴等场景的政策召回链路，并做了 RAG benchmark。简历里写的 Recall@3 94% 和官方来源命中率 98%，指的是政策依据召回层面的指标，不是最终回答准确率。整个项目的目标是提升政策类 Agent 的可解释性、可追溯性和可信度。\n\n追问：你这个项目最核心的技术亮点是什么？\n\n> 我会概括成三个点。第一是流程可信，用 Plan-and-Execute 把任务拆成可检查步骤；第二是结果可信，把政策数字交给规则引擎而不是模型生成；第三是依据可信，通过 RAG 召回官方政策来源，并在回答里保留 citation。  \n>  \n> 这三个点共同解决的是政策 Agent 最大的问题：模型不能在高风险场景里自由发挥。\n\n追问：你个人主要负责什么？\n\n> 我主要负责 Agent 链路设计、工具编排、规则测算逻辑、RAG benchmark 和评测复盘。更具体地说，我做了用户画像字段设计、信息完整性校验、规则引擎输入输出、政策召回指标，以及缺信息和 RAG bad case 的修复思路。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>这个项目是一个面向社保退休规划咨询的可信政策问答 Agent。它解决的不是普通知识问答，而是政策咨询里更难的两个问题：第一，用户会问个人化问题，比如“我什么时候退休”“我最低缴费够不够”；第二，用户需要官方依据，而不是模型凭记忆给一个说法。  </p><p> </p><p>所以我在架构上没有采用单轮 RAG 问答，而是用了 Plan-and-Execute workflow。系统先识别用户意图，判断这是个人化测算、政策解释，还是两者混合。然后生成结构化 Execution Plan，把任务拆成可执行步骤，比如画像抽取、信息完整性校验、规则引擎测算、政策依据召回、回答安全校验。  </p><p> </p><p>在工具链路上，最重要的设计是把政策数字从 LLM 里拿出来。退休年龄、最低缴费年限、缴费缺口、弹性退休提示这些逻辑，都沉淀为规则引擎，由规则引擎根据结构化画像计算。模型不能在缺少出生月份、缴费月数、女性身份类型等关键信息时直接输出政策数字。  </p><p> </p><p>在记忆和上下文方面，我把多轮对话里分散提供的信息沉淀为长期结构化用户画像，比如出生年月、性别、地区、缴费月数，同时保留会话摘要和工具事实。这里我特别注意隔离用户显式信息、模型推断信息和工具派生结果，避免模型猜测污染长期记忆。  </p><p> </p><p>在政策 RAG 方面，我构建了覆盖最低缴费年限、延迟退休、弹性退休、4050 补贴等场景的政策召回链路，并做了 RAG benchmark。简历里写的 Recall@3 94% 和官方来源命中率 98%，指的是政策依据召回层面的指标，不是最终回答准确率。整个项目的目标是提升政策类 Agent 的可解释性、可追溯性和可信度。</p></blockquote>\n<p>追问：你这个项目最核心的技术亮点是什么？</p>\n<blockquote><p>我会概括成三个点。第一是流程可信，用 Plan-and-Execute 把任务拆成可检查步骤；第二是结果可信，把政策数字交给规则引擎而不是模型生成；第三是依据可信，通过 RAG 召回官方政策来源，并在回答里保留 citation。  </p><p> </p><p>这三个点共同解决的是政策 Agent 最大的问题：模型不能在高风险场景里自由发挥。</p></blockquote>\n<p>追问：你个人主要负责什么？</p>\n<blockquote><p>我主要负责 Agent 链路设计、工具编排、规则测算逻辑、RAG benchmark 和评测复盘。更具体地说，我做了用户画像字段设计、信息完整性校验、规则引擎输入输出、政策召回指标，以及缺信息和 RAG bad case 的修复思路。</p></blockquote>","searchText":"Q1. 请你详细介绍一下这个项目 1. 项目介绍与整体架构 逐字稿： > 这个项目是一个面向社保退休规划咨询的可信政策问答 Agent。它解决的不是普通知识问答，而是政策咨询里更难的两个问题：第一，用户会问个人化问题，比如“我什么时候退休”“我最低缴费够不够”；第二，用户需要官方依据，而不是模型凭记忆给一个说法。 > > 所以我在架构上没有采用单轮 RAG 问答，而是用了 Plan-and-Execute workflow。系统先识别用户意图，判断这是个人化测算、政策解释，还是两者混合。然后生成结构化 Execution Plan，把任务拆成可执行步骤，比如画像抽取、信息完整性校验、规则引擎测算、政策依据召回、回答安全校验。 > > 在工具链路上，最重要的设计是把政策数字从 LLM 里拿出来。退休年龄、最低缴费年限、缴费缺口、弹性退休提示这些逻辑，都沉淀为规则引擎，由规则引擎根据结构化画像计算。模型不能在缺少出生月份、缴费月数、女性身份类型等关键信息时直接输出政策数字。 > > 在记忆和上下文方面，我把多轮对话里分散提供的信息沉淀为长期结构化用户画像，比如出生年月、性别、地区、缴费月数，同时保留会话摘要和工具事实。这里我特别注意隔离用户显式信息、模型推断信息和工具派生结果，避免模型猜测污染长期记忆。 > > 在政策 RAG 方面，我构建了覆盖最低缴费年限、延迟退休、弹性退休、4050 补贴等场景的政策召回链路，并做了 RAG benchmark。简历里写的 Recall@3 94% 和官方来源命中率 98%，指的是政策依据召回层面的指标，不是最终回答准确率。整个项目的目标是提升政策类 Agent 的可解释性、可追溯性和可信度。 追问：你这个项目最核心的技术亮点是什么？ > 我会概括成三个点。第一是流程可信，用 Plan-and-Execute 把任务拆成可检查步骤；第二是结果可信，把政策数字交给规则引擎而不是模型生成；第三是依据可信，通过 RAG 召回官方政策来源，并在回答里保留 citation。 > > 这三个点共同解决的是政策 Agent 最大的问题：模型不能在高风险场景里自由发挥。 追问：你个人主要负责什么？ > 我主要负责 Agent 链路设计、工具编排、规则测算逻辑、RAG benchmark 和评测复盘。更具体地说，我做了用户画像字段设计、信息完整性校验、规则引擎输入输出、政策召回指标，以及缺信息和 RAG bad case 的修复思路。"},{"id":"s5-q2-这个项目为什么叫-可信政策问答-agent","index":4,"number":"Q2","title":"Q2. 这个项目为什么叫“可信政策问答 Agent”？","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 我这里说的“可信”不是说模型永远不会错，而是系统有机制降低高风险错误，并且出错后能定位。  \n>  \n> 第一，政策数字可信。比如退休年龄、最低缴费月数、缴费缺口，不由模型直接生成，而是通过规则引擎算出来。  \n>  \n> 第二，政策依据可信。回答政策解释时，不只靠模型参数知识，而是通过 RAG 召回官方来源，并在回答里引用。  \n>  \n> 第三，流程可信。系统先生成 Execution Plan，再按计划调用工具，工具调用状态会被记录，最终回答也会检查是否和工具状态一致。  \n>  \n> 第四，记忆可信。长期记忆只沉淀用户显式提供或确认的信息，模型推断和工具派生结果不会混进用户画像。  \n>  \n> 所以可信的本质是：关键结论有来源，关键数字可计算，关键步骤可追踪，缺信息时能拒绝乱答。\n\n追问：如果模型最终还是说错了怎么办？\n\n> 所以我才强调 trace 和评测。最终回答错了以后，我可以根据 trace 判断是意图识别错、plan 漏工具、工具参数错、规则算错、RAG 召回错，还是回答整合错。这个归因能力是可信系统很重要的一部分。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我这里说的“可信”不是说模型永远不会错，而是系统有机制降低高风险错误，并且出错后能定位。  </p><p> </p><p>第一，政策数字可信。比如退休年龄、最低缴费月数、缴费缺口，不由模型直接生成，而是通过规则引擎算出来。  </p><p> </p><p>第二，政策依据可信。回答政策解释时，不只靠模型参数知识，而是通过 RAG 召回官方来源，并在回答里引用。  </p><p> </p><p>第三，流程可信。系统先生成 Execution Plan，再按计划调用工具，工具调用状态会被记录，最终回答也会检查是否和工具状态一致。  </p><p> </p><p>第四，记忆可信。长期记忆只沉淀用户显式提供或确认的信息，模型推断和工具派生结果不会混进用户画像。  </p><p> </p><p>所以可信的本质是：关键结论有来源，关键数字可计算，关键步骤可追踪，缺信息时能拒绝乱答。</p></blockquote>\n<p>追问：如果模型最终还是说错了怎么办？</p>\n<blockquote><p>所以我才强调 trace 和评测。最终回答错了以后，我可以根据 trace 判断是意图识别错、plan 漏工具、工具参数错、规则算错、RAG 召回错，还是回答整合错。这个归因能力是可信系统很重要的一部分。</p></blockquote>","searchText":"Q2. 这个项目为什么叫“可信政策问答 Agent”？ 1. 项目介绍与整体架构 逐字稿： > 我这里说的“可信”不是说模型永远不会错，而是系统有机制降低高风险错误，并且出错后能定位。 > > 第一，政策数字可信。比如退休年龄、最低缴费月数、缴费缺口，不由模型直接生成，而是通过规则引擎算出来。 > > 第二，政策依据可信。回答政策解释时，不只靠模型参数知识，而是通过 RAG 召回官方来源，并在回答里引用。 > > 第三，流程可信。系统先生成 Execution Plan，再按计划调用工具，工具调用状态会被记录，最终回答也会检查是否和工具状态一致。 > > 第四，记忆可信。长期记忆只沉淀用户显式提供或确认的信息，模型推断和工具派生结果不会混进用户画像。 > > 所以可信的本质是：关键结论有来源，关键数字可计算，关键步骤可追踪，缺信息时能拒绝乱答。 追问：如果模型最终还是说错了怎么办？ > 所以我才强调 trace 和评测。最终回答错了以后，我可以根据 trace 判断是意图识别错、plan 漏工具、工具参数错、规则算错、RAG 召回错，还是回答整合错。这个归因能力是可信系统很重要的一部分。"},{"id":"s6-q3-这个项目和普通-rag-问答有什么区别","index":5,"number":"Q3","title":"Q3. 这个项目和普通 RAG 问答有什么区别？","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 普通 RAG 的基本模式是用户提问、检索文档、把文档塞给模型回答。这个模式适合回答“某个政策是什么”，但不够适合“我的情况怎么算”。  \n>  \n> 比如用户问“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够不够”。这里有两层任务：一层是个人化测算，必须根据出生年月、性别、缴费月数走规则；另一层是政策解释，需要引用最低缴费年限和延迟退休的官方依据。  \n>  \n> 所以我的系统不是单纯 RAG，而是 Agent workflow。RAG 负责提供政策依据，规则引擎负责个人化数字，Agent 负责判断任务类型、收集信息、选择工具、整合结果。  \n>  \n> 这样普通 RAG 容易出现的两个问题可以被控制：一是模型拿到资料后自己算错，二是缺少信息时仍然生成一个看似合理的结论。\n\n追问：那普通 RAG 加一个 prompt 约束不行吗？\n\n> 可以缓解，但不够稳。Prompt 只能告诉模型“不要乱答”，但不能保证每次都遵守。我的做法是把关键动作变成程序化约束：缺字段时规则引擎不返回 ready；没有工具结果时回答校验不允许出现政策数字。这样比单纯 prompt 更可靠。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>普通 RAG 的基本模式是用户提问、检索文档、把文档塞给模型回答。这个模式适合回答“某个政策是什么”，但不够适合“我的情况怎么算”。  </p><p> </p><p>比如用户问“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够不够”。这里有两层任务：一层是个人化测算，必须根据出生年月、性别、缴费月数走规则；另一层是政策解释，需要引用最低缴费年限和延迟退休的官方依据。  </p><p> </p><p>所以我的系统不是单纯 RAG，而是 Agent workflow。RAG 负责提供政策依据，规则引擎负责个人化数字，Agent 负责判断任务类型、收集信息、选择工具、整合结果。  </p><p> </p><p>这样普通 RAG 容易出现的两个问题可以被控制：一是模型拿到资料后自己算错，二是缺少信息时仍然生成一个看似合理的结论。</p></blockquote>\n<p>追问：那普通 RAG 加一个 prompt 约束不行吗？</p>\n<blockquote><p>可以缓解，但不够稳。Prompt 只能告诉模型“不要乱答”，但不能保证每次都遵守。我的做法是把关键动作变成程序化约束：缺字段时规则引擎不返回 ready；没有工具结果时回答校验不允许出现政策数字。这样比单纯 prompt 更可靠。</p></blockquote>","searchText":"Q3. 这个项目和普通 RAG 问答有什么区别？ 1. 项目介绍与整体架构 逐字稿： > 普通 RAG 的基本模式是用户提问、检索文档、把文档塞给模型回答。这个模式适合回答“某个政策是什么”，但不够适合“我的情况怎么算”。 > > 比如用户问“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够不够”。这里有两层任务：一层是个人化测算，必须根据出生年月、性别、缴费月数走规则；另一层是政策解释，需要引用最低缴费年限和延迟退休的官方依据。 > > 所以我的系统不是单纯 RAG，而是 Agent workflow。RAG 负责提供政策依据，规则引擎负责个人化数字，Agent 负责判断任务类型、收集信息、选择工具、整合结果。 > > 这样普通 RAG 容易出现的两个问题可以被控制：一是模型拿到资料后自己算错，二是缺少信息时仍然生成一个看似合理的结论。 追问：那普通 RAG 加一个 prompt 约束不行吗？ > 可以缓解，但不够稳。Prompt 只能告诉模型“不要乱答”，但不能保证每次都遵守。我的做法是把关键动作变成程序化约束：缺字段时规则引擎不返回 ready；没有工具结果时回答校验不允许出现政策数字。这样比单纯 prompt 更可靠。"},{"id":"s7-q4-这个项目和传统规则系统有什么区别","index":6,"number":"Q4","title":"Q4. 这个项目和传统规则系统有什么区别？","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 传统规则系统的优点是确定性强，但它通常要求用户按表单提供完整信息，而且不擅长理解自然语言、多轮上下文和政策解释。  \n>  \n> 我的项目不是用 LLM 替代规则，而是用 LLM 补规则系统的短板。LLM 负责理解用户口语表达，比如“我爸快退休了，社保还没交满怎么办”；负责从多轮对话里抽取画像；负责把规则结果和政策依据解释成人能理解的回答。  \n>  \n> 规则系统负责高风险数字，RAG 负责政策依据，LLM 负责交互和编排。这个组合比纯规则系统更自然，也比纯 LLM 更可信。\n\n追问：如果只做一个表单测算工具，是不是也能解决？\n\n> 如果用户目标很明确，表单可以解决测算。但真实咨询里用户往往不知道要提供哪些字段，也会混合问政策解释和个人规划。Agent 的价值是先理解问题，再引导用户补充信息，并把测算结果和政策依据一起解释。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>传统规则系统的优点是确定性强，但它通常要求用户按表单提供完整信息，而且不擅长理解自然语言、多轮上下文和政策解释。  </p><p> </p><p>我的项目不是用 LLM 替代规则，而是用 LLM 补规则系统的短板。LLM 负责理解用户口语表达，比如“我爸快退休了，社保还没交满怎么办”；负责从多轮对话里抽取画像；负责把规则结果和政策依据解释成人能理解的回答。  </p><p> </p><p>规则系统负责高风险数字，RAG 负责政策依据，LLM 负责交互和编排。这个组合比纯规则系统更自然，也比纯 LLM 更可信。</p></blockquote>\n<p>追问：如果只做一个表单测算工具，是不是也能解决？</p>\n<blockquote><p>如果用户目标很明确，表单可以解决测算。但真实咨询里用户往往不知道要提供哪些字段，也会混合问政策解释和个人规划。Agent 的价值是先理解问题，再引导用户补充信息，并把测算结果和政策依据一起解释。</p></blockquote>","searchText":"Q4. 这个项目和传统规则系统有什么区别？ 1. 项目介绍与整体架构 逐字稿： > 传统规则系统的优点是确定性强，但它通常要求用户按表单提供完整信息，而且不擅长理解自然语言、多轮上下文和政策解释。 > > 我的项目不是用 LLM 替代规则，而是用 LLM 补规则系统的短板。LLM 负责理解用户口语表达，比如“我爸快退休了，社保还没交满怎么办”；负责从多轮对话里抽取画像；负责把规则结果和政策依据解释成人能理解的回答。 > > 规则系统负责高风险数字，RAG 负责政策依据，LLM 负责交互和编排。这个组合比纯规则系统更自然，也比纯 LLM 更可信。 追问：如果只做一个表单测算工具，是不是也能解决？ > 如果用户目标很明确，表单可以解决测算。但真实咨询里用户往往不知道要提供哪些字段，也会混合问政策解释和个人规划。Agent 的价值是先理解问题，再引导用户补充信息，并把测算结果和政策依据一起解释。"},{"id":"s8-q5-你的项目架构图如果口头描述-怎么讲","index":7,"number":"Q5","title":"Q5. 你的项目架构图如果口头描述，怎么讲？","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 我会从上到下讲四层。  \n>  \n> 第一层是交互层，接收用户当前输入和历史会话。  \n>  \n> 第二层是 Agent orchestration，也就是 Plan-and-Execute。它会识别意图，生成 Execution Plan，并决定要不要调用画像抽取、规则引擎、RAG 或安全校验。  \n>  \n> 第三层是工具层，包括 profile extractor、required-info checker、retirement rule engine、policy retriever、answer validator。每个工具都有结构化输入输出。  \n>  \n> 第四层是数据与记忆层，包括长期用户画像、会话摘要、工具事实、政策文档索引和 benchmark case。  \n>  \n> 这个分层的好处是职责清晰。模型不是所有事情都做，而是作为 planner 和 answer composer；高风险能力由工具承担。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会从上到下讲四层。  </p><p> </p><p>第一层是交互层，接收用户当前输入和历史会话。  </p><p> </p><p>第二层是 Agent orchestration，也就是 Plan-and-Execute。它会识别意图，生成 Execution Plan，并决定要不要调用画像抽取、规则引擎、RAG 或安全校验。  </p><p> </p><p>第三层是工具层，包括 profile extractor、required-info checker、retirement rule engine、policy retriever、answer validator。每个工具都有结构化输入输出。  </p><p> </p><p>第四层是数据与记忆层，包括长期用户画像、会话摘要、工具事实、政策文档索引和 benchmark case。  </p><p> </p><p>这个分层的好处是职责清晰。模型不是所有事情都做，而是作为 planner 和 answer composer；高风险能力由工具承担。</p></blockquote>","searchText":"Q5. 你的项目架构图如果口头描述，怎么讲？ 1. 项目介绍与整体架构 逐字稿： > 我会从上到下讲四层。 > > 第一层是交互层，接收用户当前输入和历史会话。 > > 第二层是 Agent orchestration，也就是 Plan-and-Execute。它会识别意图，生成 Execution Plan，并决定要不要调用画像抽取、规则引擎、RAG 或安全校验。 > > 第三层是工具层，包括 profile extractor、required-info checker、retirement rule engine、policy retriever、answer validator。每个工具都有结构化输入输出。 > > 第四层是数据与记忆层，包括长期用户画像、会话摘要、工具事实、政策文档索引和 benchmark case。 > > 这个分层的好处是职责清晰。模型不是所有事情都做，而是作为 planner 和 answer composer；高风险能力由工具承担。"},{"id":"s9-q6-你怎么理解这个项目里的-agent","index":8,"number":"Q6","title":"Q6. 你怎么理解这个项目里的“Agent”？","chapterId":"s2-1-项目介绍与整体架构","chapterTitle":"1. 项目介绍与整体架构","markdown":"逐字稿：\n\n> 我理解 Agent 不是简单的聊天机器人，而是能围绕目标规划步骤、调用工具、维护状态、根据工具结果完成任务的系统。  \n>  \n> 在这个项目里，目标是回答社保退休规划问题。Agent 会先判断用户要的是政策解释还是个人化测算，再决定是否需要补充信息、是否调用规则引擎、是否检索官方政策，最后把结果组织成回答。  \n>  \n> 所以它具备 Agent 的几个核心能力：任务规划、工具调用、状态管理、外部知识接入和结果校验。\n\n追问：Agent 是不是必须多智能体？\n\n> 不是。多智能体只是 Agent 的一种组织方式。我的项目更准确地说是单 Agent workflow 加多工具，不是多个自治 Agent 协作。这个选择更适合当前场景，因为政策规划的主问题不是多角色协作，而是流程可靠和结果可追溯。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我理解 Agent 不是简单的聊天机器人，而是能围绕目标规划步骤、调用工具、维护状态、根据工具结果完成任务的系统。  </p><p> </p><p>在这个项目里，目标是回答社保退休规划问题。Agent 会先判断用户要的是政策解释还是个人化测算，再决定是否需要补充信息、是否调用规则引擎、是否检索官方政策，最后把结果组织成回答。  </p><p> </p><p>所以它具备 Agent 的几个核心能力：任务规划、工具调用、状态管理、外部知识接入和结果校验。</p></blockquote>\n<p>追问：Agent 是不是必须多智能体？</p>\n<blockquote><p>不是。多智能体只是 Agent 的一种组织方式。我的项目更准确地说是单 Agent workflow 加多工具，不是多个自治 Agent 协作。这个选择更适合当前场景，因为政策规划的主问题不是多角色协作，而是流程可靠和结果可追溯。</p></blockquote>","searchText":"Q6. 你怎么理解这个项目里的“Agent”？ 1. 项目介绍与整体架构 逐字稿： > 我理解 Agent 不是简单的聊天机器人，而是能围绕目标规划步骤、调用工具、维护状态、根据工具结果完成任务的系统。 > > 在这个项目里，目标是回答社保退休规划问题。Agent 会先判断用户要的是政策解释还是个人化测算，再决定是否需要补充信息、是否调用规则引擎、是否检索官方政策，最后把结果组织成回答。 > > 所以它具备 Agent 的几个核心能力：任务规划、工具调用、状态管理、外部知识接入和结果校验。 追问：Agent 是不是必须多智能体？ > 不是。多智能体只是 Agent 的一种组织方式。我的项目更准确地说是单 Agent workflow 加多工具，不是多个自治 Agent 协作。这个选择更适合当前场景，因为政策规划的主问题不是多角色协作，而是流程可靠和结果可追溯。"},{"id":"s10-q7-为什么选择-plan-and-execute-而不是-react","index":9,"number":"Q7","title":"Q7. 为什么选择 Plan-and-Execute，而不是 ReAct？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 我选择 Plan-and-Execute，主要是因为社保政策咨询的流程相对明确，而且错误成本比较高。  \n>  \n> ReAct 是边推理边行动，适合开放探索问题，比如不知道要查什么资料，需要一步步观察再决定下一步。但在我的场景里，很多流程是可以预先约束的：个人化测算必须先抽画像，再校验信息完整性，再调用规则引擎；政策解释必须召回政策依据；缺关键信息时必须追问。  \n>  \n> 如果用 ReAct，模型每一步都有更大自由度，可能漏调工具，也可能在观察不完整时直接回答。Plan-and-Execute 的好处是先生成结构化计划，再按计划执行，我可以在执行前检查 plan 是否包含必要工具，在执行后检查工具状态和最终回答是否一致。  \n>  \n> 所以这个选择不是说 ReAct 不好，而是政策场景更需要显式计划、可控执行和可审计 trace。\n\n追问：Plan-and-Execute 的缺点是什么？\n\n> 缺点是灵活性会弱一点。如果用户问题非常开放，预先 plan 可能不如 ReAct 灵活。另外 plan 生成错了，后续执行也会被带偏。所以我会加 plan 校验和必要时重新规划。对我的项目来说，这个取舍是可以接受的，因为业务流程相对稳定。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我选择 Plan-and-Execute，主要是因为社保政策咨询的流程相对明确，而且错误成本比较高。  </p><p> </p><p>ReAct 是边推理边行动，适合开放探索问题，比如不知道要查什么资料，需要一步步观察再决定下一步。但在我的场景里，很多流程是可以预先约束的：个人化测算必须先抽画像，再校验信息完整性，再调用规则引擎；政策解释必须召回政策依据；缺关键信息时必须追问。  </p><p> </p><p>如果用 ReAct，模型每一步都有更大自由度，可能漏调工具，也可能在观察不完整时直接回答。Plan-and-Execute 的好处是先生成结构化计划，再按计划执行，我可以在执行前检查 plan 是否包含必要工具，在执行后检查工具状态和最终回答是否一致。  </p><p> </p><p>所以这个选择不是说 ReAct 不好，而是政策场景更需要显式计划、可控执行和可审计 trace。</p></blockquote>\n<p>追问：Plan-and-Execute 的缺点是什么？</p>\n<blockquote><p>缺点是灵活性会弱一点。如果用户问题非常开放，预先 plan 可能不如 ReAct 灵活。另外 plan 生成错了，后续执行也会被带偏。所以我会加 plan 校验和必要时重新规划。对我的项目来说，这个取舍是可以接受的，因为业务流程相对稳定。</p></blockquote>","searchText":"Q7. 为什么选择 Plan-and-Execute，而不是 ReAct？ 2. Plan-and-Execute 工作流 逐字稿： > 我选择 Plan-and-Execute，主要是因为社保政策咨询的流程相对明确，而且错误成本比较高。 > > ReAct 是边推理边行动，适合开放探索问题，比如不知道要查什么资料，需要一步步观察再决定下一步。但在我的场景里，很多流程是可以预先约束的：个人化测算必须先抽画像，再校验信息完整性，再调用规则引擎；政策解释必须召回政策依据；缺关键信息时必须追问。 > > 如果用 ReAct，模型每一步都有更大自由度，可能漏调工具，也可能在观察不完整时直接回答。Plan-and-Execute 的好处是先生成结构化计划，再按计划执行，我可以在执行前检查 plan 是否包含必要工具，在执行后检查工具状态和最终回答是否一致。 > > 所以这个选择不是说 ReAct 不好，而是政策场景更需要显式计划、可控执行和可审计 trace。 追问：Plan-and-Execute 的缺点是什么？ > 缺点是灵活性会弱一点。如果用户问题非常开放，预先 plan 可能不如 ReAct 灵活。另外 plan 生成错了，后续执行也会被带偏。所以我会加 plan 校验和必要时重新规划。对我的项目来说，这个取舍是可以接受的，因为业务流程相对稳定。"},{"id":"s11-q8-execution-plan-具体包含哪些字段","index":10,"number":"Q8","title":"Q8. Execution Plan 具体包含哪些字段？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 我会把 Execution Plan 设计成结构化对象，而不是一段自然语言。核心字段包括：intent、riskLevel、requiredFields、missingFields、steps、requiredTools、forbiddenTools、expectedOutputs 和 finalAnswerConstraints。  \n>  \n> intent 用来区分 policy_explanation、personal_plan、mixed、profile_update。riskLevel 用来决定是否必须走规则和 citation。requiredFields 和 missingFields 用来控制是否可以测算。steps 是具体执行步骤，比如 extract_profile、check_required_info、compute_plan、retrieve_policy、validate_answer。requiredTools 和 forbiddenTools 用于评测工具路径是否正确。finalAnswerConstraints 则约束最终回答，比如缺信息时不能输出确定退休月份，政策数字必须来自工具结果。\n\n示例回答可以这样补：\n\n> 比如用户说“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够了吗，依据是什么”。这个 plan 会被识别为 mixed，required tools 包括 profile extractor、required-info checker、computePlan、retrievePolicy 和 answer validator。输出约束是必须说明测算结果、最低缴费缺口和政策依据，并且 citation 要来自官方来源。\n\n追问：为什么 plan 要有 forbiddenTools？\n\n> 因为过度调用工具也会带来成本和延迟。比如用户只是问“4050 补贴是什么”，不需要调用个人退休测算规则。forbiddenTools 可以帮助评估工具调用是否过度，也能让流程更清晰。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会把 Execution Plan 设计成结构化对象，而不是一段自然语言。核心字段包括：intent、riskLevel、requiredFields、missingFields、steps、requiredTools、forbiddenTools、expectedOutputs 和 finalAnswerConstraints。  </p><p> </p><p>intent 用来区分 policy_explanation、personal_plan、mixed、profile_update。riskLevel 用来决定是否必须走规则和 citation。requiredFields 和 missingFields 用来控制是否可以测算。steps 是具体执行步骤，比如 extract_profile、check_required_info、compute_plan、retrieve_policy、validate_answer。requiredTools 和 forbiddenTools 用于评测工具路径是否正确。finalAnswerConstraints 则约束最终回答，比如缺信息时不能输出确定退休月份，政策数字必须来自工具结果。</p></blockquote>\n<p>示例回答可以这样补：</p>\n<blockquote><p>比如用户说“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够了吗，依据是什么”。这个 plan 会被识别为 mixed，required tools 包括 profile extractor、required-info checker、computePlan、retrievePolicy 和 answer validator。输出约束是必须说明测算结果、最低缴费缺口和政策依据，并且 citation 要来自官方来源。</p></blockquote>\n<p>追问：为什么 plan 要有 forbiddenTools？</p>\n<blockquote><p>因为过度调用工具也会带来成本和延迟。比如用户只是问“4050 补贴是什么”，不需要调用个人退休测算规则。forbiddenTools 可以帮助评估工具调用是否过度，也能让流程更清晰。</p></blockquote>","searchText":"Q8. Execution Plan 具体包含哪些字段？ 2. Plan-and-Execute 工作流 逐字稿： > 我会把 Execution Plan 设计成结构化对象，而不是一段自然语言。核心字段包括：intent、riskLevel、requiredFields、missingFields、steps、requiredTools、forbiddenTools、expectedOutputs 和 finalAnswerConstraints。 > > intent 用来区分 policy_explanation、personal_plan、mixed、profile_update。riskLevel 用来决定是否必须走规则和 citation。requiredFields 和 missingFields 用来控制是否可以测算。steps 是具体执行步骤，比如 extract_profile、check_required_info、compute_plan、retrieve_policy、validate_answer。requiredTools 和 forbiddenTools 用于评测工具路径是否正确。finalAnswerConstraints 则约束最终回答，比如缺信息时不能输出确定退休月份，政策数字必须来自工具结果。 示例回答可以这样补： > 比如用户说“我是 1977 年 3 月出生的男性，在上海交了 170 个月，我什么时候退休，最低缴费够了吗，依据是什么”。这个 plan 会被识别为 mixed，required tools 包括 profile extractor、required-info checker、computePlan、retrievePolicy 和 answer validator。输出约束是必须说明测算结果、最低缴费缺口和政策依据，并且 citation 要来自官方来源。 追问：为什么 plan 要有 forbiddenTools？ > 因为过度调用工具也会带来成本和延迟。比如用户只是问“4050 补贴是什么”，不需要调用个人退休测算规则。forbiddenTools 可以帮助评估工具调用是否过度，也能让流程更清晰。"},{"id":"s12-q9-你的-agent-如何从用户意图生成计划","index":11,"number":"Q9","title":"Q9. 你的 Agent 如何从用户意图生成计划？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 我会先把用户问题归到几个意图：个人化测算、政策解释、混合问题、画像补充、闲聊或超出范围。判断依据包括用户是否提供个人字段、是否问“我什么时候”“我够不够”“我还差多少”，以及是否要求“依据”“政策文件”“官方说法”。  \n>  \n> 识别完意图后，再根据意图模板生成计划。比如 personal_plan 必须经过画像抽取和信息完整性校验；policy_explanation 必须走 RAG；mixed 则两条链路都走。  \n>  \n> 这不是完全硬编码，也不是完全让模型自由发挥，而是模型识别意图后落到有限几类可控 workflow。这样兼顾自然语言灵活性和工程可控性。\n\n追问：意图识别错了怎么办？\n\n> 我会通过后置校验兜底。比如用户问题里出现“我什么时候退休”，但 plan 没有 computePlan，就说明 under-tool；如果回答里出现个人化政策数字但 trace 里没有规则结果，就会被 answer validator 拦住。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会先把用户问题归到几个意图：个人化测算、政策解释、混合问题、画像补充、闲聊或超出范围。判断依据包括用户是否提供个人字段、是否问“我什么时候”“我够不够”“我还差多少”，以及是否要求“依据”“政策文件”“官方说法”。  </p><p> </p><p>识别完意图后，再根据意图模板生成计划。比如 personal_plan 必须经过画像抽取和信息完整性校验；policy_explanation 必须走 RAG；mixed 则两条链路都走。  </p><p> </p><p>这不是完全硬编码，也不是完全让模型自由发挥，而是模型识别意图后落到有限几类可控 workflow。这样兼顾自然语言灵活性和工程可控性。</p></blockquote>\n<p>追问：意图识别错了怎么办？</p>\n<blockquote><p>我会通过后置校验兜底。比如用户问题里出现“我什么时候退休”，但 plan 没有 computePlan，就说明 under-tool；如果回答里出现个人化政策数字但 trace 里没有规则结果，就会被 answer validator 拦住。</p></blockquote>","searchText":"Q9. 你的 Agent 如何从用户意图生成计划？ 2. Plan-and-Execute 工作流 逐字稿： > 我会先把用户问题归到几个意图：个人化测算、政策解释、混合问题、画像补充、闲聊或超出范围。判断依据包括用户是否提供个人字段、是否问“我什么时候”“我够不够”“我还差多少”，以及是否要求“依据”“政策文件”“官方说法”。 > > 识别完意图后，再根据意图模板生成计划。比如 personal_plan 必须经过画像抽取和信息完整性校验；policy_explanation 必须走 RAG；mixed 则两条链路都走。 > > 这不是完全硬编码，也不是完全让模型自由发挥，而是模型识别意图后落到有限几类可控 workflow。这样兼顾自然语言灵活性和工程可控性。 追问：意图识别错了怎么办？ > 我会通过后置校验兜底。比如用户问题里出现“我什么时候退休”，但 plan 没有 computePlan，就说明 under-tool；如果回答里出现个人化政策数字但 trace 里没有规则结果，就会被 answer validator 拦住。"},{"id":"s13-q10-plan-生成以后怎么执行","index":12,"number":"Q10","title":"Q10. Plan 生成以后怎么执行？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 执行阶段不是让模型继续自由决定，而是按 plan 的 steps 顺序调用工具。每个 step 都会产生结构化结果和状态，比如 success、needs_more_info、failed、skipped。  \n>  \n> 如果 required-info checker 返回 needs_more_info，后续 computePlan 就不能执行，最终回答要转为追问。  \n>  \n> 如果 computePlan 成功，但 retrievePolicy 失败，系统可以输出个人测算结果，但要谨慎说明当前政策依据召回失败，不能伪造官方引用。  \n>  \n> 这套状态设计的好处是，最终回答不是只看模型生成，而是受工具状态约束。\n\n追问：如果中间工具失败，plan 会重新生成吗？\n\n> 取决于失败类型。如果是信息缺失，不需要重新 plan，而是追问用户。如果是 RAG 超时，可以重试或降级到 lexical 检索。如果是 plan 本身漏了关键步骤，就需要重新规划。关键是失败原因要进入 trace。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>执行阶段不是让模型继续自由决定，而是按 plan 的 steps 顺序调用工具。每个 step 都会产生结构化结果和状态，比如 success、needs_more_info、failed、skipped。  </p><p> </p><p>如果 required-info checker 返回 needs_more_info，后续 computePlan 就不能执行，最终回答要转为追问。  </p><p> </p><p>如果 computePlan 成功，但 retrievePolicy 失败，系统可以输出个人测算结果，但要谨慎说明当前政策依据召回失败，不能伪造官方引用。  </p><p> </p><p>这套状态设计的好处是，最终回答不是只看模型生成，而是受工具状态约束。</p></blockquote>\n<p>追问：如果中间工具失败，plan 会重新生成吗？</p>\n<blockquote><p>取决于失败类型。如果是信息缺失，不需要重新 plan，而是追问用户。如果是 RAG 超时，可以重试或降级到 lexical 检索。如果是 plan 本身漏了关键步骤，就需要重新规划。关键是失败原因要进入 trace。</p></blockquote>","searchText":"Q10. Plan 生成以后怎么执行？ 2. Plan-and-Execute 工作流 逐字稿： > 执行阶段不是让模型继续自由决定，而是按 plan 的 steps 顺序调用工具。每个 step 都会产生结构化结果和状态，比如 success、needs_more_info、failed、skipped。 > > 如果 required-info checker 返回 needs_more_info，后续 computePlan 就不能执行，最终回答要转为追问。 > > 如果 computePlan 成功，但 retrievePolicy 失败，系统可以输出个人测算结果，但要谨慎说明当前政策依据召回失败，不能伪造官方引用。 > > 这套状态设计的好处是，最终回答不是只看模型生成，而是受工具状态约束。 追问：如果中间工具失败，plan 会重新生成吗？ > 取决于失败类型。如果是信息缺失，不需要重新 plan，而是追问用户。如果是 RAG 超时，可以重试或降级到 lexical 检索。如果是 plan 本身漏了关键步骤，就需要重新规划。关键是失败原因要进入 trace。"},{"id":"s14-q11-plan-and-execute-如何避免模型跑偏","index":13,"number":"Q11","title":"Q11. Plan-and-Execute 如何避免模型跑偏？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 我主要靠三层约束。  \n>  \n> 第一是结构化 plan。模型先把任务拆成有限步骤，系统可以检查计划里有没有 required tool。  \n>  \n> 第二是工具 schema。每个工具输入输出固定，模型不能随便传自然语言或者补不存在的字段。  \n>  \n> 第三是回答校验。最终回答如果出现政策数字，就必须能在工具结果里找到对应来源；如果工具状态是 needs_more_info，就不能输出确定性结论。  \n>  \n> 所以模型即使在生成层有偏差，也会被流程和校验限制住。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我主要靠三层约束。  </p><p> </p><p>第一是结构化 plan。模型先把任务拆成有限步骤，系统可以检查计划里有没有 required tool。  </p><p> </p><p>第二是工具 schema。每个工具输入输出固定，模型不能随便传自然语言或者补不存在的字段。  </p><p> </p><p>第三是回答校验。最终回答如果出现政策数字，就必须能在工具结果里找到对应来源；如果工具状态是 needs_more_info，就不能输出确定性结论。  </p><p> </p><p>所以模型即使在生成层有偏差，也会被流程和校验限制住。</p></blockquote>","searchText":"Q11. Plan-and-Execute 如何避免模型跑偏？ 2. Plan-and-Execute 工作流 逐字稿： > 我主要靠三层约束。 > > 第一是结构化 plan。模型先把任务拆成有限步骤，系统可以检查计划里有没有 required tool。 > > 第二是工具 schema。每个工具输入输出固定，模型不能随便传自然语言或者补不存在的字段。 > > 第三是回答校验。最终回答如果出现政策数字，就必须能在工具结果里找到对应来源；如果工具状态是 needs_more_info，就不能输出确定性结论。 > > 所以模型即使在生成层有偏差，也会被流程和校验限制住。"},{"id":"s15-q12-如果用户同时问多个问题-怎么拆","index":14,"number":"Q12","title":"Q12. 如果用户同时问多个问题，怎么拆？","chapterId":"s3-2-plan-and-execute-工作流","chapterTitle":"2. Plan-and-Execute 工作流","markdown":"逐字稿：\n\n> 我会把用户问题拆成子任务。比如“我什么时候退休，最低缴费够不够，4050 补贴能不能领”，这里至少有三类子任务：退休时间测算、最低缴费判断、补贴政策解释。  \n>  \n> 退休时间和缴费判断走规则引擎，4050 补贴走政策 RAG。如果 4050 补贴还需要就业状态、年龄、地区等信息，就要追问或给通用解释。  \n>  \n> 这也是 Plan-and-Execute 的优势，它能把混合请求拆成不同工具负责的步骤。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会把用户问题拆成子任务。比如“我什么时候退休，最低缴费够不够，4050 补贴能不能领”，这里至少有三类子任务：退休时间测算、最低缴费判断、补贴政策解释。  </p><p> </p><p>退休时间和缴费判断走规则引擎，4050 补贴走政策 RAG。如果 4050 补贴还需要就业状态、年龄、地区等信息，就要追问或给通用解释。  </p><p> </p><p>这也是 Plan-and-Execute 的优势，它能把混合请求拆成不同工具负责的步骤。</p></blockquote>","searchText":"Q12. 如果用户同时问多个问题，怎么拆？ 2. Plan-and-Execute 工作流 逐字稿： > 我会把用户问题拆成子任务。比如“我什么时候退休，最低缴费够不够，4050 补贴能不能领”，这里至少有三类子任务：退休时间测算、最低缴费判断、补贴政策解释。 > > 退休时间和缴费判断走规则引擎，4050 补贴走政策 RAG。如果 4050 补贴还需要就业状态、年龄、地区等信息，就要追问或给通用解释。 > > 这也是 Plan-and-Execute 的优势，它能把混合请求拆成不同工具负责的步骤。"},{"id":"s16-q13-你的工具链路具体有哪些工具-输入输出是什么","index":15,"number":"Q13","title":"Q13. 你的工具链路具体有哪些工具？输入输出是什么？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我的工具链路可以拆成五个核心工具。  \n>  \n> 第一个是 profile extraction，输入是用户当前消息和历史上下文，输出是结构化用户画像，比如出生年份、出生月份、性别、地区、缴费月数、身份类型，并标记这些字段来自用户显式信息还是历史记忆。  \n>  \n> 第二个是 required-info checker，输入是用户意图和 profile，输出是是否具备测算条件。如果缺出生月份、缴费月数或女性身份类型，就返回 missingFields。  \n>  \n> 第三个是 rule engine，输入是完整 profile 和规则版本，输出退休时间、最低缴费月数、缴费缺口、弹性退休提示和 trace。  \n>  \n> 第四个是 policy retriever，输入是政策查询意图、地区、政策类型和必要上下文，输出 citations，包括 sourceId、title、url、sourceType、excerpt。  \n>  \n> 第五个是 answer validator，输入是工具 trace 和回答草稿，输出通过、要求改写或拦截。它检查回答里的政策数字是否有工具支撑，缺信息时是否乱给结论，citation 是否存在。\n\n追问：这些工具都是模型工具调用吗？\n\n> 不完全是。这里的“工具”包括模型可调用工具，也包括系统内部的确定性模块。比如规则引擎和信息完整性校验可以由程序直接执行，不一定每一步都交给模型决定。关键是工具边界清晰、输入输出结构化、状态可追踪。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我的工具链路可以拆成五个核心工具。  </p><p> </p><p>第一个是 profile extraction，输入是用户当前消息和历史上下文，输出是结构化用户画像，比如出生年份、出生月份、性别、地区、缴费月数、身份类型，并标记这些字段来自用户显式信息还是历史记忆。  </p><p> </p><p>第二个是 required-info checker，输入是用户意图和 profile，输出是是否具备测算条件。如果缺出生月份、缴费月数或女性身份类型，就返回 missingFields。  </p><p> </p><p>第三个是 rule engine，输入是完整 profile 和规则版本，输出退休时间、最低缴费月数、缴费缺口、弹性退休提示和 trace。  </p><p> </p><p>第四个是 policy retriever，输入是政策查询意图、地区、政策类型和必要上下文，输出 citations，包括 sourceId、title、url、sourceType、excerpt。  </p><p> </p><p>第五个是 answer validator，输入是工具 trace 和回答草稿，输出通过、要求改写或拦截。它检查回答里的政策数字是否有工具支撑，缺信息时是否乱给结论，citation 是否存在。</p></blockquote>\n<p>追问：这些工具都是模型工具调用吗？</p>\n<blockquote><p>不完全是。这里的“工具”包括模型可调用工具，也包括系统内部的确定性模块。比如规则引擎和信息完整性校验可以由程序直接执行，不一定每一步都交给模型决定。关键是工具边界清晰、输入输出结构化、状态可追踪。</p></blockquote>","searchText":"Q13. 你的工具链路具体有哪些工具？输入输出是什么？ 3. 工具链路与规则引擎 逐字稿： > 我的工具链路可以拆成五个核心工具。 > > 第一个是 profile extraction，输入是用户当前消息和历史上下文，输出是结构化用户画像，比如出生年份、出生月份、性别、地区、缴费月数、身份类型，并标记这些字段来自用户显式信息还是历史记忆。 > > 第二个是 required-info checker，输入是用户意图和 profile，输出是是否具备测算条件。如果缺出生月份、缴费月数或女性身份类型，就返回 missingFields。 > > 第三个是 rule engine，输入是完整 profile 和规则版本，输出退休时间、最低缴费月数、缴费缺口、弹性退休提示和 trace。 > > 第四个是 policy retriever，输入是政策查询意图、地区、政策类型和必要上下文，输出 citations，包括 sourceId、title、url、sourceType、excerpt。 > > 第五个是 answer validator，输入是工具 trace 和回答草稿，输出通过、要求改写或拦截。它检查回答里的政策数字是否有工具支撑，缺信息时是否乱给结论，citation 是否存在。 追问：这些工具都是模型工具调用吗？ > 不完全是。这里的“工具”包括模型可调用工具，也包括系统内部的确定性模块。比如规则引擎和信息完整性校验可以由程序直接执行，不一定每一步都交给模型决定。关键是工具边界清晰、输入输出结构化、状态可追踪。"},{"id":"s17-q14-为什么退休年龄-最低缴费年限这些要放规则引擎","index":16,"number":"Q14","title":"Q14. 为什么退休年龄、最低缴费年限这些要放规则引擎？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 因为这些是高风险、确定性、可规则化的政策数字。LLM 擅长语言理解和总结，但不应该负责最终政策数字。  \n>  \n> 比如最低缴费年限会随时间和政策版本变化，退休年龄也和出生年月、性别、身份类型有关。如果让模型凭参数记忆回答，可能记到旧政策，也可能在信息缺失时补默认值。  \n>  \n> 规则引擎的好处是可测试、可版本管理、可追溯。输入什么画像、使用什么规则版本、输出什么结果，都可以记录 trace。这个 trace 后续还能被回答校验和评测使用。\n\n追问：规则引擎会不会让系统不智能？\n\n> 我觉得不会。高风险数字本来就应该确定性处理。智能体的价值不在于让模型猜数字，而在于让模型理解用户问题、引导补充信息、调用正确工具，并把结果解释清楚。规则引擎提高的是可信度。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>因为这些是高风险、确定性、可规则化的政策数字。LLM 擅长语言理解和总结，但不应该负责最终政策数字。  </p><p> </p><p>比如最低缴费年限会随时间和政策版本变化，退休年龄也和出生年月、性别、身份类型有关。如果让模型凭参数记忆回答，可能记到旧政策，也可能在信息缺失时补默认值。  </p><p> </p><p>规则引擎的好处是可测试、可版本管理、可追溯。输入什么画像、使用什么规则版本、输出什么结果，都可以记录 trace。这个 trace 后续还能被回答校验和评测使用。</p></blockquote>\n<p>追问：规则引擎会不会让系统不智能？</p>\n<blockquote><p>我觉得不会。高风险数字本来就应该确定性处理。智能体的价值不在于让模型猜数字，而在于让模型理解用户问题、引导补充信息、调用正确工具，并把结果解释清楚。规则引擎提高的是可信度。</p></blockquote>","searchText":"Q14. 为什么退休年龄、最低缴费年限这些要放规则引擎？ 3. 工具链路与规则引擎 逐字稿： > 因为这些是高风险、确定性、可规则化的政策数字。LLM 擅长语言理解和总结，但不应该负责最终政策数字。 > > 比如最低缴费年限会随时间和政策版本变化，退休年龄也和出生年月、性别、身份类型有关。如果让模型凭参数记忆回答，可能记到旧政策，也可能在信息缺失时补默认值。 > > 规则引擎的好处是可测试、可版本管理、可追溯。输入什么画像、使用什么规则版本、输出什么结果，都可以记录 trace。这个 trace 后续还能被回答校验和评测使用。 追问：规则引擎会不会让系统不智能？ > 我觉得不会。高风险数字本来就应该确定性处理。智能体的价值不在于让模型猜数字，而在于让模型理解用户问题、引导补充信息、调用正确工具，并把结果解释清楚。规则引擎提高的是可信度。"},{"id":"s18-q15-信息完整性校验怎么做","index":17,"number":"Q15","title":"Q15. 信息完整性校验怎么做？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我会根据不同意图定义 required fields。  \n>  \n> 如果是个人退休时间测算，至少要有出生年份、出生月份、性别或身份类型、地区。涉及最低缴费是否足够，还需要已缴费月数。  \n>  \n> 如果是女性退休，还要确认身份类型，因为女职工、女干部、灵活就业人员可能对应不同规则。如果用户只说“我是女的”，系统不能直接套某个年龄。  \n>  \n> 校验工具输出不是简单 true/false，而是 ready、needs_more_info、missingFields 和 clarificationQuestion。这样最终回答可以精准追问，比如“还需要你的出生月份和累计缴费月数”。\n\n追问：为什么不先给一个大概估算？\n\n> 政策场景里，“大概估算”很容易被用户当成确定结论。如果缺字段会影响退休月份或资格判断，我会选择追问。可以给通用政策解释，但不能给个人化确定数字。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会根据不同意图定义 required fields。  </p><p> </p><p>如果是个人退休时间测算，至少要有出生年份、出生月份、性别或身份类型、地区。涉及最低缴费是否足够，还需要已缴费月数。  </p><p> </p><p>如果是女性退休，还要确认身份类型，因为女职工、女干部、灵活就业人员可能对应不同规则。如果用户只说“我是女的”，系统不能直接套某个年龄。  </p><p> </p><p>校验工具输出不是简单 true/false，而是 ready、needs_more_info、missingFields 和 clarificationQuestion。这样最终回答可以精准追问，比如“还需要你的出生月份和累计缴费月数”。</p></blockquote>\n<p>追问：为什么不先给一个大概估算？</p>\n<blockquote><p>政策场景里，“大概估算”很容易被用户当成确定结论。如果缺字段会影响退休月份或资格判断，我会选择追问。可以给通用政策解释，但不能给个人化确定数字。</p></blockquote>","searchText":"Q15. 信息完整性校验怎么做？ 3. 工具链路与规则引擎 逐字稿： > 我会根据不同意图定义 required fields。 > > 如果是个人退休时间测算，至少要有出生年份、出生月份、性别或身份类型、地区。涉及最低缴费是否足够，还需要已缴费月数。 > > 如果是女性退休，还要确认身份类型，因为女职工、女干部、灵活就业人员可能对应不同规则。如果用户只说“我是女的”，系统不能直接套某个年龄。 > > 校验工具输出不是简单 true/false，而是 ready、needs_more_info、missingFields 和 clarificationQuestion。这样最终回答可以精准追问，比如“还需要你的出生月份和累计缴费月数”。 追问：为什么不先给一个大概估算？ > 政策场景里，“大概估算”很容易被用户当成确定结论。如果缺字段会影响退休月份或资格判断，我会选择追问。可以给通用政策解释，但不能给个人化确定数字。"},{"id":"s19-q16-回答安全校验怎么做","index":18,"number":"Q16","title":"Q16. 回答安全校验怎么做？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 回答安全校验主要检查三个一致性。  \n>  \n> 第一，工具状态一致性。如果 required-info checker 返回 needs_more_info，回答里不能出现具体退休日期、缺口月数这类确定性结果。  \n>  \n> 第二，数字来源一致性。回答里的退休时间、最低缴费月数、缺口月数必须和 computePlan 结果一致，不能模型自己改写。  \n>  \n> 第三，依据一致性。回答声称“官方依据”时，必须有 RAG citation，并且 citation metadata 里 sourceType 是官方或权威来源。  \n>  \n> 这一步相当于最后的 guardrail，防止模型在表达阶段重新引入幻觉。\n\n追问：如果回答校验失败怎么办？\n\n> 可以要求模型基于工具结果重写回答，或者直接切换到保守模板。比如缺信息场景就输出“目前还不能测算，需要补充某某字段”，而不是让模型继续自由生成。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>回答安全校验主要检查三个一致性。  </p><p> </p><p>第一，工具状态一致性。如果 required-info checker 返回 needs_more_info，回答里不能出现具体退休日期、缺口月数这类确定性结果。  </p><p> </p><p>第二，数字来源一致性。回答里的退休时间、最低缴费月数、缺口月数必须和 computePlan 结果一致，不能模型自己改写。  </p><p> </p><p>第三，依据一致性。回答声称“官方依据”时，必须有 RAG citation，并且 citation metadata 里 sourceType 是官方或权威来源。  </p><p> </p><p>这一步相当于最后的 guardrail，防止模型在表达阶段重新引入幻觉。</p></blockquote>\n<p>追问：如果回答校验失败怎么办？</p>\n<blockquote><p>可以要求模型基于工具结果重写回答，或者直接切换到保守模板。比如缺信息场景就输出“目前还不能测算，需要补充某某字段”，而不是让模型继续自由生成。</p></blockquote>","searchText":"Q16. 回答安全校验怎么做？ 3. 工具链路与规则引擎 逐字稿： > 回答安全校验主要检查三个一致性。 > > 第一，工具状态一致性。如果 required-info checker 返回 needs_more_info，回答里不能出现具体退休日期、缺口月数这类确定性结果。 > > 第二，数字来源一致性。回答里的退休时间、最低缴费月数、缺口月数必须和 computePlan 结果一致，不能模型自己改写。 > > 第三，依据一致性。回答声称“官方依据”时，必须有 RAG citation，并且 citation metadata 里 sourceType 是官方或权威来源。 > > 这一步相当于最后的 guardrail，防止模型在表达阶段重新引入幻觉。 追问：如果回答校验失败怎么办？ > 可以要求模型基于工具结果重写回答，或者直接切换到保守模板。比如缺信息场景就输出“目前还不能测算，需要补充某某字段”，而不是让模型继续自由生成。"},{"id":"s20-q17-如果用户提供的信息有冲突怎么办","index":19,"number":"Q17","title":"Q17. 如果用户提供的信息有冲突怎么办？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我不会简单采用最新信息覆盖旧信息，而是把冲突暴露出来让用户确认。  \n>  \n> 比如用户上一轮说自己是 1977 年 3 月出生，后面又说是 1978 年 3 月，这会影响退休测算，不能自动覆盖。系统应该提示“你前后提供的出生年份不一致，请确认以哪个为准”。  \n>  \n> 这背后其实是记忆管理问题。长期记忆不能只做 key-value 覆盖，还要保留来源、更新时间和置信度。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我不会简单采用最新信息覆盖旧信息，而是把冲突暴露出来让用户确认。  </p><p> </p><p>比如用户上一轮说自己是 1977 年 3 月出生，后面又说是 1978 年 3 月，这会影响退休测算，不能自动覆盖。系统应该提示“你前后提供的出生年份不一致，请确认以哪个为准”。  </p><p> </p><p>这背后其实是记忆管理问题。长期记忆不能只做 key-value 覆盖，还要保留来源、更新时间和置信度。</p></blockquote>","searchText":"Q17. 如果用户提供的信息有冲突怎么办？ 3. 工具链路与规则引擎 逐字稿： > 我不会简单采用最新信息覆盖旧信息，而是把冲突暴露出来让用户确认。 > > 比如用户上一轮说自己是 1977 年 3 月出生，后面又说是 1978 年 3 月，这会影响退休测算，不能自动覆盖。系统应该提示“你前后提供的出生年份不一致，请确认以哪个为准”。 > > 这背后其实是记忆管理问题。长期记忆不能只做 key-value 覆盖，还要保留来源、更新时间和置信度。"},{"id":"s21-q18-工具调用失败-超时怎么办","index":20,"number":"Q18","title":"Q18. 工具调用失败、超时怎么办？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我会按工具类型分别处理。  \n>  \n> 对规则引擎，如果是参数不完整，它应该返回 needs_more_info；如果是内部异常，则不能输出个人化结论，要提示暂时无法测算。  \n>  \n> 对 RAG，如果向量检索失败，可以降级到关键词检索；如果整体召回失败，回答要说明当前没有找到足够政策依据，不能伪造 citation。  \n>  \n> 对回答校验，如果发现工具状态和回答内容不一致，要触发重写或拦截。  \n>  \n> 关键原则是：工具失败可以降级，但不能假装成功。\n\n追问：这会不会影响体验？\n\n> 会有影响，但政策咨询里可信优先于完整回答。用户可以接受“需要补充信息”或“当前依据不足”，但不能接受系统给一个错误确定结论。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会按工具类型分别处理。  </p><p> </p><p>对规则引擎，如果是参数不完整，它应该返回 needs_more_info；如果是内部异常，则不能输出个人化结论，要提示暂时无法测算。  </p><p> </p><p>对 RAG，如果向量检索失败，可以降级到关键词检索；如果整体召回失败，回答要说明当前没有找到足够政策依据，不能伪造 citation。  </p><p> </p><p>对回答校验，如果发现工具状态和回答内容不一致，要触发重写或拦截。  </p><p> </p><p>关键原则是：工具失败可以降级，但不能假装成功。</p></blockquote>\n<p>追问：这会不会影响体验？</p>\n<blockquote><p>会有影响，但政策咨询里可信优先于完整回答。用户可以接受“需要补充信息”或“当前依据不足”，但不能接受系统给一个错误确定结论。</p></blockquote>","searchText":"Q18. 工具调用失败、超时怎么办？ 3. 工具链路与规则引擎 逐字稿： > 我会按工具类型分别处理。 > > 对规则引擎，如果是参数不完整，它应该返回 needs_more_info；如果是内部异常，则不能输出个人化结论，要提示暂时无法测算。 > > 对 RAG，如果向量检索失败，可以降级到关键词检索；如果整体召回失败，回答要说明当前没有找到足够政策依据，不能伪造 citation。 > > 对回答校验，如果发现工具状态和回答内容不一致，要触发重写或拦截。 > > 关键原则是：工具失败可以降级，但不能假装成功。 追问：这会不会影响体验？ > 会有影响，但政策咨询里可信优先于完整回答。用户可以接受“需要补充信息”或“当前依据不足”，但不能接受系统给一个错误确定结论。"},{"id":"s22-q19-如果工具链路很多-延迟高怎么办","index":21,"number":"Q19","title":"Q19. 如果工具链路很多，延迟高怎么办？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我会先根据 trace 定位延迟来源，是 planning、RAG、rerank、规则引擎还是最终生成。然后按风险分级优化。  \n>  \n> 第一，低风险政策解释可以走轻量路径，不调用规则引擎。第二，规则引擎通常很快，可以同步执行；RAG 和部分校验可以并行。第三，对稳定政策 query 做缓存，比如最低缴费年限这类高频问题。第四，控制上下文长度，只把结构化 profile、必要摘要和 TopK citation 给模型。  \n>  \n> 但我不会为了降延迟绕过 required-info check 或 answer validator，因为那会破坏可信边界。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会先根据 trace 定位延迟来源，是 planning、RAG、rerank、规则引擎还是最终生成。然后按风险分级优化。  </p><p> </p><p>第一，低风险政策解释可以走轻量路径，不调用规则引擎。第二，规则引擎通常很快，可以同步执行；RAG 和部分校验可以并行。第三，对稳定政策 query 做缓存，比如最低缴费年限这类高频问题。第四，控制上下文长度，只把结构化 profile、必要摘要和 TopK citation 给模型。  </p><p> </p><p>但我不会为了降延迟绕过 required-info check 或 answer validator，因为那会破坏可信边界。</p></blockquote>","searchText":"Q19. 如果工具链路很多，延迟高怎么办？ 3. 工具链路与规则引擎 逐字稿： > 我会先根据 trace 定位延迟来源，是 planning、RAG、rerank、规则引擎还是最终生成。然后按风险分级优化。 > > 第一，低风险政策解释可以走轻量路径，不调用规则引擎。第二，规则引擎通常很快，可以同步执行；RAG 和部分校验可以并行。第三，对稳定政策 query 做缓存，比如最低缴费年限这类高频问题。第四，控制上下文长度，只把结构化 profile、必要摘要和 TopK citation 给模型。 > > 但我不会为了降延迟绕过 required-info check 或 answer validator，因为那会破坏可信边界。"},{"id":"s23-q20-多工具冲突时如何处理","index":22,"number":"Q20","title":"Q20. 多工具冲突时如何处理？","chapterId":"s4-3-工具链路与规则引擎","chapterTitle":"3. 工具链路与规则引擎","markdown":"逐字稿：\n\n> 我会先定义来源优先级。用户显式确认的信息优先于模型推断；规则引擎的个人化计算优先于模型生成；官方政策来源优先于非官方解读；现行有效政策优先于历史政策。  \n>  \n> 如果冲突无法自动判断，比如两个政策文件版本都看似有效，系统应该提示存在版本差异，并引导用户参考最新官方口径或转人工确认。  \n>  \n> 对 Agent 来说，冲突处理不应该交给模型自由选择，而应该有明确的业务规则。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会先定义来源优先级。用户显式确认的信息优先于模型推断；规则引擎的个人化计算优先于模型生成；官方政策来源优先于非官方解读；现行有效政策优先于历史政策。  </p><p> </p><p>如果冲突无法自动判断，比如两个政策文件版本都看似有效，系统应该提示存在版本差异，并引导用户参考最新官方口径或转人工确认。  </p><p> </p><p>对 Agent 来说，冲突处理不应该交给模型自由选择，而应该有明确的业务规则。</p></blockquote>","searchText":"Q20. 多工具冲突时如何处理？ 3. 工具链路与规则引擎 逐字稿： > 我会先定义来源优先级。用户显式确认的信息优先于模型推断；规则引擎的个人化计算优先于模型生成；官方政策来源优先于非官方解读；现行有效政策优先于历史政策。 > > 如果冲突无法自动判断，比如两个政策文件版本都看似有效，系统应该提示存在版本差异，并引导用户参考最新官方口径或转人工确认。 > > 对 Agent 来说，冲突处理不应该交给模型自由选择，而应该有明确的业务规则。"},{"id":"s24-q21-长期结构化记忆具体怎么设计","index":23,"number":"Q21","title":"Q21. 长期结构化记忆具体怎么设计？","chapterId":"s5-4-记忆与上下文","chapterTitle":"4. 记忆与上下文","markdown":"逐字稿：\n\n> 我没有把长期记忆设计成“保存完整聊天记录”，而是设计成结构化用户画像。因为社保规划真正需要长期保存的是稳定字段，比如出生年份、出生月份、性别、参保地区、累计缴费月数、身份类型等。  \n>  \n> 每个字段除了 value，还要记录 source、confidence、updatedAt 和 status。source 用来区分用户显式提供、模型推断、工具派生；confidence 表示置信度；status 表示是否已确认。  \n>  \n> 举个例子，用户说“我是 1977 年 3 月出生的男的”，这可以进入长期画像，因为是用户显式提供；如果模型根据年龄猜测用户可能快退休，这只能作为推断，不能写入长期事实。  \n>  \n> 这种设计的好处是，多轮甚至跨会话都能恢复关键信息，同时避免把聊天摘要里的模糊信息误当成确定事实。\n\n追问：为什么不用向量记忆？\n\n> 向量记忆适合召回历史片段，但不适合保存高风险结构化事实。比如出生月份、缴费月数必须精确，不能靠相似度召回。所以我会把结构化画像作为主记忆，向量或摘要作为辅助上下文。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我没有把长期记忆设计成“保存完整聊天记录”，而是设计成结构化用户画像。因为社保规划真正需要长期保存的是稳定字段，比如出生年份、出生月份、性别、参保地区、累计缴费月数、身份类型等。  </p><p> </p><p>每个字段除了 value，还要记录 source、confidence、updatedAt 和 status。source 用来区分用户显式提供、模型推断、工具派生；confidence 表示置信度；status 表示是否已确认。  </p><p> </p><p>举个例子，用户说“我是 1977 年 3 月出生的男的”，这可以进入长期画像，因为是用户显式提供；如果模型根据年龄猜测用户可能快退休，这只能作为推断，不能写入长期事实。  </p><p> </p><p>这种设计的好处是，多轮甚至跨会话都能恢复关键信息，同时避免把聊天摘要里的模糊信息误当成确定事实。</p></blockquote>\n<p>追问：为什么不用向量记忆？</p>\n<blockquote><p>向量记忆适合召回历史片段，但不适合保存高风险结构化事实。比如出生月份、缴费月数必须精确，不能靠相似度召回。所以我会把结构化画像作为主记忆，向量或摘要作为辅助上下文。</p></blockquote>","searchText":"Q21. 长期结构化记忆具体怎么设计？ 4. 记忆与上下文 逐字稿： > 我没有把长期记忆设计成“保存完整聊天记录”，而是设计成结构化用户画像。因为社保规划真正需要长期保存的是稳定字段，比如出生年份、出生月份、性别、参保地区、累计缴费月数、身份类型等。 > > 每个字段除了 value，还要记录 source、confidence、updatedAt 和 status。source 用来区分用户显式提供、模型推断、工具派生；confidence 表示置信度；status 表示是否已确认。 > > 举个例子，用户说“我是 1977 年 3 月出生的男的”，这可以进入长期画像，因为是用户显式提供；如果模型根据年龄猜测用户可能快退休，这只能作为推断，不能写入长期事实。 > > 这种设计的好处是，多轮甚至跨会话都能恢复关键信息，同时避免把聊天摘要里的模糊信息误当成确定事实。 追问：为什么不用向量记忆？ > 向量记忆适合召回历史片段，但不适合保存高风险结构化事实。比如出生月份、缴费月数必须精确，不能靠相似度召回。所以我会把结构化画像作为主记忆，向量或摘要作为辅助上下文。"},{"id":"s25-q22-你怎么处理多轮对话中分散提供的信息","index":24,"number":"Q22","title":"Q22. 你怎么处理多轮对话中分散提供的信息？","chapterId":"s5-4-记忆与上下文","chapterTitle":"4. 记忆与上下文","markdown":"逐字稿：\n\n> 我会在每轮对话后做增量画像抽取。用户第一轮说“我是 1977 年出生的男的”，系统先保存 birthYear 和 gender，但 birthMonth 还是 missing。第二轮用户说“3 月”，结合上下文可以更新 birthMonth。第三轮说“上海交了 170 个月”，再更新 region 和 paidMonths。  \n>  \n> 到用户最后问“那我什么时候退休”时，系统不只看最后一句，而是从长期画像和会话状态里恢复完整 profile，再决定能否调用规则引擎。  \n>  \n> 这个机制能解决真实对话中用户不会一次性填写所有字段的问题。\n\n追问：如果“3 月”指的是别的含义怎么办？\n\n> 所以要结合上下文和当前缺失字段。如果上一轮刚问出生月份，那么“3 月”可以解析成 birthMonth；如果上下文不明确，就不能强行写入长期记忆，需要追问确认。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会在每轮对话后做增量画像抽取。用户第一轮说“我是 1977 年出生的男的”，系统先保存 birthYear 和 gender，但 birthMonth 还是 missing。第二轮用户说“3 月”，结合上下文可以更新 birthMonth。第三轮说“上海交了 170 个月”，再更新 region 和 paidMonths。  </p><p> </p><p>到用户最后问“那我什么时候退休”时，系统不只看最后一句，而是从长期画像和会话状态里恢复完整 profile，再决定能否调用规则引擎。  </p><p> </p><p>这个机制能解决真实对话中用户不会一次性填写所有字段的问题。</p></blockquote>\n<p>追问：如果“3 月”指的是别的含义怎么办？</p>\n<blockquote><p>所以要结合上下文和当前缺失字段。如果上一轮刚问出生月份，那么“3 月”可以解析成 birthMonth；如果上下文不明确，就不能强行写入长期记忆，需要追问确认。</p></blockquote>","searchText":"Q22. 你怎么处理多轮对话中分散提供的信息？ 4. 记忆与上下文 逐字稿： > 我会在每轮对话后做增量画像抽取。用户第一轮说“我是 1977 年出生的男的”，系统先保存 birthYear 和 gender，但 birthMonth 还是 missing。第二轮用户说“3 月”，结合上下文可以更新 birthMonth。第三轮说“上海交了 170 个月”，再更新 region 和 paidMonths。 > > 到用户最后问“那我什么时候退休”时，系统不只看最后一句，而是从长期画像和会话状态里恢复完整 profile，再决定能否调用规则引擎。 > > 这个机制能解决真实对话中用户不会一次性填写所有字段的问题。 追问：如果“3 月”指的是别的含义怎么办？ > 所以要结合上下文和当前缺失字段。如果上一轮刚问出生月份，那么“3 月”可以解析成 birthMonth；如果上下文不明确，就不能强行写入长期记忆，需要追问确认。"},{"id":"s26-q23-上下文压缩怎么做","index":25,"number":"Q23","title":"Q23. 上下文压缩怎么做？","chapterId":"s5-4-记忆与上下文","chapterTitle":"4. 记忆与上下文","markdown":"逐字稿：\n\n> 我把上下文分成四类：最近对话、结构化用户画像、会话摘要、工具事实。压缩时不是简单总结所有文本，而是先把结构化事实和工具结果单独保留，再把较早的自然语言对话压缩成摘要。  \n>  \n> 比如用户的出生年月、缴费月数、规则引擎输出、RAG citation 都不能只靠摘要保存，因为摘要可能漏掉或改写。它们要以结构化状态保留。  \n>  \n> 最终给模型的上下文会包含最近几轮原文、当前 profile、必要会话摘要、工具 trace 和相关 citation。这样既控制 token，又避免长对话丢关键事实。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我把上下文分成四类：最近对话、结构化用户画像、会话摘要、工具事实。压缩时不是简单总结所有文本，而是先把结构化事实和工具结果单独保留，再把较早的自然语言对话压缩成摘要。  </p><p> </p><p>比如用户的出生年月、缴费月数、规则引擎输出、RAG citation 都不能只靠摘要保存，因为摘要可能漏掉或改写。它们要以结构化状态保留。  </p><p> </p><p>最终给模型的上下文会包含最近几轮原文、当前 profile、必要会话摘要、工具 trace 和相关 citation。这样既控制 token，又避免长对话丢关键事实。</p></blockquote>","searchText":"Q23. 上下文压缩怎么做？ 4. 记忆与上下文 逐字稿： > 我把上下文分成四类：最近对话、结构化用户画像、会话摘要、工具事实。压缩时不是简单总结所有文本，而是先把结构化事实和工具结果单独保留，再把较早的自然语言对话压缩成摘要。 > > 比如用户的出生年月、缴费月数、规则引擎输出、RAG citation 都不能只靠摘要保存，因为摘要可能漏掉或改写。它们要以结构化状态保留。 > > 最终给模型的上下文会包含最近几轮原文、当前 profile、必要会话摘要、工具 trace 和相关 citation。这样既控制 token，又避免长对话丢关键事实。"},{"id":"s27-q24-如何避免长期记忆污染","index":26,"number":"Q24","title":"Q24. 如何避免长期记忆污染？","chapterId":"s5-4-记忆与上下文","chapterTitle":"4. 记忆与上下文","markdown":"逐字稿：\n\n> 我主要做三件事。  \n>  \n> 第一，来源隔离。用户显式信息、模型推断信息、工具派生结果分别存储，不混成一个字段。  \n>  \n> 第二，确认机制。影响测算的关键字段必须由用户显式提供或确认，模型推断不能直接进入 confirmed profile。  \n>  \n> 第三，冲突检测。新信息和旧信息冲突时，不直接覆盖，而是追问用户确认。  \n>  \n> 例如模型不能因为用户说“我快退休了”就推断用户年龄并写入出生年份；规则引擎算出的“还差 70 个月”也不能覆盖用户的“已缴费月数”，它只是派生结果。\n\n追问：为什么工具派生结果不能写进长期画像？\n\n> 因为工具结果依赖某次规则版本和当时输入。它可以作为历史测算记录保存，但不是用户基础事实。政策规则更新后，旧测算结果可能过期，所以不能和用户画像混在一起。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我主要做三件事。  </p><p> </p><p>第一，来源隔离。用户显式信息、模型推断信息、工具派生结果分别存储，不混成一个字段。  </p><p> </p><p>第二，确认机制。影响测算的关键字段必须由用户显式提供或确认，模型推断不能直接进入 confirmed profile。  </p><p> </p><p>第三，冲突检测。新信息和旧信息冲突时，不直接覆盖，而是追问用户确认。  </p><p> </p><p>例如模型不能因为用户说“我快退休了”就推断用户年龄并写入出生年份；规则引擎算出的“还差 70 个月”也不能覆盖用户的“已缴费月数”，它只是派生结果。</p></blockquote>\n<p>追问：为什么工具派生结果不能写进长期画像？</p>\n<blockquote><p>因为工具结果依赖某次规则版本和当时输入。它可以作为历史测算记录保存，但不是用户基础事实。政策规则更新后，旧测算结果可能过期，所以不能和用户画像混在一起。</p></blockquote>","searchText":"Q24. 如何避免长期记忆污染？ 4. 记忆与上下文 逐字稿： > 我主要做三件事。 > > 第一，来源隔离。用户显式信息、模型推断信息、工具派生结果分别存储，不混成一个字段。 > > 第二，确认机制。影响测算的关键字段必须由用户显式提供或确认，模型推断不能直接进入 confirmed profile。 > > 第三，冲突检测。新信息和旧信息冲突时，不直接覆盖，而是追问用户确认。 > > 例如模型不能因为用户说“我快退休了”就推断用户年龄并写入出生年份；规则引擎算出的“还差 70 个月”也不能覆盖用户的“已缴费月数”，它只是派生结果。 追问：为什么工具派生结果不能写进长期画像？ > 因为工具结果依赖某次规则版本和当时输入。它可以作为历史测算记录保存，但不是用户基础事实。政策规则更新后，旧测算结果可能过期，所以不能和用户画像混在一起。"},{"id":"s28-q25-记忆系统怎么评测","index":27,"number":"Q25","title":"Q25. 记忆系统怎么评测？","chapterId":"s5-4-记忆与上下文","chapterTitle":"4. 记忆与上下文","markdown":"逐字稿：\n\n> 我会用多轮和跨会话 case 来评测。  \n>  \n> 第一类是信息累积 case，用户分多轮提供出生年月、性别、地区、缴费月数，看系统能否合并成完整 profile。  \n>  \n> 第二类是指代 case，比如用户最后只说“那我呢”，看系统能否结合历史恢复当前任务。  \n>  \n> 第三类是冲突 case，比如用户前后提供不同出生年份，看系统是否追问确认。  \n>  \n> 第四类是污染 case，比如模型推断出的身份类型是否被错误写入长期记忆。  \n>  \n> 对记忆来说，我最关心的指标不是保存了多少，而是关键字段是否正确、来源是否清楚、冲突是否被处理。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会用多轮和跨会话 case 来评测。  </p><p> </p><p>第一类是信息累积 case，用户分多轮提供出生年月、性别、地区、缴费月数，看系统能否合并成完整 profile。  </p><p> </p><p>第二类是指代 case，比如用户最后只说“那我呢”，看系统能否结合历史恢复当前任务。  </p><p> </p><p>第三类是冲突 case，比如用户前后提供不同出生年份，看系统是否追问确认。  </p><p> </p><p>第四类是污染 case，比如模型推断出的身份类型是否被错误写入长期记忆。  </p><p> </p><p>对记忆来说，我最关心的指标不是保存了多少，而是关键字段是否正确、来源是否清楚、冲突是否被处理。</p></blockquote>","searchText":"Q25. 记忆系统怎么评测？ 4. 记忆与上下文 逐字稿： > 我会用多轮和跨会话 case 来评测。 > > 第一类是信息累积 case，用户分多轮提供出生年月、性别、地区、缴费月数，看系统能否合并成完整 profile。 > > 第二类是指代 case，比如用户最后只说“那我呢”，看系统能否结合历史恢复当前任务。 > > 第三类是冲突 case，比如用户前后提供不同出生年份，看系统是否追问确认。 > > 第四类是污染 case，比如模型推断出的身份类型是否被错误写入长期记忆。 > > 对记忆来说，我最关心的指标不是保存了多少，而是关键字段是否正确、来源是否清楚、冲突是否被处理。"},{"id":"s29-q26-政策信息-rag-链路具体怎么设计","index":28,"number":"Q26","title":"Q26. 政策信息 RAG 链路具体怎么设计？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> RAG 链路我会分成离线构建和在线检索两部分。  \n>  \n> 离线构建阶段，先收集政策文档，优先官方来源；然后做清洗、切分和 metadata 标注。metadata 至少包括 sourceId、title、url、sourceType、region、policyType、publishDate、effectiveDate、expireDate。切分时尽量按政策条款和语义段落切，不只是固定长度。  \n>  \n> 在线检索阶段，先根据用户意图和 profile 构造 query。比如用户最后只问“我什么时候退”，检索 query 不能只用这句话，而要结合地区、退休、最低缴费年限、延迟退休等上下文关键词。然后做 hybrid retrieval 或向量检索，再 rerank，最后输出 citations。  \n>  \n> 最终回答时，模型只能引用检索结果里的 citation，不能自己编政策来源。\n\n追问：为什么 metadata 很重要？\n\n> 因为政策问答里相关性不只由文本相似度决定，还和地区、政策类型、发布时间、是否官方有关。metadata 能帮助过滤和 rerank，也能支持后续评测和引用展示。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>RAG 链路我会分成离线构建和在线检索两部分。  </p><p> </p><p>离线构建阶段，先收集政策文档，优先官方来源；然后做清洗、切分和 metadata 标注。metadata 至少包括 sourceId、title、url、sourceType、region、policyType、publishDate、effectiveDate、expireDate。切分时尽量按政策条款和语义段落切，不只是固定长度。  </p><p> </p><p>在线检索阶段，先根据用户意图和 profile 构造 query。比如用户最后只问“我什么时候退”，检索 query 不能只用这句话，而要结合地区、退休、最低缴费年限、延迟退休等上下文关键词。然后做 hybrid retrieval 或向量检索，再 rerank，最后输出 citations。  </p><p> </p><p>最终回答时，模型只能引用检索结果里的 citation，不能自己编政策来源。</p></blockquote>\n<p>追问：为什么 metadata 很重要？</p>\n<blockquote><p>因为政策问答里相关性不只由文本相似度决定，还和地区、政策类型、发布时间、是否官方有关。metadata 能帮助过滤和 rerank，也能支持后续评测和引用展示。</p></blockquote>","searchText":"Q26. 政策信息 RAG 链路具体怎么设计？ 5. 政策信息 RAG 逐字稿： > RAG 链路我会分成离线构建和在线检索两部分。 > > 离线构建阶段，先收集政策文档，优先官方来源；然后做清洗、切分和 metadata 标注。metadata 至少包括 sourceId、title、url、sourceType、region、policyType、publishDate、effectiveDate、expireDate。切分时尽量按政策条款和语义段落切，不只是固定长度。 > > 在线检索阶段，先根据用户意图和 profile 构造 query。比如用户最后只问“我什么时候退”，检索 query 不能只用这句话，而要结合地区、退休、最低缴费年限、延迟退休等上下文关键词。然后做 hybrid retrieval 或向量检索，再 rerank，最后输出 citations。 > > 最终回答时，模型只能引用检索结果里的 citation，不能自己编政策来源。 追问：为什么 metadata 很重要？ > 因为政策问答里相关性不只由文本相似度决定，还和地区、政策类型、发布时间、是否官方有关。metadata 能帮助过滤和 rerank，也能支持后续评测和引用展示。"},{"id":"s30-q27-为什么覆盖最低缴费年限-延迟退休-弹性退休-4050-补贴","index":29,"number":"Q27","title":"Q27. 为什么覆盖最低缴费年限、延迟退休、弹性退休、4050 补贴？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 这几个场景覆盖了社保退休规划里最常见的用户需求。最低缴费年限和退休年龄直接影响用户能否领取养老金；延迟退休和弹性退休是当前政策变化比较大的部分；4050 补贴属于用户经常混淆的就业社保补贴类问题。  \n>  \n> 从 Agent 评测角度看，这几个场景也很有代表性：有确定性规则、有政策解释、有个人化计算、有相似政策混淆，也有办理类问题。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>这几个场景覆盖了社保退休规划里最常见的用户需求。最低缴费年限和退休年龄直接影响用户能否领取养老金；延迟退休和弹性退休是当前政策变化比较大的部分；4050 补贴属于用户经常混淆的就业社保补贴类问题。  </p><p> </p><p>从 Agent 评测角度看，这几个场景也很有代表性：有确定性规则、有政策解释、有个人化计算、有相似政策混淆，也有办理类问题。</p></blockquote>","searchText":"Q27. 为什么覆盖最低缴费年限、延迟退休、弹性退休、4050 补贴？ 5. 政策信息 RAG 逐字稿： > 这几个场景覆盖了社保退休规划里最常见的用户需求。最低缴费年限和退休年龄直接影响用户能否领取养老金；延迟退休和弹性退休是当前政策变化比较大的部分；4050 补贴属于用户经常混淆的就业社保补贴类问题。 > > 从 Agent 评测角度看，这几个场景也很有代表性：有确定性规则、有政策解释、有个人化计算、有相似政策混淆，也有办理类问题。"},{"id":"s31-q28-rag-benchmark-具体怎么做","index":30,"number":"Q28","title":"Q28. RAG benchmark 具体怎么做？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 每个 benchmark case 包含 query、tags、expectedSourceIds 和 expectedSourceType。query 是用户问题，tags 标记政策类型和难度，expectedSourceIds 是期望命中的政策来源。  \n>  \n> 评测时系统对 query 做检索，取 Top3 结果，判断是否命中期望 sourceId，计算 source-level Recall@3；同时统计 Top3 里是否命中相关官方来源，也就是 RelevantOfficialHit@3；还可以看 MRR，也就是第一个相关来源排在第几位。  \n>  \n> 我特别强调 source-level，是因为同一个政策文件会切成多个 chunk。如果按 chunk-level 算，切分策略会影响指标，而且同一个来源多个 chunk 可能让指标虚高。source-level 更符合“回答能引用正确政策来源”的目标。\n\n追问：94% 和 98% 到底代表什么？\n\n> 94% 代表在 benchmark 里，Top3 检索结果能覆盖期望政策来源的比例。98% 代表官方来源覆盖率。它们都是 RAG 召回层指标，不是最终回答准确率。最终回答还要看规则结果、工具调用和 claim support。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>每个 benchmark case 包含 query、tags、expectedSourceIds 和 expectedSourceType。query 是用户问题，tags 标记政策类型和难度，expectedSourceIds 是期望命中的政策来源。  </p><p> </p><p>评测时系统对 query 做检索，取 Top3 结果，判断是否命中期望 sourceId，计算 source-level Recall@3；同时统计 Top3 里是否命中相关官方来源，也就是 RelevantOfficialHit@3；还可以看 MRR，也就是第一个相关来源排在第几位。  </p><p> </p><p>我特别强调 source-level，是因为同一个政策文件会切成多个 chunk。如果按 chunk-level 算，切分策略会影响指标，而且同一个来源多个 chunk 可能让指标虚高。source-level 更符合“回答能引用正确政策来源”的目标。</p></blockquote>\n<p>追问：94% 和 98% 到底代表什么？</p>\n<blockquote><p>94% 代表在 benchmark 里，Top3 检索结果能覆盖期望政策来源的比例。98% 代表官方来源覆盖率。它们都是 RAG 召回层指标，不是最终回答准确率。最终回答还要看规则结果、工具调用和 claim support。</p></blockquote>","searchText":"Q28. RAG benchmark 具体怎么做？ 5. 政策信息 RAG 逐字稿： > 每个 benchmark case 包含 query、tags、expectedSourceIds 和 expectedSourceType。query 是用户问题，tags 标记政策类型和难度，expectedSourceIds 是期望命中的政策来源。 > > 评测时系统对 query 做检索，取 Top3 结果，判断是否命中期望 sourceId，计算 source-level Recall@3；同时统计 Top3 里是否命中相关官方来源，也就是 RelevantOfficialHit@3；还可以看 MRR，也就是第一个相关来源排在第几位。 > > 我特别强调 source-level，是因为同一个政策文件会切成多个 chunk。如果按 chunk-level 算，切分策略会影响指标，而且同一个来源多个 chunk 可能让指标虚高。source-level 更符合“回答能引用正确政策来源”的目标。 追问：94% 和 98% 到底代表什么？ > 94% 代表在 benchmark 里，Top3 检索结果能覆盖期望政策来源的比例。98% 代表官方来源覆盖率。它们都是 RAG 召回层指标，不是最终回答准确率。最终回答还要看规则结果、工具调用和 claim support。"},{"id":"s32-q29-如果-rag-结果全是-100-是不是更好","index":31,"number":"Q29","title":"Q29. 如果 RAG 结果全是 100%，是不是更好？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 不一定。要看测试集难度。  \n>  \n> 如果是 easy regression set，接近 100% 很正常，因为这些 case 用来保证基础链路不坏，比如“上海最低缴费年限是多少”这种标准问题。  \n>  \n> 但如果 realistic set 也是 100%，我反而会怀疑测试集太单一。真实用户会说“我爸快退休了，社保没交满怎么办”“4050 那个补贴在哪弄”，这种表达和政策文件标题差异很大，还会有省略、别名、相似政策混淆。  \n>  \n> 所以我会把 benchmark 分层。简单集用于回归，真实集用于看泛化。简历里的 94% 更适合作为 realistic set 的指标，而不是追求表面 100%。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>不一定。要看测试集难度。  </p><p> </p><p>如果是 easy regression set，接近 100% 很正常，因为这些 case 用来保证基础链路不坏，比如“上海最低缴费年限是多少”这种标准问题。  </p><p> </p><p>但如果 realistic set 也是 100%，我反而会怀疑测试集太单一。真实用户会说“我爸快退休了，社保没交满怎么办”“4050 那个补贴在哪弄”，这种表达和政策文件标题差异很大，还会有省略、别名、相似政策混淆。  </p><p> </p><p>所以我会把 benchmark 分层。简单集用于回归，真实集用于看泛化。简历里的 94% 更适合作为 realistic set 的指标，而不是追求表面 100%。</p></blockquote>","searchText":"Q29. 如果 RAG 结果全是 100%，是不是更好？ 5. 政策信息 RAG 逐字稿： > 不一定。要看测试集难度。 > > 如果是 easy regression set，接近 100% 很正常，因为这些 case 用来保证基础链路不坏，比如“上海最低缴费年限是多少”这种标准问题。 > > 但如果 realistic set 也是 100%，我反而会怀疑测试集太单一。真实用户会说“我爸快退休了，社保没交满怎么办”“4050 那个补贴在哪弄”，这种表达和政策文件标题差异很大，还会有省略、别名、相似政策混淆。 > > 所以我会把 benchmark 分层。简单集用于回归，真实集用于看泛化。简历里的 94% 更适合作为 realistic set 的指标，而不是追求表面 100%。"},{"id":"s33-q30-rag-遇到召回-bad-case-怎么处理","index":32,"number":"Q30","title":"Q30. RAG 遇到召回 bad case 怎么处理？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 我不会直接调 prompt，而是先做归因。  \n>  \n> 第一，看 query 是否缺上下文。多轮场景最后一句可能很短，需要结合 profile 和摘要构造检索 query。  \n>  \n> 第二，看文档切分是否合理。如果一个政策条款被切断，检索可能命中不到关键内容。  \n>  \n> 第三，看 metadata 是否缺失，比如地区、政策类型、是否官方。  \n>  \n> 第四，看 rerank 是否把泛相关内容排在前面。  \n>  \n> 第五，看最终回答是否正确使用 citation。有时召回是对的，但回答没有引用或引用错位置。  \n>  \n> 对应修复方式包括 query rewrite、补 metadata、调整 chunk、source diversity、rerank 加权和 answer grounding。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我不会直接调 prompt，而是先做归因。  </p><p> </p><p>第一，看 query 是否缺上下文。多轮场景最后一句可能很短，需要结合 profile 和摘要构造检索 query。  </p><p> </p><p>第二，看文档切分是否合理。如果一个政策条款被切断，检索可能命中不到关键内容。  </p><p> </p><p>第三，看 metadata 是否缺失，比如地区、政策类型、是否官方。  </p><p> </p><p>第四，看 rerank 是否把泛相关内容排在前面。  </p><p> </p><p>第五，看最终回答是否正确使用 citation。有时召回是对的，但回答没有引用或引用错位置。  </p><p> </p><p>对应修复方式包括 query rewrite、补 metadata、调整 chunk、source diversity、rerank 加权和 answer grounding。</p></blockquote>","searchText":"Q30. RAG 遇到召回 bad case 怎么处理？ 5. 政策信息 RAG 逐字稿： > 我不会直接调 prompt，而是先做归因。 > > 第一，看 query 是否缺上下文。多轮场景最后一句可能很短，需要结合 profile 和摘要构造检索 query。 > > 第二，看文档切分是否合理。如果一个政策条款被切断，检索可能命中不到关键内容。 > > 第三，看 metadata 是否缺失，比如地区、政策类型、是否官方。 > > 第四，看 rerank 是否把泛相关内容排在前面。 > > 第五，看最终回答是否正确使用 citation。有时召回是对的，但回答没有引用或引用错位置。 > > 对应修复方式包括 query rewrite、补 metadata、调整 chunk、source diversity、rerank 加权和 answer grounding。"},{"id":"s34-q31-如何处理相似政策混淆","index":33,"number":"Q31","title":"Q31. 如何处理相似政策混淆？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 相似政策混淆在社保场景很常见，比如 4050 补贴、就业困难人员灵活就业社保补贴、大龄失业岗位补贴，用户可能混着问。  \n>  \n> 我会从三层处理。第一，知识库 metadata 里标注 policyType 和适用条件。第二，query rewrite 里保留用户原词，同时补充可能的官方名称。第三，rerank 时增加政策类型和适用条件匹配权重。  \n>  \n> 最终回答也不能简单说“是一个东西”或“不是一个东西”，而要解释它们在申请对象、地区口径、办理渠道和补贴条件上的差异。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>相似政策混淆在社保场景很常见，比如 4050 补贴、就业困难人员灵活就业社保补贴、大龄失业岗位补贴，用户可能混着问。  </p><p> </p><p>我会从三层处理。第一，知识库 metadata 里标注 policyType 和适用条件。第二，query rewrite 里保留用户原词，同时补充可能的官方名称。第三，rerank 时增加政策类型和适用条件匹配权重。  </p><p> </p><p>最终回答也不能简单说“是一个东西”或“不是一个东西”，而要解释它们在申请对象、地区口径、办理渠道和补贴条件上的差异。</p></blockquote>","searchText":"Q31. 如何处理相似政策混淆？ 5. 政策信息 RAG 逐字稿： > 相似政策混淆在社保场景很常见，比如 4050 补贴、就业困难人员灵活就业社保补贴、大龄失业岗位补贴，用户可能混着问。 > > 我会从三层处理。第一，知识库 metadata 里标注 policyType 和适用条件。第二，query rewrite 里保留用户原词，同时补充可能的官方名称。第三，rerank 时增加政策类型和适用条件匹配权重。 > > 最终回答也不能简单说“是一个东西”或“不是一个东西”，而要解释它们在申请对象、地区口径、办理渠道和补贴条件上的差异。"},{"id":"s35-q32-如何处理政策时效","index":34,"number":"Q32","title":"Q32. 如何处理政策时效？","chapterId":"s6-5-政策信息-rag","chapterTitle":"5. 政策信息 RAG","markdown":"逐字稿：\n\n> 政策时效要靠 metadata 和评测共同保证。每个来源要有 publishDate、effectiveDate、expireDate 或 version。检索时优先现行有效政策；回答中如果引用历史政策，要明确说明时效。  \n>  \n> 评测里我会专门加 outdated policy set，比如问“2025 年以后最低缴费年限还是 15 年吗”，看系统是否召回现行政策，而不是旧口径。  \n>  \n> 政策场景最怕模型记住旧知识，所以 RAG 和版本管理是必要的。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>政策时效要靠 metadata 和评测共同保证。每个来源要有 publishDate、effectiveDate、expireDate 或 version。检索时优先现行有效政策；回答中如果引用历史政策，要明确说明时效。  </p><p> </p><p>评测里我会专门加 outdated policy set，比如问“2025 年以后最低缴费年限还是 15 年吗”，看系统是否召回现行政策，而不是旧口径。  </p><p> </p><p>政策场景最怕模型记住旧知识，所以 RAG 和版本管理是必要的。</p></blockquote>","searchText":"Q32. 如何处理政策时效？ 5. 政策信息 RAG 逐字稿： > 政策时效要靠 metadata 和评测共同保证。每个来源要有 publishDate、effectiveDate、expireDate 或 version。检索时优先现行有效政策；回答中如果引用历史政策，要明确说明时效。 > > 评测里我会专门加 outdated policy set，比如问“2025 年以后最低缴费年限还是 15 年吗”，看系统是否召回现行政策，而不是旧口径。 > > 政策场景最怕模型记住旧知识，所以 RAG 和版本管理是必要的。"},{"id":"s36-q33-怎么评估-agent-效果好不好","index":35,"number":"Q33","title":"Q33. 怎么评估 Agent 效果好不好？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 我不会只看最终回答准确率，因为 Agent 的错误可能发生在很多层。比如意图识别错了，后面工具再准也没用；plan 漏掉规则引擎，模型可能直接编数字；RAG 召回对了，最终回答也可能引用错。  \n>  \n> 所以我把评测拆成三层。  \n>  \n> 第一层是模块评测。Plan 层看 intent accuracy、plan step accuracy、missing info recall；Tool 层看 required tools 是否调用、参数是否正确；Rule 层看退休时间、最低缴费月数、缺口月数是否确定性正确；RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3；Answer 层看 claim support 和 unsafe answer。  \n>  \n> 第二层是端到端评测。从真实多轮用户输入开始，完整跑画像抽取、信息校验、规则引擎、政策召回、回答生成和安全校验。  \n>  \n> 第三层是 bad case 闭环。失败样本会归因到 profile、plan、tool、rule、RAG、answer 或 guardrail，修复后回流到 benchmark。  \n>  \n> 这样评测不是一个总分，而是能告诉我系统哪里可靠、哪里有风险、下一步该修什么。\n\n追问：如果面试官让你一句话说评测体系？\n\n> 我会说：我的评测不是评一个黑盒答案，而是评 Agent 的完整链路，模块层看 plan、tool、rule、RAG，端到端层看多轮任务完成，最终用 claim-level 检查回答是否有规则结果和官方 citation 支撑。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我不会只看最终回答准确率，因为 Agent 的错误可能发生在很多层。比如意图识别错了，后面工具再准也没用；plan 漏掉规则引擎，模型可能直接编数字；RAG 召回对了，最终回答也可能引用错。  </p><p> </p><p>所以我把评测拆成三层。  </p><p> </p><p>第一层是模块评测。Plan 层看 intent accuracy、plan step accuracy、missing info recall；Tool 层看 required tools 是否调用、参数是否正确；Rule 层看退休时间、最低缴费月数、缺口月数是否确定性正确；RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3；Answer 层看 claim support 和 unsafe answer。  </p><p> </p><p>第二层是端到端评测。从真实多轮用户输入开始，完整跑画像抽取、信息校验、规则引擎、政策召回、回答生成和安全校验。  </p><p> </p><p>第三层是 bad case 闭环。失败样本会归因到 profile、plan、tool、rule、RAG、answer 或 guardrail，修复后回流到 benchmark。  </p><p> </p><p>这样评测不是一个总分，而是能告诉我系统哪里可靠、哪里有风险、下一步该修什么。</p></blockquote>\n<p>追问：如果面试官让你一句话说评测体系？</p>\n<blockquote><p>我会说：我的评测不是评一个黑盒答案，而是评 Agent 的完整链路，模块层看 plan、tool、rule、RAG，端到端层看多轮任务完成，最终用 claim-level 检查回答是否有规则结果和官方 citation 支撑。</p></blockquote>","searchText":"Q33. 怎么评估 Agent 效果好不好？ 6. 评测体系详细版 逐字稿： > 我不会只看最终回答准确率，因为 Agent 的错误可能发生在很多层。比如意图识别错了，后面工具再准也没用；plan 漏掉规则引擎，模型可能直接编数字；RAG 召回对了，最终回答也可能引用错。 > > 所以我把评测拆成三层。 > > 第一层是模块评测。Plan 层看 intent accuracy、plan step accuracy、missing info recall；Tool 层看 required tools 是否调用、参数是否正确；Rule 层看退休时间、最低缴费月数、缺口月数是否确定性正确；RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3；Answer 层看 claim support 和 unsafe answer。 > > 第二层是端到端评测。从真实多轮用户输入开始，完整跑画像抽取、信息校验、规则引擎、政策召回、回答生成和安全校验。 > > 第三层是 bad case 闭环。失败样本会归因到 profile、plan、tool、rule、RAG、answer 或 guardrail，修复后回流到 benchmark。 > > 这样评测不是一个总分，而是能告诉我系统哪里可靠、哪里有风险、下一步该修什么。 追问：如果面试官让你一句话说评测体系？ > 我会说：我的评测不是评一个黑盒答案，而是评 Agent 的完整链路，模块层看 plan、tool、rule、RAG，端到端层看多轮任务完成，最终用 claim-level 检查回答是否有规则结果和官方 citation 支撑。"},{"id":"s37-q34-端到端评测是什么-你怎么做","index":36,"number":"Q34","title":"Q34. 端到端评测是什么？你怎么做？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 端到端评测就是从用户真实输入开始跑完整 Agent workflow，而不是只测某个函数或某个 RAG query。  \n>  \n> 在我的项目里，一个 E2E case 会包含多轮 messages、初始 memory、期望 profile、期望 intent、required tools、missingFields、ruleResult、expectedSourceIds 和 answer constraints。  \n>  \n> 比如 case 是：用户第一轮说“我是 1977 年出生的男的”，第二轮说“3 月，上海交了 170 个月”，第三轮问“那我什么时候退休，最低缴费够了吗，给我依据”。  \n>  \n> 这个 case 不只是检查最终有没有说出退休时间，还要检查 profile 是否累积出 birthYear、birthMonth、gender、region、paidMonths；plan 是否包含 computePlan 和 retrievePolicy；规则引擎是否输出正确退休时间和缴费缺口；RAG 是否召回最低缴费年限和延迟退休相关政策；最终回答里的数字是否来自工具结果。  \n>  \n> 这样才是真正覆盖 Agent 链路的评测。\n\n追问：端到端评测会不会不稳定？\n\n> 会，所以我会分轻量 E2E 和黑盒 E2E。轻量 E2E 固定工具结果，适合 CI；黑盒 E2E 调真实 LLM 和真实 RAG，适合发布前评估。最终回答不用全文匹配，而用结构化约束和 claim-level 检查，减少表达波动。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>端到端评测就是从用户真实输入开始跑完整 Agent workflow，而不是只测某个函数或某个 RAG query。  </p><p> </p><p>在我的项目里，一个 E2E case 会包含多轮 messages、初始 memory、期望 profile、期望 intent、required tools、missingFields、ruleResult、expectedSourceIds 和 answer constraints。  </p><p> </p><p>比如 case 是：用户第一轮说“我是 1977 年出生的男的”，第二轮说“3 月，上海交了 170 个月”，第三轮问“那我什么时候退休，最低缴费够了吗，给我依据”。  </p><p> </p><p>这个 case 不只是检查最终有没有说出退休时间，还要检查 profile 是否累积出 birthYear、birthMonth、gender、region、paidMonths；plan 是否包含 computePlan 和 retrievePolicy；规则引擎是否输出正确退休时间和缴费缺口；RAG 是否召回最低缴费年限和延迟退休相关政策；最终回答里的数字是否来自工具结果。  </p><p> </p><p>这样才是真正覆盖 Agent 链路的评测。</p></blockquote>\n<p>追问：端到端评测会不会不稳定？</p>\n<blockquote><p>会，所以我会分轻量 E2E 和黑盒 E2E。轻量 E2E 固定工具结果，适合 CI；黑盒 E2E 调真实 LLM 和真实 RAG，适合发布前评估。最终回答不用全文匹配，而用结构化约束和 claim-level 检查，减少表达波动。</p></blockquote>","searchText":"Q34. 端到端评测是什么？你怎么做？ 6. 评测体系详细版 逐字稿： > 端到端评测就是从用户真实输入开始跑完整 Agent workflow，而不是只测某个函数或某个 RAG query。 > > 在我的项目里，一个 E2E case 会包含多轮 messages、初始 memory、期望 profile、期望 intent、required tools、missingFields、ruleResult、expectedSourceIds 和 answer constraints。 > > 比如 case 是：用户第一轮说“我是 1977 年出生的男的”，第二轮说“3 月，上海交了 170 个月”，第三轮问“那我什么时候退休，最低缴费够了吗，给我依据”。 > > 这个 case 不只是检查最终有没有说出退休时间，还要检查 profile 是否累积出 birthYear、birthMonth、gender、region、paidMonths；plan 是否包含 computePlan 和 retrievePolicy；规则引擎是否输出正确退休时间和缴费缺口；RAG 是否召回最低缴费年限和延迟退休相关政策；最终回答里的数字是否来自工具结果。 > > 这样才是真正覆盖 Agent 链路的评测。 追问：端到端评测会不会不稳定？ > 会，所以我会分轻量 E2E 和黑盒 E2E。轻量 E2E 固定工具结果，适合 CI；黑盒 E2E 调真实 LLM 和真实 RAG，适合发布前评估。最终回答不用全文匹配，而用结构化约束和 claim-level 检查，减少表达波动。"},{"id":"s38-q35-claim-level-evaluation-怎么做","index":37,"number":"Q35","title":"Q35. Claim-level evaluation 怎么做？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> Claim-level evaluation 是我认为政策 Agent 最关键的评测方式。因为最终回答是一段自然语言，整体看起来可能没问题，但里面某一句政策数字可能没有依据。  \n>  \n> 我的做法是先把回答拆成原子 claim。比如“你预计 2040 年 3 月退休，目前最低缴费要求是 240 个月，你已缴 170 个月，还差 70 个月”，这里至少有三个 claim：退休时间、最低缴费要求、缴费缺口。  \n>  \n> 然后给每个 claim 找支撑来源。个人化测算 claim 必须来自 computePlan；政策数字 claim 必须来自规则结果或官方 citation；用户事实 claim 必须来自用户显式信息；风险提示可以来自规则状态或安全策略。  \n>  \n> 最后判断 supported、unsupported、contradicted 或 not_applicable。只要高风险 claim unsupported，比如没有工具结果却说“你一定可以领取养老金”，这个 case 就失败。  \n>  \n> 它的价值是把“回答看起来对”拆成“每个事实是否有依据”，更适合政策类 Agent。\n\n追问：LLM judge 可以做这个吗？\n\n> 可以辅助拆 claim 和判断自然语言覆盖，但政策数字和工具一致性最好程序化。比如 computePlan 输出 70 个月，回答写 60 个月，这不需要 LLM judge，直接规则比对就能判错。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>Claim-level evaluation 是我认为政策 Agent 最关键的评测方式。因为最终回答是一段自然语言，整体看起来可能没问题，但里面某一句政策数字可能没有依据。  </p><p> </p><p>我的做法是先把回答拆成原子 claim。比如“你预计 2040 年 3 月退休，目前最低缴费要求是 240 个月，你已缴 170 个月，还差 70 个月”，这里至少有三个 claim：退休时间、最低缴费要求、缴费缺口。  </p><p> </p><p>然后给每个 claim 找支撑来源。个人化测算 claim 必须来自 computePlan；政策数字 claim 必须来自规则结果或官方 citation；用户事实 claim 必须来自用户显式信息；风险提示可以来自规则状态或安全策略。  </p><p> </p><p>最后判断 supported、unsupported、contradicted 或 not_applicable。只要高风险 claim unsupported，比如没有工具结果却说“你一定可以领取养老金”，这个 case 就失败。  </p><p> </p><p>它的价值是把“回答看起来对”拆成“每个事实是否有依据”，更适合政策类 Agent。</p></blockquote>\n<p>追问：LLM judge 可以做这个吗？</p>\n<blockquote><p>可以辅助拆 claim 和判断自然语言覆盖，但政策数字和工具一致性最好程序化。比如 computePlan 输出 70 个月，回答写 60 个月，这不需要 LLM judge，直接规则比对就能判错。</p></blockquote>","searchText":"Q35. Claim-level evaluation 怎么做？ 6. 评测体系详细版 逐字稿： > Claim-level evaluation 是我认为政策 Agent 最关键的评测方式。因为最终回答是一段自然语言，整体看起来可能没问题，但里面某一句政策数字可能没有依据。 > > 我的做法是先把回答拆成原子 claim。比如“你预计 2040 年 3 月退休，目前最低缴费要求是 240 个月，你已缴 170 个月，还差 70 个月”，这里至少有三个 claim：退休时间、最低缴费要求、缴费缺口。 > > 然后给每个 claim 找支撑来源。个人化测算 claim 必须来自 computePlan；政策数字 claim 必须来自规则结果或官方 citation；用户事实 claim 必须来自用户显式信息；风险提示可以来自规则状态或安全策略。 > > 最后判断 supported、unsupported、contradicted 或 not_applicable。只要高风险 claim unsupported，比如没有工具结果却说“你一定可以领取养老金”，这个 case 就失败。 > > 它的价值是把“回答看起来对”拆成“每个事实是否有依据”，更适合政策类 Agent。 追问：LLM judge 可以做这个吗？ > 可以辅助拆 claim 和判断自然语言覆盖，但政策数字和工具一致性最好程序化。比如 computePlan 输出 70 个月，回答写 60 个月，这不需要 LLM judge，直接规则比对就能判错。"},{"id":"s39-q36-评测集怎么构造","index":38,"number":"Q36","title":"Q36. 评测集怎么构造？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 我会把评测集分成七类。  \n>  \n> 第一类是 easy regression set，覆盖标准问法，用来做 CI 回归。第二类是 realistic user set，模拟真实用户口语化表达，比如“我爸快退休了，社保没交满怎么办”。第三类是 multi-turn set，测试分散信息和长期记忆。第四类是 missing info set，测试缺出生月份、女性身份类型、缴费月数时是否追问。第五类是 confusing policy set，测试 4050 补贴和类似政策是否混淆。第六类是 outdated policy set，测试政策时效。第七类是 adversarial set，测试用户诱导模型绕过工具或伪造依据。  \n>  \n> 这些集合的目的不同。easy set 追求稳定，realistic set 追求真实难度，risk set 追求暴露高风险问题。\n\n追问：case 数量怎么设？\n\n> 本地快速回归可以 20 到 30 条，合并前 100 到 150 条，发布前 300 到 500 条。线上后再把真实 bad case 脱敏回流，让测试集持续增长。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会把评测集分成七类。  </p><p> </p><p>第一类是 easy regression set，覆盖标准问法，用来做 CI 回归。第二类是 realistic user set，模拟真实用户口语化表达，比如“我爸快退休了，社保没交满怎么办”。第三类是 multi-turn set，测试分散信息和长期记忆。第四类是 missing info set，测试缺出生月份、女性身份类型、缴费月数时是否追问。第五类是 confusing policy set，测试 4050 补贴和类似政策是否混淆。第六类是 outdated policy set，测试政策时效。第七类是 adversarial set，测试用户诱导模型绕过工具或伪造依据。  </p><p> </p><p>这些集合的目的不同。easy set 追求稳定，realistic set 追求真实难度，risk set 追求暴露高风险问题。</p></blockquote>\n<p>追问：case 数量怎么设？</p>\n<blockquote><p>本地快速回归可以 20 到 30 条，合并前 100 到 150 条，发布前 300 到 500 条。线上后再把真实 bad case 脱敏回流，让测试集持续增长。</p></blockquote>","searchText":"Q36. 评测集怎么构造？ 6. 评测体系详细版 逐字稿： > 我会把评测集分成七类。 > > 第一类是 easy regression set，覆盖标准问法，用来做 CI 回归。第二类是 realistic user set，模拟真实用户口语化表达，比如“我爸快退休了，社保没交满怎么办”。第三类是 multi-turn set，测试分散信息和长期记忆。第四类是 missing info set，测试缺出生月份、女性身份类型、缴费月数时是否追问。第五类是 confusing policy set，测试 4050 补贴和类似政策是否混淆。第六类是 outdated policy set，测试政策时效。第七类是 adversarial set，测试用户诱导模型绕过工具或伪造依据。 > > 这些集合的目的不同。easy set 追求稳定，realistic set 追求真实难度，risk set 追求暴露高风险问题。 追问：case 数量怎么设？ > 本地快速回归可以 20 到 30 条，合并前 100 到 150 条，发布前 300 到 500 条。线上后再把真实 bad case 脱敏回流，让测试集持续增长。"},{"id":"s40-q37-你用了哪些指标","index":39,"number":"Q37","title":"Q37. 你用了哪些指标？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 我会按链路分指标。  \n>  \n> Plan 层看 Intent Accuracy、Plan Step Accuracy、Missing Info Recall，回答的是“Agent 有没有想清楚怎么做”。  \n>  \n> Tool 层看 Tool Call Recall、Tool Call Precision、Tool Argument Accuracy，回答的是“工具有没有调对，参数有没有传对”。  \n>  \n> Rule 层看 Retirement Age Accuracy、Required Months Accuracy、Missing Months Accuracy、Trace Completeness，这些必须确定性校验。  \n>  \n> RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3、Citation Completeness 和 Context Coverage。  \n>  \n> Answer 层看 Claim Support Rate、Clarification Correctness、Unsafe Answer Rate 和 Answer Completeness。  \n>  \n> 其中我最重视 Missing Info Recall、Rule Accuracy、RelevantOfficialHit@3 和 Claim Support Rate，因为它们分别对应缺信息乱答、政策数字错误、来源不可信和最终回答无依据。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会按链路分指标。  </p><p> </p><p>Plan 层看 Intent Accuracy、Plan Step Accuracy、Missing Info Recall，回答的是“Agent 有没有想清楚怎么做”。  </p><p> </p><p>Tool 层看 Tool Call Recall、Tool Call Precision、Tool Argument Accuracy，回答的是“工具有没有调对，参数有没有传对”。  </p><p> </p><p>Rule 层看 Retirement Age Accuracy、Required Months Accuracy、Missing Months Accuracy、Trace Completeness，这些必须确定性校验。  </p><p> </p><p>RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3、Citation Completeness 和 Context Coverage。  </p><p> </p><p>Answer 层看 Claim Support Rate、Clarification Correctness、Unsafe Answer Rate 和 Answer Completeness。  </p><p> </p><p>其中我最重视 Missing Info Recall、Rule Accuracy、RelevantOfficialHit@3 和 Claim Support Rate，因为它们分别对应缺信息乱答、政策数字错误、来源不可信和最终回答无依据。</p></blockquote>","searchText":"Q37. 你用了哪些指标？ 6. 评测体系详细版 逐字稿： > 我会按链路分指标。 > > Plan 层看 Intent Accuracy、Plan Step Accuracy、Missing Info Recall，回答的是“Agent 有没有想清楚怎么做”。 > > Tool 层看 Tool Call Recall、Tool Call Precision、Tool Argument Accuracy，回答的是“工具有没有调对，参数有没有传对”。 > > Rule 层看 Retirement Age Accuracy、Required Months Accuracy、Missing Months Accuracy、Trace Completeness，这些必须确定性校验。 > > RAG 层看 source-level Recall@3、MRR、RelevantOfficialHit@3、Citation Completeness 和 Context Coverage。 > > Answer 层看 Claim Support Rate、Clarification Correctness、Unsafe Answer Rate 和 Answer Completeness。 > > 其中我最重视 Missing Info Recall、Rule Accuracy、RelevantOfficialHit@3 和 Claim Support Rate，因为它们分别对应缺信息乱答、政策数字错误、来源不可信和最终回答无依据。"},{"id":"s41-q38-为什么不用-bleu-rouge-或简单文本相似度","index":40,"number":"Q38","title":"Q38. 为什么不用 BLEU、ROUGE 或简单文本相似度？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 因为政策 Agent 的目标不是让回答和参考答案字面相似，而是让结论正确、依据可靠、过程可追溯。  \n>  \n> 同一个正确答案可能有很多表达方式，BLEU 低不代表错；反过来，一个回答可能和标准答案很像，但引用了错误政策或在缺信息时给了确定数字，这种必须判失败。  \n>  \n> 所以我更看结构化指标，比如工具路径、规则结果、citation 命中、claim support 和 unsafe answer。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>因为政策 Agent 的目标不是让回答和参考答案字面相似，而是让结论正确、依据可靠、过程可追溯。  </p><p> </p><p>同一个正确答案可能有很多表达方式，BLEU 低不代表错；反过来，一个回答可能和标准答案很像，但引用了错误政策或在缺信息时给了确定数字，这种必须判失败。  </p><p> </p><p>所以我更看结构化指标，比如工具路径、规则结果、citation 命中、claim support 和 unsafe answer。</p></blockquote>","searchText":"Q38. 为什么不用 BLEU、ROUGE 或简单文本相似度？ 6. 评测体系详细版 逐字稿： > 因为政策 Agent 的目标不是让回答和参考答案字面相似，而是让结论正确、依据可靠、过程可追溯。 > > 同一个正确答案可能有很多表达方式，BLEU 低不代表错；反过来，一个回答可能和标准答案很像，但引用了错误政策或在缺信息时给了确定数字，这种必须判失败。 > > 所以我更看结构化指标，比如工具路径、规则结果、citation 命中、claim support 和 unsafe answer。"},{"id":"s42-q39-如果面试官问-你现在评测做到什么程度-怎么稳妥回答","index":41,"number":"Q39","title":"Q39. 如果面试官问“你现在评测做到什么程度”，怎么稳妥回答？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 稳妥说法是：当前我已经做了分层评测和轻量端到端评测。分层评测包括 RAG benchmark、规则回归、Agent 链路 eval 和 guardrail eval；轻量 E2E 会串起多轮输入、画像、计划、工具路径、规则测算、fixture citation 和回答安全校验。  \n>  \n> 如果继续做到生产级，我会补完整黑盒 E2E 和 claim-level evaluation，让真实 LLM 生成最终回答，再把回答拆成 claim，逐条检查是否由规则结果或 citation 支撑。上线后还要接入真实用户日志和 bad case 回流。  \n>  \n> 这样说既能体现你知道生产级评测怎么做，也不会把当前没有完全上线的东西说过头。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>稳妥说法是：当前我已经做了分层评测和轻量端到端评测。分层评测包括 RAG benchmark、规则回归、Agent 链路 eval 和 guardrail eval；轻量 E2E 会串起多轮输入、画像、计划、工具路径、规则测算、fixture citation 和回答安全校验。  </p><p> </p><p>如果继续做到生产级，我会补完整黑盒 E2E 和 claim-level evaluation，让真实 LLM 生成最终回答，再把回答拆成 claim，逐条检查是否由规则结果或 citation 支撑。上线后还要接入真实用户日志和 bad case 回流。  </p><p> </p><p>这样说既能体现你知道生产级评测怎么做，也不会把当前没有完全上线的东西说过头。</p></blockquote>","searchText":"Q39. 如果面试官问“你现在评测做到什么程度”，怎么稳妥回答？ 6. 评测体系详细版 逐字稿： > 稳妥说法是：当前我已经做了分层评测和轻量端到端评测。分层评测包括 RAG benchmark、规则回归、Agent 链路 eval 和 guardrail eval；轻量 E2E 会串起多轮输入、画像、计划、工具路径、规则测算、fixture citation 和回答安全校验。 > > 如果继续做到生产级，我会补完整黑盒 E2E 和 claim-level evaluation，让真实 LLM 生成最终回答，再把回答拆成 claim，逐条检查是否由规则结果或 citation 支撑。上线后还要接入真实用户日志和 bad case 回流。 > > 这样说既能体现你知道生产级评测怎么做，也不会把当前没有完全上线的东西说过头。"},{"id":"s43-q40-如果假设你真的已经做到生产级评测-应该怎么回答","index":42,"number":"Q40","title":"Q40. 如果假设你真的已经做到生产级评测，应该怎么回答？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 如果项目做到完整生产级，我会这样回答：我们做了一个分层 Agent eval 体系，不是只看最终回答。  \n>  \n> 模块层，分别评估 plan、tool、rule、RAG、answer 和 guardrail。规则引擎要求确定性测试 100% 通过；RAG 看 source-level Recall@3、MRR 和 RelevantOfficialHit@3；工具调用看 required tool recall 和 argument accuracy。  \n>  \n> 端到端层，我们构造多轮真实用户 case，完整跑画像抽取、信息校验、规则测算、政策召回、回答生成和安全校验。  \n>  \n> 最终回答层，我们做 claim-level evaluation，把回答拆成事实声明，逐条校验是否有用户显式信息、规则结果或官方 citation 支撑。  \n>  \n> 线上层，我们接入 trace observability 和 bad case 回流，监控 tool error rate、RAG degraded rate、guardrail trigger rate、用户追问率和人工复核失败率。这样能保证 Agent 不只是离线分数好看，而是上线后也能持续发现问题。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>如果项目做到完整生产级，我会这样回答：我们做了一个分层 Agent eval 体系，不是只看最终回答。  </p><p> </p><p>模块层，分别评估 plan、tool、rule、RAG、answer 和 guardrail。规则引擎要求确定性测试 100% 通过；RAG 看 source-level Recall@3、MRR 和 RelevantOfficialHit@3；工具调用看 required tool recall 和 argument accuracy。  </p><p> </p><p>端到端层，我们构造多轮真实用户 case，完整跑画像抽取、信息校验、规则测算、政策召回、回答生成和安全校验。  </p><p> </p><p>最终回答层，我们做 claim-level evaluation，把回答拆成事实声明，逐条校验是否有用户显式信息、规则结果或官方 citation 支撑。  </p><p> </p><p>线上层，我们接入 trace observability 和 bad case 回流，监控 tool error rate、RAG degraded rate、guardrail trigger rate、用户追问率和人工复核失败率。这样能保证 Agent 不只是离线分数好看，而是上线后也能持续发现问题。</p></blockquote>","searchText":"Q40. 如果假设你真的已经做到生产级评测，应该怎么回答？ 6. 评测体系详细版 逐字稿： > 如果项目做到完整生产级，我会这样回答：我们做了一个分层 Agent eval 体系，不是只看最终回答。 > > 模块层，分别评估 plan、tool、rule、RAG、answer 和 guardrail。规则引擎要求确定性测试 100% 通过；RAG 看 source-level Recall@3、MRR 和 RelevantOfficialHit@3；工具调用看 required tool recall 和 argument accuracy。 > > 端到端层，我们构造多轮真实用户 case，完整跑画像抽取、信息校验、规则测算、政策召回、回答生成和安全校验。 > > 最终回答层，我们做 claim-level evaluation，把回答拆成事实声明，逐条校验是否有用户显式信息、规则结果或官方 citation 支撑。 > > 线上层，我们接入 trace observability 和 bad case 回流，监控 tool error rate、RAG degraded rate、guardrail trigger rate、用户追问率和人工复核失败率。这样能保证 Agent 不只是离线分数好看，而是上线后也能持续发现问题。"},{"id":"s44-q41-如何防止-benchmark-被刷分","index":43,"number":"Q41","title":"Q41. 如何防止 benchmark 被刷分？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 我会从数据集和指标两侧防止刷分。  \n>  \n> 数据集上，分固定回归集、隐藏评测集和线上回流集。固定集用于防回归，可以被开发者看到；隐藏集不参与 prompt 调参，用来评估泛化；线上回流集来自真实 bad case，持续补充新问题。  \n>  \n> 指标上，不只看最终答案，而是看中间 trace。比如是否调用 computePlan、工具参数是否正确、sourceId 是否命中、claim 是否有支撑。这样即使 prompt 适配了某些标准问法，也很难绕过工具链路和依据校验。  \n>  \n> 另外，我不会把 easy set 的高分当成泛化能力。easy set 是回归门禁，realistic set 才更能说明系统在真实表达下的表现。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会从数据集和指标两侧防止刷分。  </p><p> </p><p>数据集上，分固定回归集、隐藏评测集和线上回流集。固定集用于防回归，可以被开发者看到；隐藏集不参与 prompt 调参，用来评估泛化；线上回流集来自真实 bad case，持续补充新问题。  </p><p> </p><p>指标上，不只看最终答案，而是看中间 trace。比如是否调用 computePlan、工具参数是否正确、sourceId 是否命中、claim 是否有支撑。这样即使 prompt 适配了某些标准问法，也很难绕过工具链路和依据校验。  </p><p> </p><p>另外，我不会把 easy set 的高分当成泛化能力。easy set 是回归门禁，realistic set 才更能说明系统在真实表达下的表现。</p></blockquote>","searchText":"Q41. 如何防止 benchmark 被刷分？ 6. 评测体系详细版 逐字稿： > 我会从数据集和指标两侧防止刷分。 > > 数据集上，分固定回归集、隐藏评测集和线上回流集。固定集用于防回归，可以被开发者看到；隐藏集不参与 prompt 调参，用来评估泛化；线上回流集来自真实 bad case，持续补充新问题。 > > 指标上，不只看最终答案，而是看中间 trace。比如是否调用 computePlan、工具参数是否正确、sourceId 是否命中、claim 是否有支撑。这样即使 prompt 适配了某些标准问法，也很难绕过工具链路和依据校验。 > > 另外，我不会把 easy set 的高分当成泛化能力。easy set 是回归门禁，realistic set 才更能说明系统在真实表达下的表现。"},{"id":"s45-q42-如果面试官质疑-评测全靠你自己标-会不会主观-怎么答","index":44,"number":"Q42","title":"Q42. 如果面试官质疑“评测全靠你自己标，会不会主观”，怎么答？","chapterId":"s7-6-评测体系详细版","chapterTitle":"6. 评测体系详细版","markdown":"逐字稿：\n\n> 我会承认政策评测确实需要人工标注，但我会尽量把主观判断变成结构化标准。  \n>  \n> 比如 RAG case 标注 expectedSourceIds，这个是客观的；规则测算 case 的退休时间和缴费缺口由规则表生成，也是客观的；缺信息 case 标注 missingFields，也可以程序化检查。  \n>  \n> 真正主观的是回答完整性和可读性，这部分可以用人工抽检或 LLM judge 辅助，但不会用它判断政策数字。  \n>  \n> 所以我的评测不是完全主观打分，而是尽量把高风险部分结构化和程序化。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会承认政策评测确实需要人工标注，但我会尽量把主观判断变成结构化标准。  </p><p> </p><p>比如 RAG case 标注 expectedSourceIds，这个是客观的；规则测算 case 的退休时间和缴费缺口由规则表生成，也是客观的；缺信息 case 标注 missingFields，也可以程序化检查。  </p><p> </p><p>真正主观的是回答完整性和可读性，这部分可以用人工抽检或 LLM judge 辅助，但不会用它判断政策数字。  </p><p> </p><p>所以我的评测不是完全主观打分，而是尽量把高风险部分结构化和程序化。</p></blockquote>","searchText":"Q42. 如果面试官质疑“评测全靠你自己标，会不会主观”，怎么答？ 6. 评测体系详细版 逐字稿： > 我会承认政策评测确实需要人工标注，但我会尽量把主观判断变成结构化标准。 > > 比如 RAG case 标注 expectedSourceIds，这个是客观的；规则测算 case 的退休时间和缴费缺口由规则表生成，也是客观的；缺信息 case 标注 missingFields，也可以程序化检查。 > > 真正主观的是回答完整性和可读性，这部分可以用人工抽检或 LLM judge 辅助，但不会用它判断政策数字。 > > 所以我的评测不是完全主观打分，而是尽量把高风险部分结构化和程序化。"},{"id":"s46-q43a-项目中遇到的最大问题是什么-宏观上怎么回答","index":45,"number":"Q43","title":"Q43A. 项目中遇到的最大问题是什么？宏观上怎么回答？","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 如果让我概括这个项目里遇到的最大问题，我不会说是某一个政策规则很难，也不会说只是 RAG 召回难，而是**多轮政策咨询场景下，怎么保证上下文可信、工具链一致、最终回答可追溯**。  \n>  \n> 社保退休规划这个场景有一个特点：用户不会一次性把所有字段都说全。真实对话经常是这样的：第一轮用户说“我是 1977 年出生的男的”，第二轮补充“3 月”，第三轮说“在上海交了 170 个月”，最后才问“那我什么时候退休，依据是什么”。  \n>  \n> 这时 Agent 不能只看最后一句，因为最后一句没有地区、出生年月、缴费月数这些关键字段；但也不能简单把所有历史消息拼进 prompt，因为长对话里会出现旧信息、冲突信息、模型推断信息和工具派生信息混在一起的问题。  \n>  \n> 所以我真正要解决的是一个可信状态管理问题：系统必须清楚地区分三类信息，第一类是用户显式提供的信息，比如出生年月、性别、地区、缴费月数；第二类是模型推断信息，比如用户可能属于某类就业身份；第三类是工具派生结果，比如规则引擎算出的退休时间和最低缴费缺口。只有第一类和用户确认过的信息可以进入长期画像，工具结果只能作为 tool facts 保留，不能反向污染用户画像。  \n>  \n> 在这个基础上，我再用 Plan-and-Execute 把流程约束住。比如个人化测算必须先抽取画像，再做 required-info check，再调用规则引擎；政策解释必须走政策依据召回；如果缺少出生月份、地区、缴费月数、女性身份类型这类关键字段，系统必须追问，不能让模型直接输出政策数字。  \n>  \n> 所以我的回答会落到一句话：这个项目最大的工程难点是让 Agent 在多轮、高风险、强依据要求的场景里，不仅能回答，而且能说明它为什么这么答、依据来自哪里、哪些信息还不够。\n\n追问：为什么你认为这是最大问题，而不是 RAG 或规则引擎本身？\n\n> 因为 RAG 和规则引擎是两个相对独立的能力，但 Agent 的最终可信度取决于它们能不能被正确编排。  \n>  \n> 举个例子，RAG 召回到了延迟退休政策，但如果 profile 里出生月份错了，规则引擎计算结果仍然会错；规则引擎算出了退休时间，但如果最终回答没有 citation，用户不知道政策依据；如果 required-info check 漏掉了女性身份类型，模型可能会替用户选择一个规则分支。  \n>  \n> 所以真正难的是跨模块一致性：profile、Execution Plan、tool call、rule result、citation 和 final answer 必须互相对齐。这个问题比单点优化更能体现 Agent 工程能力。\n\n追问：你最后怎么验证这个问题被解决了？\n\n> 我会从 trace 和评测两个层面验证。trace 层面看每个 case 的 intent、requiredFields、missingFields、tool calls、rule result、retrieved sources 和 final answer 是否一致；评测层面把 case 拆成多轮完整信息、缺信息、冲突信息、混合意图和 RAG 追问几类。  \n>  \n> 如果一个 case 缺出生月份，正确结果不是算出一个时间，而是追问月份；如果一个 case 有规则测算和政策依据需求，就必须同时看到 computePlan 和 retrievePolicy 的调用。这样才能证明不是模型碰巧答对，而是链路真的按约束执行。\n\n宏观备选 1：从高风险政策数字角度回答\n\n> 如果面试官更关注“可信”和“安全”，我会把最大问题表述为：**怎么防止模型在信息不完整时输出确定性政策数字**。  \n>  \n> 政策咨询和普通问答最大的区别是，很多数字会影响用户判断。比如退休时间、最低缴费年限、还差多少个月，这些都不能让模型凭语感生成。用户只说“我是 1977 年出生的男性”，模型可能直接回答某年某月退休，但如果缺出生月份，精确退休月份其实算不出来。女性用户更复杂，如果缺少女职工、女干部、灵活就业这类身份字段，规则分支也不能确定。  \n>  \n> 所以我把高风险数字从模型里拿出来，交给规则引擎。模型负责理解意图和组织表达，required-info checker 负责判断能不能算，规则引擎负责给确定性结果，answer validator 负责拦截“没有工具结果却出现政策数字”的回答。  \n>  \n> 这个回答适合在面试官问“你怎么防幻觉”时使用，因为它能把幻觉问题落到具体工程机制上。\n\n宏观备选 2：从长期记忆污染角度回答\n\n> 如果面试官对 memory 比较感兴趣，我会说最大问题是：**长期记忆不是存得越多越好，而是要防止错误信息跨轮、跨会话扩散**。  \n>  \n> 在社保规划里，长期记忆里存的不是偏好，而是会影响计算的事实字段。出生年月、性别、地区、缴费月数、就业身份这些字段一旦错了，后续所有测算都可能错。更麻烦的是，多轮对话中用户会补充、修正甚至前后矛盾，模型也可能基于表达做推断。  \n>  \n> 所以我的做法是把记忆做成结构化事实，并且带来源和状态。用户显式说的信息可以作为 confirmed 候选；模型推断只能放到 inferred 或 candidate；规则引擎输出的是 tool facts，不能覆盖用户画像。冲突字段不能静默覆盖，而要暴露给用户确认。  \n>  \n> 这个问题的本质是 memory governance，而不是简单的“把聊天记录总结一下”。\n\n宏观备选 3：从评测可信角度回答\n\n> 如果面试官追问评测，我会说最大问题是：**Agent 不能只靠最终答案打分，因为最终答案对了也可能是碰巧对**。  \n>  \n> 比如一个回答说出了正确退休年龄，但 trace 里没有调用规则引擎，那它其实是不可信的；一个回答引用了官方政策，但 citation 不支撑对应结论，也是不可信的。  \n>  \n> 所以我会把评测拆成分层评测和端到端评测。分层评测看 intent、plan、tool argument、rule result、RAG source、answer grounding、guardrail；端到端评测从多轮用户输入开始跑完整链路，看最终状态和回答是否符合预期。  \n>  \n> 这个角度能体现我不是只做 demo，而是在考虑 Agent 的可回归和可审计。\n\n宏观备选 4：从 RAG 可追溯角度回答\n\n> 如果面试官更偏 RAG，我会说最大问题是：**政策召回命中不等于政策回答可信**。  \n>  \n> RAG 在这个项目里不是为了让模型“多看几段材料”，而是为了让政策解释有可追溯来源。这里有几个细节：第一，来源要尽量官方；第二，来源要和问题相关，不能只是官方但无关；第三，最终回答里的 citation 要支撑对应 claim，不能把引用挂错位置。  \n>  \n> 所以我会同时看 source-level Recall@3、RelevantOfficialHit 和回答层 claim support。这个回答适合接住面试官对简历里 94% 和 98% 指标的追问。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>如果让我概括这个项目里遇到的最大问题，我不会说是某一个政策规则很难，也不会说只是 RAG 召回难，而是<strong>多轮政策咨询场景下，怎么保证上下文可信、工具链一致、最终回答可追溯</strong>。  </p><p> </p><p>社保退休规划这个场景有一个特点：用户不会一次性把所有字段都说全。真实对话经常是这样的：第一轮用户说“我是 1977 年出生的男的”，第二轮补充“3 月”，第三轮说“在上海交了 170 个月”，最后才问“那我什么时候退休，依据是什么”。  </p><p> </p><p>这时 Agent 不能只看最后一句，因为最后一句没有地区、出生年月、缴费月数这些关键字段；但也不能简单把所有历史消息拼进 prompt，因为长对话里会出现旧信息、冲突信息、模型推断信息和工具派生信息混在一起的问题。  </p><p> </p><p>所以我真正要解决的是一个可信状态管理问题：系统必须清楚地区分三类信息，第一类是用户显式提供的信息，比如出生年月、性别、地区、缴费月数；第二类是模型推断信息，比如用户可能属于某类就业身份；第三类是工具派生结果，比如规则引擎算出的退休时间和最低缴费缺口。只有第一类和用户确认过的信息可以进入长期画像，工具结果只能作为 tool facts 保留，不能反向污染用户画像。  </p><p> </p><p>在这个基础上，我再用 Plan-and-Execute 把流程约束住。比如个人化测算必须先抽取画像，再做 required-info check，再调用规则引擎；政策解释必须走政策依据召回；如果缺少出生月份、地区、缴费月数、女性身份类型这类关键字段，系统必须追问，不能让模型直接输出政策数字。  </p><p> </p><p>所以我的回答会落到一句话：这个项目最大的工程难点是让 Agent 在多轮、高风险、强依据要求的场景里，不仅能回答，而且能说明它为什么这么答、依据来自哪里、哪些信息还不够。</p></blockquote>\n<p>追问：为什么你认为这是最大问题，而不是 RAG 或规则引擎本身？</p>\n<blockquote><p>因为 RAG 和规则引擎是两个相对独立的能力，但 Agent 的最终可信度取决于它们能不能被正确编排。  </p><p> </p><p>举个例子，RAG 召回到了延迟退休政策，但如果 profile 里出生月份错了，规则引擎计算结果仍然会错；规则引擎算出了退休时间，但如果最终回答没有 citation，用户不知道政策依据；如果 required-info check 漏掉了女性身份类型，模型可能会替用户选择一个规则分支。  </p><p> </p><p>所以真正难的是跨模块一致性：profile、Execution Plan、tool call、rule result、citation 和 final answer 必须互相对齐。这个问题比单点优化更能体现 Agent 工程能力。</p></blockquote>\n<p>追问：你最后怎么验证这个问题被解决了？</p>\n<blockquote><p>我会从 trace 和评测两个层面验证。trace 层面看每个 case 的 intent、requiredFields、missingFields、tool calls、rule result、retrieved sources 和 final answer 是否一致；评测层面把 case 拆成多轮完整信息、缺信息、冲突信息、混合意图和 RAG 追问几类。  </p><p> </p><p>如果一个 case 缺出生月份，正确结果不是算出一个时间，而是追问月份；如果一个 case 有规则测算和政策依据需求，就必须同时看到 computePlan 和 retrievePolicy 的调用。这样才能证明不是模型碰巧答对，而是链路真的按约束执行。</p></blockquote>\n<p>宏观备选 1：从高风险政策数字角度回答</p>\n<blockquote><p>如果面试官更关注“可信”和“安全”，我会把最大问题表述为：<strong>怎么防止模型在信息不完整时输出确定性政策数字</strong>。  </p><p> </p><p>政策咨询和普通问答最大的区别是，很多数字会影响用户判断。比如退休时间、最低缴费年限、还差多少个月，这些都不能让模型凭语感生成。用户只说“我是 1977 年出生的男性”，模型可能直接回答某年某月退休，但如果缺出生月份，精确退休月份其实算不出来。女性用户更复杂，如果缺少女职工、女干部、灵活就业这类身份字段，规则分支也不能确定。  </p><p> </p><p>所以我把高风险数字从模型里拿出来，交给规则引擎。模型负责理解意图和组织表达，required-info checker 负责判断能不能算，规则引擎负责给确定性结果，answer validator 负责拦截“没有工具结果却出现政策数字”的回答。  </p><p> </p><p>这个回答适合在面试官问“你怎么防幻觉”时使用，因为它能把幻觉问题落到具体工程机制上。</p></blockquote>\n<p>宏观备选 2：从长期记忆污染角度回答</p>\n<blockquote><p>如果面试官对 memory 比较感兴趣，我会说最大问题是：<strong>长期记忆不是存得越多越好，而是要防止错误信息跨轮、跨会话扩散</strong>。  </p><p> </p><p>在社保规划里，长期记忆里存的不是偏好，而是会影响计算的事实字段。出生年月、性别、地区、缴费月数、就业身份这些字段一旦错了，后续所有测算都可能错。更麻烦的是，多轮对话中用户会补充、修正甚至前后矛盾，模型也可能基于表达做推断。  </p><p> </p><p>所以我的做法是把记忆做成结构化事实，并且带来源和状态。用户显式说的信息可以作为 confirmed 候选；模型推断只能放到 inferred 或 candidate；规则引擎输出的是 tool facts，不能覆盖用户画像。冲突字段不能静默覆盖，而要暴露给用户确认。  </p><p> </p><p>这个问题的本质是 memory governance，而不是简单的“把聊天记录总结一下”。</p></blockquote>\n<p>宏观备选 3：从评测可信角度回答</p>\n<blockquote><p>如果面试官追问评测，我会说最大问题是：<strong>Agent 不能只靠最终答案打分，因为最终答案对了也可能是碰巧对</strong>。  </p><p> </p><p>比如一个回答说出了正确退休年龄，但 trace 里没有调用规则引擎，那它其实是不可信的；一个回答引用了官方政策，但 citation 不支撑对应结论，也是不可信的。  </p><p> </p><p>所以我会把评测拆成分层评测和端到端评测。分层评测看 intent、plan、tool argument、rule result、RAG source、answer grounding、guardrail；端到端评测从多轮用户输入开始跑完整链路，看最终状态和回答是否符合预期。  </p><p> </p><p>这个角度能体现我不是只做 demo，而是在考虑 Agent 的可回归和可审计。</p></blockquote>\n<p>宏观备选 4：从 RAG 可追溯角度回答</p>\n<blockquote><p>如果面试官更偏 RAG，我会说最大问题是：<strong>政策召回命中不等于政策回答可信</strong>。  </p><p> </p><p>RAG 在这个项目里不是为了让模型“多看几段材料”，而是为了让政策解释有可追溯来源。这里有几个细节：第一，来源要尽量官方；第二，来源要和问题相关，不能只是官方但无关；第三，最终回答里的 citation 要支撑对应 claim，不能把引用挂错位置。  </p><p> </p><p>所以我会同时看 source-level Recall@3、RelevantOfficialHit 和回答层 claim support。这个回答适合接住面试官对简历里 94% 和 98% 指标的追问。</p></blockquote>","searchText":"Q43A. 项目中遇到的最大问题是什么？宏观上怎么回答？ 7. Bad Case 复盘详细版 逐字稿： > 如果让我概括这个项目里遇到的最大问题，我不会说是某一个政策规则很难，也不会说只是 RAG 召回难，而是**多轮政策咨询场景下，怎么保证上下文可信、工具链一致、最终回答可追溯**。 > > 社保退休规划这个场景有一个特点：用户不会一次性把所有字段都说全。真实对话经常是这样的：第一轮用户说“我是 1977 年出生的男的”，第二轮补充“3 月”，第三轮说“在上海交了 170 个月”，最后才问“那我什么时候退休，依据是什么”。 > > 这时 Agent 不能只看最后一句，因为最后一句没有地区、出生年月、缴费月数这些关键字段；但也不能简单把所有历史消息拼进 prompt，因为长对话里会出现旧信息、冲突信息、模型推断信息和工具派生信息混在一起的问题。 > > 所以我真正要解决的是一个可信状态管理问题：系统必须清楚地区分三类信息，第一类是用户显式提供的信息，比如出生年月、性别、地区、缴费月数；第二类是模型推断信息，比如用户可能属于某类就业身份；第三类是工具派生结果，比如规则引擎算出的退休时间和最低缴费缺口。只有第一类和用户确认过的信息可以进入长期画像，工具结果只能作为 tool facts 保留，不能反向污染用户画像。 > > 在这个基础上，我再用 Plan-and-Execute 把流程约束住。比如个人化测算必须先抽取画像，再做 required-info check，再调用规则引擎；政策解释必须走政策依据召回；如果缺少出生月份、地区、缴费月数、女性身份类型这类关键字段，系统必须追问，不能让模型直接输出政策数字。 > > 所以我的回答会落到一句话：这个项目最大的工程难点是让 Agent 在多轮、高风险、强依据要求的场景里，不仅能回答，而且能说明它为什么这么答、依据来自哪里、哪些信息还不够。 追问：为什么你认为这是最大问题，而不是 RAG 或规则引擎本身？ > 因为 RAG 和规则引擎是两个相对独立的能力，但 Agent 的最终可信度取决于它们能不能被正确编排。 > > 举个例子，RAG 召回到了延迟退休政策，但如果 profile 里出生月份错了，规则引擎计算结果仍然会错；规则引擎算出了退休时间，但如果最终回答没有 citation，用户不知道政策依据；如果 required-info check 漏掉了女性身份类型，模型可能会替用户选择一个规则分支。 > > 所以真正难的是跨模块一致性：profile、Execution Plan、tool call、rule result、citation 和 final answer 必须互相对齐。这个问题比单点优化更能体现 Agent 工程能力。 追问：你最后怎么验证这个问题被解决了？ > 我会从 trace 和评测两个层面验证。trace 层面看每个 case 的 intent、requiredFields、missingFields、tool calls、rule result、retrieved sources 和 final answer 是否一致；评测层面把 case 拆成多轮完整信息、缺信息、冲突信息、混合意图和 RAG 追问几类。 > > 如果一个 case 缺出生月份，正确结果不是算出一个时间，而是追问月份；如果一个 case 有规则测算和政策依据需求，就必须同时看到 computePlan 和 retrievePolicy 的调用。这样才能证明不是模型碰巧答对，而是链路真的按约束执行。 宏观备选 1：从高风险政策数字角度回答 > 如果面试官更关注“可信”和“安全”，我会把最大问题表述为：**怎么防止模型在信息不完整时输出确定性政策数字**。 > > 政策咨询和普通问答最大的区别是，很多数字会影响用户判断。比如退休时间、最低缴费年限、还差多少个月，这些都不能让模型凭语感生成。用户只说“我是 1977 年出生的男性”，模型可能直接回答某年某月退休，但如果缺出生月份，精确退休月份其实算不出来。女性用户更复杂，如果缺少女职工、女干部、灵活就业这类身份字段，规则分支也不能确定。 > > 所以我把高风险数字从模型里拿出来，交给规则引擎。模型负责理解意图和组织表达，required-info checker 负责判断能不能算，规则引擎负责给确定性结果，answer validator 负责拦截“没有工具结果却出现政策数字”的回答。 > > 这个回答适合在面试官问“你怎么防幻觉”时使用，因为它能把幻觉问题落到具体工程机制上。 宏观备选 2：从长期记忆污染角度回答 > 如果面试官对 memory 比较感兴趣，我会说最大问题是：**长期记忆不是存得越多越好，而是要防止错误信息跨轮、跨会话扩散**。 > > 在社保规划里，长期记忆里存的不是偏好，而是会影响计算的事实字段。出生年月、性别、地区、缴费月数、就业身份这些字段一旦错了，后续所有测算都可能错。更麻烦的是，多轮对话中用户会补充、修正甚至前后矛盾，模型也可能基于表达做推断。 > > 所以我的做法是把记忆做成结构化事实，并且带来源和状态。用户显式说的信息可以作为 confirmed 候选；模型推断只能放到 inferred 或 candidate；规则引擎输出的是 tool facts，不能覆盖用户画像。冲突字段不能静默覆盖，而要暴露给用户确认。 > > 这个问题的本质是 memory governance，而不是简单的“把聊天记录总结一下”。 宏观备选 3：从评测可信角度回答 > 如果面试官追问评测，我会说最大问题是：**Agent 不能只靠最终答案打分，因为最终答案对了也可能是碰巧对**。 > > 比如一个回答说出了正确退休年龄，但 trace 里没有调用规则引擎，那它其实是不可信的；一个回答引用了官方政策，但 citation 不支撑对应结论，也是不可信的。 > > 所以我会把评测拆成分层评测和端到端评测。分层评测看 intent、plan、tool argument、rule result、RAG source、answer grounding、guardrail；端到端评测从多轮用户输入开始跑完整链路，看最终状态和回答是否符合预期。 > > 这个角度能体现我不是只做 demo，而是在考虑 Agent 的可回归和可审计。 宏观备选 4：从 RAG 可追溯角度回答 > 如果面试官更偏 RAG，我会说最大问题是：**政策召回命中不等于政策回答可信**。 > > RAG 在这个项目里不是为了让模型“多看几段材料”，而是为了让政策解释有可追溯来源。这里有几个细节：第一，来源要尽量官方；第二，来源要和问题相关，不能只是官方但无关；第三，最终回答里的 citation 要支撑对应 claim，不能把引用挂错位置。 > > 所以我会同时看 source-level Recall@3、RelevantOfficialHit 和回答层 claim support。这个回答适合接住面试官对简历里 94% 和 98% 指标的追问。"},{"id":"s47-q43b-如果面试官要求讲一个真实细节问题-你讲哪个","index":46,"number":"Q43","title":"Q43B. 如果面试官要求讲一个真实细节问题，你讲哪个？","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 我会讲一个很具体、也比较符合真实项目经历的 bad case：**多轮对话最后一句太短，导致 RAG query 不稳定**。  \n>  \n> 具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问一句“那我什么时候退休，依据呢”。  \n>  \n> 一开始如果 retrievePolicy 只拿 latestUserText 去检索，query 里其实只有“什么时候退休、依据”这些泛化词，没有“上海”“1977 年 3 月”“男性”“最低缴费年限”“延迟退休”“退休年龄”这些真正能约束召回的关键词。结果就是召回结果有时会偏泛，可能命中退休政策介绍类材料，但不一定命中最适合这个问题的政策依据。  \n>  \n> 我当时不是直接去调 prompt，而是先看 trace。trace 里显示 profile 抽取是对的，规则引擎入参也是对的，说明问题不在画像和测算层；但是 retrievePolicy 的 query 明显太短，说明问题在 RAG query 构造层。  \n>  \n> 修复方式是让检索 query 不再只依赖最新用户输入，而是结合结构化 profile、会话摘要和当前 intent。比如把 query 构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策依据”。这样既保留用户当前问题，也把多轮上下文里的关键字段带入检索。  \n>  \n> 这个 case 我觉得很适合面试讲，因为它不是泛泛说“优化 RAG”，而是能体现一个 Agent 工程细节：工具参数不能只来自 latestUserText，应该来自结构化上下文和执行计划。\n\n追问：这个问题为什么在单轮 RAG 里不明显？\n\n> 因为单轮 RAG 的用户问题通常比较完整，比如“上海男性 1977 年 3 月出生，已缴 170 个月，什么时候退休，最低缴费年限是多少”。这种情况下 query 自带足够关键词。  \n>  \n> 但多轮对话里，最后一句经常是“那我呢”“依据是什么”“还差多久”这种省略表达。如果没有上下文压缩和 query rewrite，RAG 会退化成拿一句很短的话去搜政策，自然不稳定。\n\n追问：你怎么证明修复有效？\n\n> 我会看两类指标。第一类是检索指标，比如 source-level Recall@3 有没有提升，正确政策来源是否进入 Top3。第二类是端到端 trace，通过对比修复前后的同一个多轮 case，看 retrievePolicy 的 query 是否带上地区、政策类型和用户画像字段，最终回答里的 citation 是否支撑对应结论。  \n>  \n> 如果只是最终回答看起来变好了，但 trace 里没有正确召回依据，我不会认为这个问题真的解决了。\n\n备用细节 1：记忆冲突不能静默覆盖\n\n> 另一个我可以讲的细节是记忆冲突。比如长期记忆里已经有 confirmed 的 birthYear=1975，后面用户又说 birthYear=1976。出生年份会直接影响退休测算，这种字段不能简单采用“最新消息覆盖旧消息”的策略。  \n>  \n> 我的设计是把长期记忆做成结构化 fact，而不是普通 key-value。每个 fact 记录 path、value、source、observedAt、confidence、status 和 conflicts。两个 confirmed 字段冲突时，状态应该变成 conflicted，并在上下文摘要里明确告诉模型：这个字段存在冲突，不能自行选择，必须向用户确认。  \n>  \n> 这里要讲得严谨一点：如果只是通过 prompt summary 提醒模型追问，它还不是最硬的工作流约束。更理想的做法是把 conflicted 字段接入 required-info checker，让它像 missingFields 一样阻断规则测算。这样面试官追问时，我可以说当前实现已经有记忆冲突标记和摘要提醒，后续优化方向是把冲突状态进一步接到执行前校验里。\n\n备用细节 2：女性退休身份缺失\n\n> 还有一个很容易被问到的细节是女性退休测算。用户只说 gender=female 和出生年月，其实不一定够，因为女性退休年龄可能和身份类型有关，比如女职工、女干部、灵活就业人员。  \n>  \n> 如果模型在这个字段缺失时自动选一个规则分支，结果就会很危险。所以我会把 femaleRetireType 或就业身份作为动态 requiredFields。也就是说 requiredFields 不是一开始写死的，而是根据 intent 和已知画像动态变化：当用户要做退休测算，并且 gender=female 时，就必须补充身份类型；如果缺失，规则引擎返回 needs_more_info，最终回答只能追问，不能输出确定退休时间。  \n>  \n> 这个 case 能体现我对 policy Agent 的理解：规则引擎不是为了让系统永远给数字，而是为了在不满足条件时拒绝给数字。\n\n备用细节 3：RAG 指标被 chunk 重复命中抬高\n\n> 评测里还有一个细节是指标虚高。早期如果按 chunk-level 统计 Recall@3，同一个政策文件切出来的多个相邻 chunk 可能同时排在 Top3，指标看起来命中了多个结果，但本质上只覆盖了一个来源。  \n>  \n> 这会带来两个问题：第一，Recall@3 看起来偏高；第二，对于混合问题，比如同时问最低缴费年限和弹性退休提示，TopK 被同一个来源占满会导致来源覆盖不足。  \n>  \n> 所以我会把评测口径改成 source-level Recall@3，按 sourceId 去重后再判断政策来源是否命中，同时看 official source hit 和 source diversity。简历里写的政策来源 Recall@3 达到 94%，我会解释成政策来源级别的命中，而不是 chunk 级别的命中，这样更可信，也更能经得住追问。\n\n备用细节 4：工具事实不能污染长期画像\n\n> 还有一个容易体现 Agent 能力的点是 tool facts 和 user profile 的隔离。比如规则引擎算出“预计退休时间是某年某月”，这个结果是工具派生事实，不应该写回用户画像里。用户画像应该记录出生年月、性别、地区、缴费月数这类用户事实。  \n>  \n> 如果把工具结果也当成长期用户事实，后续政策版本更新或用户补充新信息时，很容易出现旧计算结果污染新一轮测算的问题。所以我的上下文里会把 user explicit facts、model inferred facts 和 tool derived facts 分层管理。\n\n备用细节 5：最终回答不能暴露内部工具名\n\n> 还有一个回答层细节是，Agent 内部 trace 里有 computePlan、retrievePolicy、validateAnswer 这些工具名，但最终回答不能机械地暴露给用户。用户需要看到的是“根据你提供的信息”和“依据某某官方政策”，而不是“我调用了某某工具”。  \n>  \n> 所以回答生成要同时满足两个要求：内部 trace 足够详细，便于审计；外部表达足够自然，面向用户。这个分层也是 Agent 产品化时容易被忽略的点。\n\n备用细节 6：OfficialHit 指标虚高\n\n> 还有一个评测细节是 OfficialHit 可能虚高。比如用户问“4050 补贴怎么申请”，系统召回了一个人社局官网新闻，这当然是官方来源，但内容可能只是活动通知，并没有回答申请条件、对象或材料清单。  \n>  \n> 如果评测只看“是不是官方域名”，这个 case 也会被算成命中，指标就会偏乐观。所以我会把 OfficialHit 进一步改成 RelevantOfficialHit，要求同时满足两个条件：来源是官方；内容主题和 gold source 或人工标注主题相关。  \n>  \n> 面试里可以补一句：简历里的官方来源命中率 98%，我不会把它解释成最终回答准确率，它只是来源可信度指标。最终还要结合 Recall、answer grounding 和 claim support。\n\n追问：为什么不只保留官方来源？\n\n> 只保留官方来源能提高权威性，但不能解决相关性问题。官方来源也可能答非所问，或者是地方不匹配、时间不匹配。所以我会同时做 sourceType、topic、region、effectiveDate 这些 metadata 约束。\n\n备用细节 7：缺出生月份导致规则测算过度主动\n\n> 另一个很具体的规则层问题是 birthMonth 缺失。用户说“我是 1977 年男性，什么时候退休”，从人类角度看信息好像差不多，但对规则引擎来说还不能精确到退休月份。  \n>  \n> 如果这时模型直接给某年某月，就是典型的 over-answer。我的处理是 required-info checker 把 birthMonth 标成 missingFields，computePlan 不进入 ready 状态，最终回答只能说“还需要你的出生月份，才能继续测算具体退休时间”。  \n>  \n> 这个 case 很适合说明：缺信息追问不是用户体验差，而是政策场景里的正确安全行为。\n\n追问：如果用户不想补充月份怎么办？\n\n> 可以给通用政策解释，但不能给个人化精确结果。比如可以说“出生月份会影响具体退休月份，所以暂时无法精确测算；如果只看政策口径，可以先解释延迟退休和最低缴费年限规则”。这就是风险分级。\n\n备用细节 8：4050 俗称和官方政策名称不一致\n\n> 有一个回答层细节是用户表达和官方政策名称不一致。用户常说“4050 补贴”，但文件里可能叫“就业困难人员灵活就业社会保险补贴”。如果 RAG 召回正确，最终回答却只写官方名称、不提 4050，用户会以为没有回答他的问题。  \n>  \n> 这个问题不是召回错，而是 answer grounding 和术语对齐不够。我的修复思路是在回答约束里保留用户原始术语，并解释它和官方名称的关系，比如“你说的 4050 补贴，通常对应就业困难人员灵活就业社会保险补贴，具体以当地政策口径为准”。  \n>  \n> 这个 case 能说明，RAG eval 不能只看 source hit，还要看最终回答是否覆盖用户关心的表达。\n\n备用细节 9：混合意图导致漏调工具\n\n> 混合意图也是一个真实问题。用户经常不是只问“政策是什么”，也不是只问“我什么时候退”，而是问“我什么时候退休，依据是什么”。  \n>  \n> 这类问题必须同时走规则引擎和 RAG：规则引擎给个人化测算，RAG 给政策依据。如果 Execution Plan 只识别成 personal_calculation，就可能漏掉 retrievePolicy；如果只识别成 policy_qa，就可能没有 computePlan。  \n>  \n> 所以我会在 intent 里支持 mixed intent，并在 requiredTools 里同时要求 computePlan 和 retrievePolicy。执行后再校验 tool calls 是否覆盖 requiredTools。  \n>  \n> 这个 case 体现的是 Plan-and-Execute 的价值：计划不是形式，它要能约束工具调用完整性。\n\n备用细节 10：政策有效期和版本冲突\n\n> 政策类 RAG 还有一个不太显眼但很重要的问题：旧政策可能被召回。政策文件有发布日期、实施日期、适用地区，有些还会被新文件替代。如果只看向量相似度，旧文件可能因为文字更匹配而排在前面。  \n>  \n> 我的处理思路是给政策文档加 metadata，包括 sourceType、region、topic、publishDate、effectiveDate、status。检索后不仅看相似度，也看地区匹配、当前有效性和官方优先级。  \n>  \n> 面试里我会说：目前项目重点覆盖了最低缴费年限、延迟退休、弹性退休、4050 补贴这些场景，如果进一步生产化，政策版本管理是必须加强的一层。\n\n备用细节 11：answer validator 过严或过松\n\n> 回答安全校验也会有细节问题。过松时，模型可能在 needs_more_info 状态下仍然输出具体退休月份；过严时，回答明明是在说“目前不能确定退休月份”，却因为出现了“退休月份”几个字被误拦截。  \n>  \n> 所以 validator 不能只做关键词匹配，而要结合工具状态和 claim 类型。比如 needs_more_info 状态下，禁止的是确定性数字 claim，不是禁止解释缺什么信息。  \n>  \n> 这个细节可以说明我对 guardrail 的理解：guardrail 不是越严越好，而是要和业务风险对齐。\n\n备用细节 12：弹性退休提示不能说成确定建议\n\n> 弹性退休也是一个容易被模型说过头的点。系统可以提示用户关注弹性退休窗口、申请条件和政策限制，但不能替用户做个人决策，也不能把“可以关注”说成“你应该选择”。  \n>  \n> 所以我会把最终回答里的内容分层：确定性测算结果、政策依据、风险提示、可选事项。弹性退休更多属于政策提示或选择空间，不应该和确定退休时间混在一起。  \n>  \n> 这个 case 适合回答“政策 Agent 怎么处理建议边界”。\n\n备用细节 13：工具调用失败后的降级\n\n> 还有一个工程细节是工具失败或超时。比如 retrievePolicy 超时了，模型不能假装已经拿到政策依据；computePlan 失败了，也不能继续编一个退休时间。  \n>  \n> 我会让工具状态进入 trace，比如 success、failed、timeout、needs_more_info。最终回答要读取工具状态，如果政策依据缺失，就只能说明暂时无法提供可追溯依据；如果规则测算失败，就不能输出个人化测算数字。  \n>  \n> 这个细节能体现 Agent 不是只关注成功路径，也要设计失败路径。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会讲一个很具体、也比较符合真实项目经历的 bad case：<strong>多轮对话最后一句太短，导致 RAG query 不稳定</strong>。  </p><p> </p><p>具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问一句“那我什么时候退休，依据呢”。  </p><p> </p><p>一开始如果 retrievePolicy 只拿 latestUserText 去检索，query 里其实只有“什么时候退休、依据”这些泛化词，没有“上海”“1977 年 3 月”“男性”“最低缴费年限”“延迟退休”“退休年龄”这些真正能约束召回的关键词。结果就是召回结果有时会偏泛，可能命中退休政策介绍类材料，但不一定命中最适合这个问题的政策依据。  </p><p> </p><p>我当时不是直接去调 prompt，而是先看 trace。trace 里显示 profile 抽取是对的，规则引擎入参也是对的，说明问题不在画像和测算层；但是 retrievePolicy 的 query 明显太短，说明问题在 RAG query 构造层。  </p><p> </p><p>修复方式是让检索 query 不再只依赖最新用户输入，而是结合结构化 profile、会话摘要和当前 intent。比如把 query 构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策依据”。这样既保留用户当前问题，也把多轮上下文里的关键字段带入检索。  </p><p> </p><p>这个 case 我觉得很适合面试讲，因为它不是泛泛说“优化 RAG”，而是能体现一个 Agent 工程细节：工具参数不能只来自 latestUserText，应该来自结构化上下文和执行计划。</p></blockquote>\n<p>追问：这个问题为什么在单轮 RAG 里不明显？</p>\n<blockquote><p>因为单轮 RAG 的用户问题通常比较完整，比如“上海男性 1977 年 3 月出生，已缴 170 个月，什么时候退休，最低缴费年限是多少”。这种情况下 query 自带足够关键词。  </p><p> </p><p>但多轮对话里，最后一句经常是“那我呢”“依据是什么”“还差多久”这种省略表达。如果没有上下文压缩和 query rewrite，RAG 会退化成拿一句很短的话去搜政策，自然不稳定。</p></blockquote>\n<p>追问：你怎么证明修复有效？</p>\n<blockquote><p>我会看两类指标。第一类是检索指标，比如 source-level Recall@3 有没有提升，正确政策来源是否进入 Top3。第二类是端到端 trace，通过对比修复前后的同一个多轮 case，看 retrievePolicy 的 query 是否带上地区、政策类型和用户画像字段，最终回答里的 citation 是否支撑对应结论。  </p><p> </p><p>如果只是最终回答看起来变好了，但 trace 里没有正确召回依据，我不会认为这个问题真的解决了。</p></blockquote>\n<p>备用细节 1：记忆冲突不能静默覆盖</p>\n<blockquote><p>另一个我可以讲的细节是记忆冲突。比如长期记忆里已经有 confirmed 的 birthYear=1975，后面用户又说 birthYear=1976。出生年份会直接影响退休测算，这种字段不能简单采用“最新消息覆盖旧消息”的策略。  </p><p> </p><p>我的设计是把长期记忆做成结构化 fact，而不是普通 key-value。每个 fact 记录 path、value、source、observedAt、confidence、status 和 conflicts。两个 confirmed 字段冲突时，状态应该变成 conflicted，并在上下文摘要里明确告诉模型：这个字段存在冲突，不能自行选择，必须向用户确认。  </p><p> </p><p>这里要讲得严谨一点：如果只是通过 prompt summary 提醒模型追问，它还不是最硬的工作流约束。更理想的做法是把 conflicted 字段接入 required-info checker，让它像 missingFields 一样阻断规则测算。这样面试官追问时，我可以说当前实现已经有记忆冲突标记和摘要提醒，后续优化方向是把冲突状态进一步接到执行前校验里。</p></blockquote>\n<p>备用细节 2：女性退休身份缺失</p>\n<blockquote><p>还有一个很容易被问到的细节是女性退休测算。用户只说 gender=female 和出生年月，其实不一定够，因为女性退休年龄可能和身份类型有关，比如女职工、女干部、灵活就业人员。  </p><p> </p><p>如果模型在这个字段缺失时自动选一个规则分支，结果就会很危险。所以我会把 femaleRetireType 或就业身份作为动态 requiredFields。也就是说 requiredFields 不是一开始写死的，而是根据 intent 和已知画像动态变化：当用户要做退休测算，并且 gender=female 时，就必须补充身份类型；如果缺失，规则引擎返回 needs_more_info，最终回答只能追问，不能输出确定退休时间。  </p><p> </p><p>这个 case 能体现我对 policy Agent 的理解：规则引擎不是为了让系统永远给数字，而是为了在不满足条件时拒绝给数字。</p></blockquote>\n<p>备用细节 3：RAG 指标被 chunk 重复命中抬高</p>\n<blockquote><p>评测里还有一个细节是指标虚高。早期如果按 chunk-level 统计 Recall@3，同一个政策文件切出来的多个相邻 chunk 可能同时排在 Top3，指标看起来命中了多个结果，但本质上只覆盖了一个来源。  </p><p> </p><p>这会带来两个问题：第一，Recall@3 看起来偏高；第二，对于混合问题，比如同时问最低缴费年限和弹性退休提示，TopK 被同一个来源占满会导致来源覆盖不足。  </p><p> </p><p>所以我会把评测口径改成 source-level Recall@3，按 sourceId 去重后再判断政策来源是否命中，同时看 official source hit 和 source diversity。简历里写的政策来源 Recall@3 达到 94%，我会解释成政策来源级别的命中，而不是 chunk 级别的命中，这样更可信，也更能经得住追问。</p></blockquote>\n<p>备用细节 4：工具事实不能污染长期画像</p>\n<blockquote><p>还有一个容易体现 Agent 能力的点是 tool facts 和 user profile 的隔离。比如规则引擎算出“预计退休时间是某年某月”，这个结果是工具派生事实，不应该写回用户画像里。用户画像应该记录出生年月、性别、地区、缴费月数这类用户事实。  </p><p> </p><p>如果把工具结果也当成长期用户事实，后续政策版本更新或用户补充新信息时，很容易出现旧计算结果污染新一轮测算的问题。所以我的上下文里会把 user explicit facts、model inferred facts 和 tool derived facts 分层管理。</p></blockquote>\n<p>备用细节 5：最终回答不能暴露内部工具名</p>\n<blockquote><p>还有一个回答层细节是，Agent 内部 trace 里有 computePlan、retrievePolicy、validateAnswer 这些工具名，但最终回答不能机械地暴露给用户。用户需要看到的是“根据你提供的信息”和“依据某某官方政策”，而不是“我调用了某某工具”。  </p><p> </p><p>所以回答生成要同时满足两个要求：内部 trace 足够详细，便于审计；外部表达足够自然，面向用户。这个分层也是 Agent 产品化时容易被忽略的点。</p></blockquote>\n<p>备用细节 6：OfficialHit 指标虚高</p>\n<blockquote><p>还有一个评测细节是 OfficialHit 可能虚高。比如用户问“4050 补贴怎么申请”，系统召回了一个人社局官网新闻，这当然是官方来源，但内容可能只是活动通知，并没有回答申请条件、对象或材料清单。  </p><p> </p><p>如果评测只看“是不是官方域名”，这个 case 也会被算成命中，指标就会偏乐观。所以我会把 OfficialHit 进一步改成 RelevantOfficialHit，要求同时满足两个条件：来源是官方；内容主题和 gold source 或人工标注主题相关。  </p><p> </p><p>面试里可以补一句：简历里的官方来源命中率 98%，我不会把它解释成最终回答准确率，它只是来源可信度指标。最终还要结合 Recall、answer grounding 和 claim support。</p></blockquote>\n<p>追问：为什么不只保留官方来源？</p>\n<blockquote><p>只保留官方来源能提高权威性，但不能解决相关性问题。官方来源也可能答非所问，或者是地方不匹配、时间不匹配。所以我会同时做 sourceType、topic、region、effectiveDate 这些 metadata 约束。</p></blockquote>\n<p>备用细节 7：缺出生月份导致规则测算过度主动</p>\n<blockquote><p>另一个很具体的规则层问题是 birthMonth 缺失。用户说“我是 1977 年男性，什么时候退休”，从人类角度看信息好像差不多，但对规则引擎来说还不能精确到退休月份。  </p><p> </p><p>如果这时模型直接给某年某月，就是典型的 over-answer。我的处理是 required-info checker 把 birthMonth 标成 missingFields，computePlan 不进入 ready 状态，最终回答只能说“还需要你的出生月份，才能继续测算具体退休时间”。  </p><p> </p><p>这个 case 很适合说明：缺信息追问不是用户体验差，而是政策场景里的正确安全行为。</p></blockquote>\n<p>追问：如果用户不想补充月份怎么办？</p>\n<blockquote><p>可以给通用政策解释，但不能给个人化精确结果。比如可以说“出生月份会影响具体退休月份，所以暂时无法精确测算；如果只看政策口径，可以先解释延迟退休和最低缴费年限规则”。这就是风险分级。</p></blockquote>\n<p>备用细节 8：4050 俗称和官方政策名称不一致</p>\n<blockquote><p>有一个回答层细节是用户表达和官方政策名称不一致。用户常说“4050 补贴”，但文件里可能叫“就业困难人员灵活就业社会保险补贴”。如果 RAG 召回正确，最终回答却只写官方名称、不提 4050，用户会以为没有回答他的问题。  </p><p> </p><p>这个问题不是召回错，而是 answer grounding 和术语对齐不够。我的修复思路是在回答约束里保留用户原始术语，并解释它和官方名称的关系，比如“你说的 4050 补贴，通常对应就业困难人员灵活就业社会保险补贴，具体以当地政策口径为准”。  </p><p> </p><p>这个 case 能说明，RAG eval 不能只看 source hit，还要看最终回答是否覆盖用户关心的表达。</p></blockquote>\n<p>备用细节 9：混合意图导致漏调工具</p>\n<blockquote><p>混合意图也是一个真实问题。用户经常不是只问“政策是什么”，也不是只问“我什么时候退”，而是问“我什么时候退休，依据是什么”。  </p><p> </p><p>这类问题必须同时走规则引擎和 RAG：规则引擎给个人化测算，RAG 给政策依据。如果 Execution Plan 只识别成 personal_calculation，就可能漏掉 retrievePolicy；如果只识别成 policy_qa，就可能没有 computePlan。  </p><p> </p><p>所以我会在 intent 里支持 mixed intent，并在 requiredTools 里同时要求 computePlan 和 retrievePolicy。执行后再校验 tool calls 是否覆盖 requiredTools。  </p><p> </p><p>这个 case 体现的是 Plan-and-Execute 的价值：计划不是形式，它要能约束工具调用完整性。</p></blockquote>\n<p>备用细节 10：政策有效期和版本冲突</p>\n<blockquote><p>政策类 RAG 还有一个不太显眼但很重要的问题：旧政策可能被召回。政策文件有发布日期、实施日期、适用地区，有些还会被新文件替代。如果只看向量相似度，旧文件可能因为文字更匹配而排在前面。  </p><p> </p><p>我的处理思路是给政策文档加 metadata，包括 sourceType、region、topic、publishDate、effectiveDate、status。检索后不仅看相似度，也看地区匹配、当前有效性和官方优先级。  </p><p> </p><p>面试里我会说：目前项目重点覆盖了最低缴费年限、延迟退休、弹性退休、4050 补贴这些场景，如果进一步生产化，政策版本管理是必须加强的一层。</p></blockquote>\n<p>备用细节 11：answer validator 过严或过松</p>\n<blockquote><p>回答安全校验也会有细节问题。过松时，模型可能在 needs_more_info 状态下仍然输出具体退休月份；过严时，回答明明是在说“目前不能确定退休月份”，却因为出现了“退休月份”几个字被误拦截。  </p><p> </p><p>所以 validator 不能只做关键词匹配，而要结合工具状态和 claim 类型。比如 needs_more_info 状态下，禁止的是确定性数字 claim，不是禁止解释缺什么信息。  </p><p> </p><p>这个细节可以说明我对 guardrail 的理解：guardrail 不是越严越好，而是要和业务风险对齐。</p></blockquote>\n<p>备用细节 12：弹性退休提示不能说成确定建议</p>\n<blockquote><p>弹性退休也是一个容易被模型说过头的点。系统可以提示用户关注弹性退休窗口、申请条件和政策限制，但不能替用户做个人决策，也不能把“可以关注”说成“你应该选择”。  </p><p> </p><p>所以我会把最终回答里的内容分层：确定性测算结果、政策依据、风险提示、可选事项。弹性退休更多属于政策提示或选择空间，不应该和确定退休时间混在一起。  </p><p> </p><p>这个 case 适合回答“政策 Agent 怎么处理建议边界”。</p></blockquote>\n<p>备用细节 13：工具调用失败后的降级</p>\n<blockquote><p>还有一个工程细节是工具失败或超时。比如 retrievePolicy 超时了，模型不能假装已经拿到政策依据；computePlan 失败了，也不能继续编一个退休时间。  </p><p> </p><p>我会让工具状态进入 trace，比如 success、failed、timeout、needs_more_info。最终回答要读取工具状态，如果政策依据缺失，就只能说明暂时无法提供可追溯依据；如果规则测算失败，就不能输出个人化测算数字。  </p><p> </p><p>这个细节能体现 Agent 不是只关注成功路径，也要设计失败路径。</p></blockquote>","searchText":"Q43B. 如果面试官要求讲一个真实细节问题，你讲哪个？ 7. Bad Case 复盘详细版 逐字稿： > 我会讲一个很具体、也比较符合真实项目经历的 bad case：**多轮对话最后一句太短，导致 RAG query 不稳定**。 > > 具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问一句“那我什么时候退休，依据呢”。 > > 一开始如果 retrievePolicy 只拿 latestUserText 去检索，query 里其实只有“什么时候退休、依据”这些泛化词，没有“上海”“1977 年 3 月”“男性”“最低缴费年限”“延迟退休”“退休年龄”这些真正能约束召回的关键词。结果就是召回结果有时会偏泛，可能命中退休政策介绍类材料，但不一定命中最适合这个问题的政策依据。 > > 我当时不是直接去调 prompt，而是先看 trace。trace 里显示 profile 抽取是对的，规则引擎入参也是对的，说明问题不在画像和测算层；但是 retrievePolicy 的 query 明显太短，说明问题在 RAG query 构造层。 > > 修复方式是让检索 query 不再只依赖最新用户输入，而是结合结构化 profile、会话摘要和当前 intent。比如把 query 构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策依据”。这样既保留用户当前问题，也把多轮上下文里的关键字段带入检索。 > > 这个 case 我觉得很适合面试讲，因为它不是泛泛说“优化 RAG”，而是能体现一个 Agent 工程细节：工具参数不能只来自 latestUserText，应该来自结构化上下文和执行计划。 追问：这个问题为什么在单轮 RAG 里不明显？ > 因为单轮 RAG 的用户问题通常比较完整，比如“上海男性 1977 年 3 月出生，已缴 170 个月，什么时候退休，最低缴费年限是多少”。这种情况下 query 自带足够关键词。 > > 但多轮对话里，最后一句经常是“那我呢”“依据是什么”“还差多久”这种省略表达。如果没有上下文压缩和 query rewrite，RAG 会退化成拿一句很短的话去搜政策，自然不稳定。 追问：你怎么证明修复有效？ > 我会看两类指标。第一类是检索指标，比如 source-level Recall@3 有没有提升，正确政策来源是否进入 Top3。第二类是端到端 trace，通过对比修复前后的同一个多轮 case，看 retrievePolicy 的 query 是否带上地区、政策类型和用户画像字段，最终回答里的 citation 是否支撑对应结论。 > > 如果只是最终回答看起来变好了，但 trace 里没有正确召回依据，我不会认为这个问题真的解决了。 备用细节 1：记忆冲突不能静默覆盖 > 另一个我可以讲的细节是记忆冲突。比如长期记忆里已经有 confirmed 的 birthYear=1975，后面用户又说 birthYear=1976。出生年份会直接影响退休测算，这种字段不能简单采用“最新消息覆盖旧消息”的策略。 > > 我的设计是把长期记忆做成结构化 fact，而不是普通 key-value。每个 fact 记录 path、value、source、observedAt、confidence、status 和 conflicts。两个 confirmed 字段冲突时，状态应该变成 conflicted，并在上下文摘要里明确告诉模型：这个字段存在冲突，不能自行选择，必须向用户确认。 > > 这里要讲得严谨一点：如果只是通过 prompt summary 提醒模型追问，它还不是最硬的工作流约束。更理想的做法是把 conflicted 字段接入 required-info checker，让它像 missingFields 一样阻断规则测算。这样面试官追问时，我可以说当前实现已经有记忆冲突标记和摘要提醒，后续优化方向是把冲突状态进一步接到执行前校验里。 备用细节 2：女性退休身份缺失 > 还有一个很容易被问到的细节是女性退休测算。用户只说 gender=female 和出生年月，其实不一定够，因为女性退休年龄可能和身份类型有关，比如女职工、女干部、灵活就业人员。 > > 如果模型在这个字段缺失时自动选一个规则分支，结果就会很危险。所以我会把 femaleRetireType 或就业身份作为动态 requiredFields。也就是说 requiredFields 不是一开始写死的，而是根据 intent 和已知画像动态变化：当用户要做退休测算，并且 gender=female 时，就必须补充身份类型；如果缺失，规则引擎返回 needs_more_info，最终回答只能追问，不能输出确定退休时间。 > > 这个 case 能体现我对 policy Agent 的理解：规则引擎不是为了让系统永远给数字，而是为了在不满足条件时拒绝给数字。 备用细节 3：RAG 指标被 chunk 重复命中抬高 > 评测里还有一个细节是指标虚高。早期如果按 chunk-level 统计 Recall@3，同一个政策文件切出来的多个相邻 chunk 可能同时排在 Top3，指标看起来命中了多个结果，但本质上只覆盖了一个来源。 > > 这会带来两个问题：第一，Recall@3 看起来偏高；第二，对于混合问题，比如同时问最低缴费年限和弹性退休提示，TopK 被同一个来源占满会导致来源覆盖不足。 > > 所以我会把评测口径改成 source-level Recall@3，按 sourceId 去重后再判断政策来源是否命中，同时看 official source hit 和 source diversity。简历里写的政策来源 Recall@3 达到 94%，我会解释成政策来源级别的命中，而不是 chunk 级别的命中，这样更可信，也更能经得住追问。 备用细节 4：工具事实不能污染长期画像 > 还有一个容易体现 Agent 能力的点是 tool facts 和 user profile 的隔离。比如规则引擎算出“预计退休时间是某年某月”，这个结果是工具派生事实，不应该写回用户画像里。用户画像应该记录出生年月、性别、地区、缴费月数这类用户事实。 > > 如果把工具结果也当成长期用户事实，后续政策版本更新或用户补充新信息时，很容易出现旧计算结果污染新一轮测算的问题。所以我的上下文里会把 user explicit facts、model inferred facts 和 tool derived facts 分层管理。 备用细节 5：最终回答不能暴露内部工具名 > 还有一个回答层细节是，Agent 内部 trace 里有 computePlan、retrievePolicy、validateAnswer 这些工具名，但最终回答不能机械地暴露给用户。用户需要看到的是“根据你提供的信息”和“依据某某官方政策”，而不是“我调用了某某工具”。 > > 所以回答生成要同时满足两个要求：内部 trace 足够详细，便于审计；外部表达足够自然，面向用户。这个分层也是 Agent 产品化时容易被忽略的点。 备用细节 6：OfficialHit 指标虚高 > 还有一个评测细节是 OfficialHit 可能虚高。比如用户问“4050 补贴怎么申请”，系统召回了一个人社局官网新闻，这当然是官方来源，但内容可能只是活动通知，并没有回答申请条件、对象或材料清单。 > > 如果评测只看“是不是官方域名”，这个 case 也会被算成命中，指标就会偏乐观。所以我会把 OfficialHit 进一步改成 RelevantOfficialHit，要求同时满足两个条件：来源是官方；内容主题和 gold source 或人工标注主题相关。 > > 面试里可以补一句：简历里的官方来源命中率 98%，我不会把它解释成最终回答准确率，它只是来源可信度指标。最终还要结合 Recall、answer grounding 和 claim support。 追问：为什么不只保留官方来源？ > 只保留官方来源能提高权威性，但不能解决相关性问题。官方来源也可能答非所问，或者是地方不匹配、时间不匹配。所以我会同时做 sourceType、topic、region、effectiveDate 这些 metadata 约束。 备用细节 7：缺出生月份导致规则测算过度主动 > 另一个很具体的规则层问题是 birthMonth 缺失。用户说“我是 1977 年男性，什么时候退休”，从人类角度看信息好像差不多，但对规则引擎来说还不能精确到退休月份。 > > 如果这时模型直接给某年某月，就是典型的 over-answer。我的处理是 required-info checker 把 birthMonth 标成 missingFields，computePlan 不进入 ready 状态，最终回答只能说“还需要你的出生月份，才能继续测算具体退休时间”。 > > 这个 case 很适合说明：缺信息追问不是用户体验差，而是政策场景里的正确安全行为。 追问：如果用户不想补充月份怎么办？ > 可以给通用政策解释，但不能给个人化精确结果。比如可以说“出生月份会影响具体退休月份，所以暂时无法精确测算；如果只看政策口径，可以先解释延迟退休和最低缴费年限规则”。这就是风险分级。 备用细节 8：4050 俗称和官方政策名称不一致 > 有一个回答层细节是用户表达和官方政策名称不一致。用户常说“4050 补贴”，但文件里可能叫“就业困难人员灵活就业社会保险补贴”。如果 RAG 召回正确，最终回答却只写官方名称、不提 4050，用户会以为没有回答他的问题。 > > 这个问题不是召回错，而是 answer grounding 和术语对齐不够。我的修复思路是在回答约束里保留用户原始术语，并解释它和官方名称的关系，比如“你说的 4050 补贴，通常对应就业困难人员灵活就业社会保险补贴，具体以当地政策口径为准”。 > > 这个 case 能说明，RAG eval 不能只看 source hit，还要看最终回答是否覆盖用户关心的表达。 备用细节 9：混合意图导致漏调工具 > 混合意图也是一个真实问题。用户经常不是只问“政策是什么”，也不是只问“我什么时候退”，而是问“我什么时候退休，依据是什么”。 > > 这类问题必须同时走规则引擎和 RAG：规则引擎给个人化测算，RAG 给政策依据。如果 Execution Plan 只识别成 personal_calculation，就可能漏掉 retrievePolicy；如果只识别成 policy_qa，就可能没有 computePlan。 > > 所以我会在 intent 里支持 mixed intent，并在 requiredTools 里同时要求 computePlan 和 retrievePolicy。执行后再校验 tool calls 是否覆盖 requiredTools。 > > 这个 case 体现的是 Plan-and-Execute 的价值：计划不是形式，它要能约束工具调用完整性。 备用细节 10：政策有效期和版本冲突 > 政策类 RAG 还有一个不太显眼但很重要的问题：旧政策可能被召回。政策文件有发布日期、实施日期、适用地区，有些还会被新文件替代。如果只看向量相似度，旧文件可能因为文字更匹配而排在前面。 > > 我的处理思路是给政策文档加 metadata，包括 sourceType、region、topic、publishDate、effectiveDate、status。检索后不仅看相似度，也看地区匹配、当前有效性和官方优先级。 > > 面试里我会说：目前项目重点覆盖了最低缴费年限、延迟退休、弹性退休、4050 补贴这些场景，如果进一步生产化，政策版本管理是必须加强的一层。 备用细节 11：answer validator 过严或过松 > 回答安全校验也会有细节问题。过松时，模型可能在 needs_more_info 状态下仍然输出具体退休月份；过严时，回答明明是在说“目前不能确定退休月份”，却因为出现了“退休月份”几个字被误拦截。 > > 所以 validator 不能只做关键词匹配，而要结合工具状态和 claim 类型。比如 needs_more_info 状态下，禁止的是确定性数字 claim，不是禁止解释缺什么信息。 > > 这个细节可以说明我对 guardrail 的理解：guardrail 不是越严越好，而是要和业务风险对齐。 备用细节 12：弹性退休提示不能说成确定建议 > 弹性退休也是一个容易被模型说过头的点。系统可以提示用户关注弹性退休窗口、申请条件和政策限制，但不能替用户做个人决策，也不能把“可以关注”说成“你应该选择”。 > > 所以我会把最终回答里的内容分层：确定性测算结果、政策依据、风险提示、可选事项。弹性退休更多属于政策提示或选择空间，不应该和确定退休时间混在一起。 > > 这个 case 适合回答“政策 Agent 怎么处理建议边界”。 备用细节 13：工具调用失败后的降级 > 还有一个工程细节是工具失败或超时。比如 retrievePolicy 超时了，模型不能假装已经拿到政策依据；computePlan 失败了，也不能继续编一个退休时间。 > > 我会让工具状态进入 trace，比如 success、failed、timeout、needs_more_info。最终回答要读取工具状态，如果政策依据缺失，就只能说明暂时无法提供可追溯依据；如果规则测算失败，就不能输出个人化测算数字。 > > 这个细节能体现 Agent 不是只关注成功路径，也要设计失败路径。"},{"id":"s48-q43-你遇到过哪个-bad-case-怎么定位和解决","index":47,"number":"Q43","title":"Q43. 你遇到过哪个 bad case，怎么定位和解决？","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 一个比较典型的 bad case 是多轮对话里，最后一轮 query 太短导致 RAG 召回不稳定。  \n>  \n> 具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问“那我什么时候退休，依据呢”。如果 RAG 只拿最后一句去检索，query 里只有“什么时候退休、依据”，缺少地区、最低缴费年限、延迟退休这些关键信息，就可能召回泛化材料。  \n>  \n> 我定位时看 trace，发现 profile 抽取和规则测算是对的，但 retrievePolicy 的 query 信息不足，所以问题不是规则层，而是 RAG query 构造层。  \n>  \n> 修复方式是让检索 query 结合结构化 profile、会话摘要和当前 intent，把地区、政策类型、用户关注点拼进去。比如构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策”。这样召回更稳定。  \n>  \n> 这个 case 给我的启发是，多轮 Agent 不能只用最后一句做检索，必须把结构化上下文带进工具调用。\n\n追问：这个问题为什么普通单轮 RAG 不明显？\n\n> 因为单轮 RAG 的 query 往往包含完整问题；多轮对话里，最后一句经常是省略表达，比如“那我呢”“依据是什么”。这时如果没有记忆和 query rewrite，RAG 就会退化。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>一个比较典型的 bad case 是多轮对话里，最后一轮 query 太短导致 RAG 召回不稳定。  </p><p> </p><p>具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问“那我什么时候退休，依据呢”。如果 RAG 只拿最后一句去检索，query 里只有“什么时候退休、依据”，缺少地区、最低缴费年限、延迟退休这些关键信息，就可能召回泛化材料。  </p><p> </p><p>我定位时看 trace，发现 profile 抽取和规则测算是对的，但 retrievePolicy 的 query 信息不足，所以问题不是规则层，而是 RAG query 构造层。  </p><p> </p><p>修复方式是让检索 query 结合结构化 profile、会话摘要和当前 intent，把地区、政策类型、用户关注点拼进去。比如构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策”。这样召回更稳定。  </p><p> </p><p>这个 case 给我的启发是，多轮 Agent 不能只用最后一句做检索，必须把结构化上下文带进工具调用。</p></blockquote>\n<p>追问：这个问题为什么普通单轮 RAG 不明显？</p>\n<blockquote><p>因为单轮 RAG 的 query 往往包含完整问题；多轮对话里，最后一句经常是省略表达，比如“那我呢”“依据是什么”。这时如果没有记忆和 query rewrite，RAG 就会退化。</p></blockquote>","searchText":"Q43. 你遇到过哪个 bad case，怎么定位和解决？ 7. Bad Case 复盘详细版 逐字稿： > 一个比较典型的 bad case 是多轮对话里，最后一轮 query 太短导致 RAG 召回不稳定。 > > 具体场景是，用户前面几轮已经提供了“上海、1977 年 3 月、男性、已缴 170 个月”，最后只问“那我什么时候退休，依据呢”。如果 RAG 只拿最后一句去检索，query 里只有“什么时候退休、依据”，缺少地区、最低缴费年限、延迟退休这些关键信息，就可能召回泛化材料。 > > 我定位时看 trace，发现 profile 抽取和规则测算是对的，但 retrievePolicy 的 query 信息不足，所以问题不是规则层，而是 RAG query 构造层。 > > 修复方式是让检索 query 结合结构化 profile、会话摘要和当前 intent，把地区、政策类型、用户关注点拼进去。比如构造成“上海 男性 1977 年 3 月 退休年龄 最低缴费年限 延迟退休 官方政策”。这样召回更稳定。 > > 这个 case 给我的启发是，多轮 Agent 不能只用最后一句做检索，必须把结构化上下文带进工具调用。 追问：这个问题为什么普通单轮 RAG 不明显？ > 因为单轮 RAG 的 query 往往包含完整问题；多轮对话里，最后一句经常是省略表达，比如“那我呢”“依据是什么”。这时如果没有记忆和 query rewrite，RAG 就会退化。"},{"id":"s49-q44-再讲一个-rag-bad-case","index":48,"number":"Q44","title":"Q44. 再讲一个 RAG bad case","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 另一个 bad case 是 TopK 被同一个来源的多个 chunk 占满。比如一个政策文件被切成多个相邻片段，向量相似度都很高，Top3 可能全来自同一个 source。  \n>  \n> 这会导致两个问题：第一，指标可能虚高，因为看起来命中了多个 chunk，其实来源只有一个；第二，回答依据覆盖不够，尤其用户问的是混合问题，需要多个政策来源支撑。  \n>  \n> 我的处理是做 source-level 评估和 source diversity。评测时按 sourceId 去重，不让重复 chunk 虚高；检索结果组织时，也尽量让 TopK 覆盖不同相关来源。  \n>  \n> 这对政策问答很重要，因为回答往往需要多个依据互相补充。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>另一个 bad case 是 TopK 被同一个来源的多个 chunk 占满。比如一个政策文件被切成多个相邻片段，向量相似度都很高，Top3 可能全来自同一个 source。  </p><p> </p><p>这会导致两个问题：第一，指标可能虚高，因为看起来命中了多个 chunk，其实来源只有一个；第二，回答依据覆盖不够，尤其用户问的是混合问题，需要多个政策来源支撑。  </p><p> </p><p>我的处理是做 source-level 评估和 source diversity。评测时按 sourceId 去重，不让重复 chunk 虚高；检索结果组织时，也尽量让 TopK 覆盖不同相关来源。  </p><p> </p><p>这对政策问答很重要，因为回答往往需要多个依据互相补充。</p></blockquote>","searchText":"Q44. 再讲一个 RAG bad case 7. Bad Case 复盘详细版 逐字稿： > 另一个 bad case 是 TopK 被同一个来源的多个 chunk 占满。比如一个政策文件被切成多个相邻片段，向量相似度都很高，Top3 可能全来自同一个 source。 > > 这会导致两个问题：第一，指标可能虚高，因为看起来命中了多个 chunk，其实来源只有一个；第二，回答依据覆盖不够，尤其用户问的是混合问题，需要多个政策来源支撑。 > > 我的处理是做 source-level 评估和 source diversity。评测时按 sourceId 去重，不让重复 chunk 虚高；检索结果组织时，也尽量让 TopK 覆盖不同相关来源。 > > 这对政策问答很重要，因为回答往往需要多个依据互相补充。"},{"id":"s50-q45-再讲一个回答层-bad-case","index":49,"number":"Q45","title":"Q45. 再讲一个回答层 bad case","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 有一个回答层 bad case 是，RAG 召回到了正确政策，但最终回答没有覆盖用户原始问题里的关键词。  \n>  \n> 比如用户问“4050 补贴怎么申请”，召回结果里可能是官方名称“就业困难人员灵活就业社会保险补贴”。模型回答时如果只写官方名称，不提“4050”，用户会觉得没有回答他的问题。  \n>  \n> 这不是 RAG 没命中，而是 answer grounding 和表达覆盖问题。修复时，我会在回答约束里要求保留用户原始术语，并解释它和官方名称之间的对应关系。  \n>  \n> 这个 case 说明评测不能只看检索命中，还要看最终回答是否覆盖用户关心的表达。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>有一个回答层 bad case 是，RAG 召回到了正确政策，但最终回答没有覆盖用户原始问题里的关键词。  </p><p> </p><p>比如用户问“4050 补贴怎么申请”，召回结果里可能是官方名称“就业困难人员灵活就业社会保险补贴”。模型回答时如果只写官方名称，不提“4050”，用户会觉得没有回答他的问题。  </p><p> </p><p>这不是 RAG 没命中，而是 answer grounding 和表达覆盖问题。修复时，我会在回答约束里要求保留用户原始术语，并解释它和官方名称之间的对应关系。  </p><p> </p><p>这个 case 说明评测不能只看检索命中，还要看最终回答是否覆盖用户关心的表达。</p></blockquote>","searchText":"Q45. 再讲一个回答层 bad case 7. Bad Case 复盘详细版 逐字稿： > 有一个回答层 bad case 是，RAG 召回到了正确政策，但最终回答没有覆盖用户原始问题里的关键词。 > > 比如用户问“4050 补贴怎么申请”，召回结果里可能是官方名称“就业困难人员灵活就业社会保险补贴”。模型回答时如果只写官方名称，不提“4050”，用户会觉得没有回答他的问题。 > > 这不是 RAG 没命中，而是 answer grounding 和表达覆盖问题。修复时，我会在回答约束里要求保留用户原始术语，并解释它和官方名称之间的对应关系。 > > 这个 case 说明评测不能只看检索命中，还要看最终回答是否覆盖用户关心的表达。"},{"id":"s51-q46-缺信息场景的-bad-case-怎么处理","index":50,"number":"Q46","title":"Q46. 缺信息场景的 bad case 怎么处理？","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 缺信息场景最典型的问题是模型过度主动。比如用户说“我是 1977 年男性，什么时候退休”，模型可能根据年份直接给一个退休时间，但其实缺出生月份，无法精确到月份。  \n>  \n> 我把这个问题归因到 required-info check 和 answer guardrail 不够硬。修复时，一方面在规则引擎前增加必要字段校验，缺 birthMonth 时 computePlan 不进入 ready；另一方面在回答安全校验里规定，needs_more_info 状态下不能出现具体退休月份。  \n>  \n> 最终正确回答应该是：“还需要你的出生月份，才能计算具体退休时间；如果你补充月份，我可以继续测算。”  \n>  \n> 在政策场景里，这种追问不是失败，而是正确的安全行为。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>缺信息场景最典型的问题是模型过度主动。比如用户说“我是 1977 年男性，什么时候退休”，模型可能根据年份直接给一个退休时间，但其实缺出生月份，无法精确到月份。  </p><p> </p><p>我把这个问题归因到 required-info check 和 answer guardrail 不够硬。修复时，一方面在规则引擎前增加必要字段校验，缺 birthMonth 时 computePlan 不进入 ready；另一方面在回答安全校验里规定，needs_more_info 状态下不能出现具体退休月份。  </p><p> </p><p>最终正确回答应该是：“还需要你的出生月份，才能计算具体退休时间；如果你补充月份，我可以继续测算。”  </p><p> </p><p>在政策场景里，这种追问不是失败，而是正确的安全行为。</p></blockquote>","searchText":"Q46. 缺信息场景的 bad case 怎么处理？ 7. Bad Case 复盘详细版 逐字稿： > 缺信息场景最典型的问题是模型过度主动。比如用户说“我是 1977 年男性，什么时候退休”，模型可能根据年份直接给一个退休时间，但其实缺出生月份，无法精确到月份。 > > 我把这个问题归因到 required-info check 和 answer guardrail 不够硬。修复时，一方面在规则引擎前增加必要字段校验，缺 birthMonth 时 computePlan 不进入 ready；另一方面在回答安全校验里规定，needs_more_info 状态下不能出现具体退休月份。 > > 最终正确回答应该是：“还需要你的出生月份，才能计算具体退休时间；如果你补充月份，我可以继续测算。” > > 在政策场景里，这种追问不是失败，而是正确的安全行为。"},{"id":"s52-q47-记忆污染-bad-case-怎么处理","index":51,"number":"Q47","title":"Q47. 记忆污染 bad case 怎么处理？","chapterId":"s8-7-bad-case-复盘详细版","chapterTitle":"7. Bad Case 复盘详细版","markdown":"逐字稿：\n\n> 记忆污染的风险是模型把推断当事实保存。比如用户说“我一直自己交社保”，模型可能推断他是灵活就业人员，但这个推断不一定严谨。如果直接写入长期画像，后续退休测算可能全部基于错误身份。  \n>  \n> 我的处理是把字段来源显式标记。用户明确说的内容可以进入 confirmed profile；模型推断只能进入 inferred 或 candidate，需要用户确认；工具派生结果进入 tool facts，不覆盖用户事实。  \n>  \n> 同时，影响政策计算的字段必须是 confirmed，不能用 inferred 字段直接计算确定结论。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>记忆污染的风险是模型把推断当事实保存。比如用户说“我一直自己交社保”，模型可能推断他是灵活就业人员，但这个推断不一定严谨。如果直接写入长期画像，后续退休测算可能全部基于错误身份。  </p><p> </p><p>我的处理是把字段来源显式标记。用户明确说的内容可以进入 confirmed profile；模型推断只能进入 inferred 或 candidate，需要用户确认；工具派生结果进入 tool facts，不覆盖用户事实。  </p><p> </p><p>同时，影响政策计算的字段必须是 confirmed，不能用 inferred 字段直接计算确定结论。</p></blockquote>","searchText":"Q47. 记忆污染 bad case 怎么处理？ 7. Bad Case 复盘详细版 逐字稿： > 记忆污染的风险是模型把推断当事实保存。比如用户说“我一直自己交社保”，模型可能推断他是灵活就业人员，但这个推断不一定严谨。如果直接写入长期画像，后续退休测算可能全部基于错误身份。 > > 我的处理是把字段来源显式标记。用户明确说的内容可以进入 confirmed profile；模型推断只能进入 inferred 或 candidate，需要用户确认；工具派生结果进入 tool facts，不覆盖用户事实。 > > 同时，影响政策计算的字段必须是 confirmed，不能用 inferred 字段直接计算确定结论。"},{"id":"s53-q48-你的项目适合封装成-mcp-吗","index":52,"number":"Q48","title":"Q48. 你的项目适合封装成 MCP 吗？","chapterId":"s9-8-mcp-skills-langgraph-与多智能体","chapterTitle":"8. MCP、Skills、LangGraph 与多智能体","markdown":"逐字稿：\n\n> 我觉得非常适合。因为 MCP 的价值是把外部工具和资源以标准协议暴露给 Agent，而我的项目里工具边界已经比较清晰。  \n>  \n> 可以封装成五个 MCP tools：`extractProfile` 负责画像抽取，`assessRequiredInfo` 判断缺失字段，`computeRetirementPlan` 做规则测算，`retrievePolicyEvidence` 做政策依据召回，`validatePolicyAnswer` 做回答安全校验。  \n>  \n> 每个工具都有明确输入输出。例如 `computeRetirementPlan` 输入 birthYear、birthMonth、gender、region、paidMonths，输出 retireDate、requiredMonths、missingMonths、ruleVersion 和 trace。`retrievePolicyEvidence` 输入 policyType、region、query，输出 citations。  \n>  \n> MCP 化的好处是这些能力可以被不同 Agent runtime 或前端复用，而且每个 tool 可以独立评测、独立权限控制、独立观测。\n\n追问：当前已经做成 MCP 了吗？\n\n> 稳妥说法是：当前工具边界已经接近 MCP 化，但如果没有正式实现 MCP server，就不要说已经完成 MCP。可以说后续很适合把这些工具封装成 MCP，因为 schema 和职责边界已经清楚。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我觉得非常适合。因为 MCP 的价值是把外部工具和资源以标准协议暴露给 Agent，而我的项目里工具边界已经比较清晰。  </p><p> </p><p>可以封装成五个 MCP tools：<code>extractProfile</code> 负责画像抽取，<code>assessRequiredInfo</code> 判断缺失字段，<code>computeRetirementPlan</code> 做规则测算，<code>retrievePolicyEvidence</code> 做政策依据召回，<code>validatePolicyAnswer</code> 做回答安全校验。  </p><p> </p><p>每个工具都有明确输入输出。例如 <code>computeRetirementPlan</code> 输入 birthYear、birthMonth、gender、region、paidMonths，输出 retireDate、requiredMonths、missingMonths、ruleVersion 和 trace。<code>retrievePolicyEvidence</code> 输入 policyType、region、query，输出 citations。  </p><p> </p><p>MCP 化的好处是这些能力可以被不同 Agent runtime 或前端复用，而且每个 tool 可以独立评测、独立权限控制、独立观测。</p></blockquote>\n<p>追问：当前已经做成 MCP 了吗？</p>\n<blockquote><p>稳妥说法是：当前工具边界已经接近 MCP 化，但如果没有正式实现 MCP server，就不要说已经完成 MCP。可以说后续很适合把这些工具封装成 MCP，因为 schema 和职责边界已经清楚。</p></blockquote>","searchText":"Q48. 你的项目适合封装成 MCP 吗？ 8. MCP、Skills、LangGraph 与多智能体 逐字稿： > 我觉得非常适合。因为 MCP 的价值是把外部工具和资源以标准协议暴露给 Agent，而我的项目里工具边界已经比较清晰。 > > 可以封装成五个 MCP tools：`extractProfile` 负责画像抽取，`assessRequiredInfo` 判断缺失字段，`computeRetirementPlan` 做规则测算，`retrievePolicyEvidence` 做政策依据召回，`validatePolicyAnswer` 做回答安全校验。 > > 每个工具都有明确输入输出。例如 `computeRetirementPlan` 输入 birthYear、birthMonth、gender、region、paidMonths，输出 retireDate、requiredMonths、missingMonths、ruleVersion 和 trace。`retrievePolicyEvidence` 输入 policyType、region、query，输出 citations。 > > MCP 化的好处是这些能力可以被不同 Agent runtime 或前端复用，而且每个 tool 可以独立评测、独立权限控制、独立观测。 追问：当前已经做成 MCP 了吗？ > 稳妥说法是：当前工具边界已经接近 MCP 化，但如果没有正式实现 MCP server，就不要说已经完成 MCP。可以说后续很适合把这些工具封装成 MCP，因为 schema 和职责边界已经清楚。"},{"id":"s54-q49-skill-和-mcp-有什么区别","index":53,"number":"Q49","title":"Q49. Skill 和 MCP 有什么区别？","chapterId":"s9-8-mcp-skills-langgraph-与多智能体","chapterTitle":"8. MCP、Skills、LangGraph 与多智能体","markdown":"逐字稿：\n\n> 我理解 Skill 更偏“怎么完成一个任务”的过程知识，MCP 更偏“怎么标准化调用外部工具和资源”。  \n>  \n> 比如社保退休规划可以写成一个 Skill，里面规定：先抽画像，再查缺失字段，信息完整后调规则引擎，需要依据时调政策检索，最后做安全校验。  \n>  \n> 而 computePlan、retrievePolicy 这些具体能力适合做成 MCP tools。Skill 负责流程和方法，MCP 负责工具连接和标准调用。两者可以配合。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我理解 Skill 更偏“怎么完成一个任务”的过程知识，MCP 更偏“怎么标准化调用外部工具和资源”。  </p><p> </p><p>比如社保退休规划可以写成一个 Skill，里面规定：先抽画像，再查缺失字段，信息完整后调规则引擎，需要依据时调政策检索，最后做安全校验。  </p><p> </p><p>而 computePlan、retrievePolicy 这些具体能力适合做成 MCP tools。Skill 负责流程和方法，MCP 负责工具连接和标准调用。两者可以配合。</p></blockquote>","searchText":"Q49. Skill 和 MCP 有什么区别？ 8. MCP、Skills、LangGraph 与多智能体 逐字稿： > 我理解 Skill 更偏“怎么完成一个任务”的过程知识，MCP 更偏“怎么标准化调用外部工具和资源”。 > > 比如社保退休规划可以写成一个 Skill，里面规定：先抽画像，再查缺失字段，信息完整后调规则引擎，需要依据时调政策检索，最后做安全校验。 > > 而 computePlan、retrievePolicy 这些具体能力适合做成 MCP tools。Skill 负责流程和方法，MCP 负责工具连接和标准调用。两者可以配合。"},{"id":"s55-q50-你用了-langgraph-吗-不用-langgraph-能叫-agent-吗","index":54,"number":"Q50","title":"Q50. 你用了 LangGraph 吗？不用 LangGraph 能叫 Agent 吗？","chapterId":"s9-8-mcp-skills-langgraph-与多智能体","chapterTitle":"8. MCP、Skills、LangGraph 与多智能体","markdown":"逐字稿：\n\n> 我会回答：Agent 不由某个框架定义，而由能力定义。只要系统能理解目标、规划步骤、调用工具、维护状态并根据结果完成任务，就可以是 Agent。  \n>  \n> LangGraph 的优势是把 workflow 表达成状态图，适合复杂分支、循环和可视化 trace。我的项目核心是 Plan-and-Execute 和工具链路约束，可以用 LangGraph 实现，也可以用自定义状态机实现。  \n>  \n> 如果后续工程化，我会考虑引入 LangGraph 或类似框架，把 needs_more_info、tool_failed、validate_failed 这些分支显式建模。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会回答：Agent 不由某个框架定义，而由能力定义。只要系统能理解目标、规划步骤、调用工具、维护状态并根据结果完成任务，就可以是 Agent。  </p><p> </p><p>LangGraph 的优势是把 workflow 表达成状态图，适合复杂分支、循环和可视化 trace。我的项目核心是 Plan-and-Execute 和工具链路约束，可以用 LangGraph 实现，也可以用自定义状态机实现。  </p><p> </p><p>如果后续工程化，我会考虑引入 LangGraph 或类似框架，把 needs_more_info、tool_failed、validate_failed 这些分支显式建模。</p></blockquote>","searchText":"Q50. 你用了 LangGraph 吗？不用 LangGraph 能叫 Agent 吗？ 8. MCP、Skills、LangGraph 与多智能体 逐字稿： > 我会回答：Agent 不由某个框架定义，而由能力定义。只要系统能理解目标、规划步骤、调用工具、维护状态并根据结果完成任务，就可以是 Agent。 > > LangGraph 的优势是把 workflow 表达成状态图，适合复杂分支、循环和可视化 trace。我的项目核心是 Plan-and-Execute 和工具链路约束，可以用 LangGraph 实现，也可以用自定义状态机实现。 > > 如果后续工程化，我会考虑引入 LangGraph 或类似框架，把 needs_more_info、tool_failed、validate_failed 这些分支显式建模。"},{"id":"s56-q51-多智能体怎么协作","index":55,"number":"Q51","title":"Q51. 多智能体怎么协作？","chapterId":"s9-8-mcp-skills-langgraph-与多智能体","chapterTitle":"8. MCP、Skills、LangGraph 与多智能体","markdown":"逐字稿：\n\n> 如果这个项目扩成多智能体，我会按职责拆，而不是为了多 Agent 而多 Agent。  \n>  \n> 可以有 Planner Agent 负责生成计划，Policy Agent 负责政策召回和依据判断，Rule Agent 或 Rule Tool 负责确定性测算，Verifier Agent 负责检查最终回答是否有 unsupported claim。  \n>  \n> 但我会强调，当前场景用单 Agent + 多工具更合适，因为主流程比较明确。多 Agent 会增加延迟、通信成本和错误归因难度。只有当政策域扩大、任务复杂到需要多个专家角色时，再引入多智能体更合理。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>如果这个项目扩成多智能体，我会按职责拆，而不是为了多 Agent 而多 Agent。  </p><p> </p><p>可以有 Planner Agent 负责生成计划，Policy Agent 负责政策召回和依据判断，Rule Agent 或 Rule Tool 负责确定性测算，Verifier Agent 负责检查最终回答是否有 unsupported claim。  </p><p> </p><p>但我会强调，当前场景用单 Agent + 多工具更合适，因为主流程比较明确。多 Agent 会增加延迟、通信成本和错误归因难度。只有当政策域扩大、任务复杂到需要多个专家角色时，再引入多智能体更合理。</p></blockquote>","searchText":"Q51. 多智能体怎么协作？ 8. MCP、Skills、LangGraph 与多智能体 逐字稿： > 如果这个项目扩成多智能体，我会按职责拆，而不是为了多 Agent 而多 Agent。 > > 可以有 Planner Agent 负责生成计划，Policy Agent 负责政策召回和依据判断，Rule Agent 或 Rule Tool 负责确定性测算，Verifier Agent 负责检查最终回答是否有 unsupported claim。 > > 但我会强调，当前场景用单 Agent + 多工具更合适，因为主流程比较明确。多 Agent 会增加延迟、通信成本和错误归因难度。只有当政策域扩大、任务复杂到需要多个专家角色时，再引入多智能体更合理。"},{"id":"s57-q52-agent-的难点是什么","index":56,"number":"Q52","title":"Q52. Agent 的难点是什么？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 我认为 Agent 的难点不是单次回答，而是长链路可靠性。  \n>  \n> 一个 Agent 请求里可能包含意图识别、任务规划、工具选择、参数构造、工具执行、结果整合、上下文更新和最终回答。任何一环出错，用户看到的都是最终回答错误。  \n>  \n> 以我的社保项目为例，如果 profile 抽错出生月份，规则引擎算得再准也会错；如果 plan 漏掉 RAG，回答就没有依据；如果 RAG 召回正确但模型引用错，最终仍然不可信。  \n>  \n> 所以我觉得做 Agent 最重要的是三件事：第一，工具和状态要结构化；第二，关键链路要有 guardrail；第三，要有分层评测和 trace，否则出了问题不知道从哪里修。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我认为 Agent 的难点不是单次回答，而是长链路可靠性。  </p><p> </p><p>一个 Agent 请求里可能包含意图识别、任务规划、工具选择、参数构造、工具执行、结果整合、上下文更新和最终回答。任何一环出错，用户看到的都是最终回答错误。  </p><p> </p><p>以我的社保项目为例，如果 profile 抽错出生月份，规则引擎算得再准也会错；如果 plan 漏掉 RAG，回答就没有依据；如果 RAG 召回正确但模型引用错，最终仍然不可信。  </p><p> </p><p>所以我觉得做 Agent 最重要的是三件事：第一，工具和状态要结构化；第二，关键链路要有 guardrail；第三，要有分层评测和 trace，否则出了问题不知道从哪里修。</p></blockquote>","searchText":"Q52. Agent 的难点是什么？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 我认为 Agent 的难点不是单次回答，而是长链路可靠性。 > > 一个 Agent 请求里可能包含意图识别、任务规划、工具选择、参数构造、工具执行、结果整合、上下文更新和最终回答。任何一环出错，用户看到的都是最终回答错误。 > > 以我的社保项目为例，如果 profile 抽错出生月份，规则引擎算得再准也会错；如果 plan 漏掉 RAG，回答就没有依据；如果 RAG 召回正确但模型引用错，最终仍然不可信。 > > 所以我觉得做 Agent 最重要的是三件事：第一，工具和状态要结构化；第二，关键链路要有 guardrail；第三，要有分层评测和 trace，否则出了问题不知道从哪里修。"},{"id":"s58-q53-现阶段做-agent-最重要的是什么","index":57,"number":"Q53","title":"Q53. 现阶段做 Agent 最重要的是什么？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 我觉得最重要的是把模型的不确定性放在合适的位置。  \n>  \n> LLM 很适合做自然语言理解、意图识别、计划生成和回答组织，但不适合直接承担高风险事实判断、精确计算和权限操作。  \n>  \n> 所以在我的项目里，模型负责理解和编排，规则引擎负责政策数字，RAG 负责官方依据，安全校验负责边界控制。  \n>  \n> 很多 Agent demo 看起来能力很强，但真正落地时会卡在可评测、可追踪、可控权限和稳定性上。我会更重视这些工程问题。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我觉得最重要的是把模型的不确定性放在合适的位置。  </p><p> </p><p>LLM 很适合做自然语言理解、意图识别、计划生成和回答组织，但不适合直接承担高风险事实判断、精确计算和权限操作。  </p><p> </p><p>所以在我的项目里，模型负责理解和编排，规则引擎负责政策数字，RAG 负责官方依据，安全校验负责边界控制。  </p><p> </p><p>很多 Agent demo 看起来能力很强，但真正落地时会卡在可评测、可追踪、可控权限和稳定性上。我会更重视这些工程问题。</p></blockquote>","searchText":"Q53. 现阶段做 Agent 最重要的是什么？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 我觉得最重要的是把模型的不确定性放在合适的位置。 > > LLM 很适合做自然语言理解、意图识别、计划生成和回答组织，但不适合直接承担高风险事实判断、精确计算和权限操作。 > > 所以在我的项目里，模型负责理解和编排，规则引擎负责政策数字，RAG 负责官方依据，安全校验负责边界控制。 > > 很多 Agent demo 看起来能力很强，但真正落地时会卡在可评测、可追踪、可控权限和稳定性上。我会更重视这些工程问题。"},{"id":"s59-q54-怎么让模型老老实实调用工具-不瞎编参数","index":58,"number":"Q54","title":"Q54. 怎么让模型老老实实调用工具，不瞎编参数？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 不能只靠 prompt。我的做法是四层约束。  \n>  \n> 第一，工具 schema 清楚，字段类型和必填项明确。比如 computePlan 需要 birthYear、birthMonth、gender、region、paidMonths，缺字段就不能调用或只能返回 needs_more_info。  \n>  \n> 第二，Execution Plan 声明 required tools，系统可以检查是否漏调。  \n>  \n> 第三，工具参数来源要可追踪，区分用户显式信息、长期记忆和模型推断。高风险字段不能用模型推断直接填。  \n>  \n> 第四，最终回答校验。如果没有工具结果却出现政策数字，就拦截或重写。  \n>  \n> 这样模型即使想偷懒直接答，也会被流程约束住。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>不能只靠 prompt。我的做法是四层约束。  </p><p> </p><p>第一，工具 schema 清楚，字段类型和必填项明确。比如 computePlan 需要 birthYear、birthMonth、gender、region、paidMonths，缺字段就不能调用或只能返回 needs_more_info。  </p><p> </p><p>第二，Execution Plan 声明 required tools，系统可以检查是否漏调。  </p><p> </p><p>第三，工具参数来源要可追踪，区分用户显式信息、长期记忆和模型推断。高风险字段不能用模型推断直接填。  </p><p> </p><p>第四，最终回答校验。如果没有工具结果却出现政策数字，就拦截或重写。  </p><p> </p><p>这样模型即使想偷懒直接答，也会被流程约束住。</p></blockquote>","searchText":"Q54. 怎么让模型老老实实调用工具，不瞎编参数？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 不能只靠 prompt。我的做法是四层约束。 > > 第一，工具 schema 清楚，字段类型和必填项明确。比如 computePlan 需要 birthYear、birthMonth、gender、region、paidMonths，缺字段就不能调用或只能返回 needs_more_info。 > > 第二，Execution Plan 声明 required tools，系统可以检查是否漏调。 > > 第三，工具参数来源要可追踪，区分用户显式信息、长期记忆和模型推断。高风险字段不能用模型推断直接填。 > > 第四，最终回答校验。如果没有工具结果却出现政策数字，就拦截或重写。 > > 这样模型即使想偷懒直接答，也会被流程约束住。"},{"id":"s60-q55-prompt-你会怎么设计","index":59,"number":"Q55","title":"Q55. Prompt 你会怎么设计？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> Prompt 我会按模块拆，而不是写一大段泛泛要求。  \n>  \n> Planning prompt 重点约束意图分类、工具选择和缺信息判断；tool calling prompt 重点约束参数来源，不能编字段；answer prompt 重点要求只基于工具结果和 citations 回答；validator prompt 或程序校验重点检查 unsupported claim。  \n>  \n> 同时我会把硬约束尽量放到代码和 schema 里。比如“缺出生月份不能计算退休月份”不应该只写在 prompt 里，而应该由 required-info checker 和 answer validator 保证。  \n>  \n> Prompt 是引导，不是安全边界的唯一来源。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>Prompt 我会按模块拆，而不是写一大段泛泛要求。  </p><p> </p><p>Planning prompt 重点约束意图分类、工具选择和缺信息判断；tool calling prompt 重点约束参数来源，不能编字段；answer prompt 重点要求只基于工具结果和 citations 回答；validator prompt 或程序校验重点检查 unsupported claim。  </p><p> </p><p>同时我会把硬约束尽量放到代码和 schema 里。比如“缺出生月份不能计算退休月份”不应该只写在 prompt 里，而应该由 required-info checker 和 answer validator 保证。  </p><p> </p><p>Prompt 是引导，不是安全边界的唯一来源。</p></blockquote>","searchText":"Q55. Prompt 你会怎么设计？ 9. 泛 Agent 高频题：详细回答 逐字稿： > Prompt 我会按模块拆，而不是写一大段泛泛要求。 > > Planning prompt 重点约束意图分类、工具选择和缺信息判断；tool calling prompt 重点约束参数来源，不能编字段；answer prompt 重点要求只基于工具结果和 citations 回答；validator prompt 或程序校验重点检查 unsupported claim。 > > 同时我会把硬约束尽量放到代码和 schema 里。比如“缺出生月份不能计算退休月份”不应该只写在 prompt 里，而应该由 required-info checker 和 answer validator 保证。 > > Prompt 是引导，不是安全边界的唯一来源。"},{"id":"s61-q56-上下文工程是什么","index":60,"number":"Q56","title":"Q56. 上下文工程是什么？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 上下文工程不是简单把历史消息都塞进模型，而是决定哪些信息以什么形式进入模型上下文。  \n>  \n> 在我的项目里，上下文分为最近对话、结构化 profile、会话摘要、工具 trace、RAG citations。最近对话用于理解当前指代，profile 用于个人化测算，summary 用于保留历史任务背景，tool trace 用于保证回答一致性，citations 用于政策依据。  \n>  \n> 如果不做上下文工程，长对话里很容易出现两类问题：要么关键信息丢失，比如出生月份忘了；要么噪声太多，模型把旧信息或推断信息当事实。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>上下文工程不是简单把历史消息都塞进模型，而是决定哪些信息以什么形式进入模型上下文。  </p><p> </p><p>在我的项目里，上下文分为最近对话、结构化 profile、会话摘要、工具 trace、RAG citations。最近对话用于理解当前指代，profile 用于个人化测算，summary 用于保留历史任务背景，tool trace 用于保证回答一致性，citations 用于政策依据。  </p><p> </p><p>如果不做上下文工程，长对话里很容易出现两类问题：要么关键信息丢失，比如出生月份忘了；要么噪声太多，模型把旧信息或推断信息当事实。</p></blockquote>","searchText":"Q56. 上下文工程是什么？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 上下文工程不是简单把历史消息都塞进模型，而是决定哪些信息以什么形式进入模型上下文。 > > 在我的项目里，上下文分为最近对话、结构化 profile、会话摘要、工具 trace、RAG citations。最近对话用于理解当前指代，profile 用于个人化测算，summary 用于保留历史任务背景，tool trace 用于保证回答一致性，citations 用于政策依据。 > > 如果不做上下文工程，长对话里很容易出现两类问题：要么关键信息丢失，比如出生月份忘了；要么噪声太多，模型把旧信息或推断信息当事实。"},{"id":"s62-q57-rag-微调-规则分别适合什么","index":61,"number":"Q57","title":"Q57. RAG、微调、规则分别适合什么？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> RAG 适合知识更新频繁、需要引用来源的内容，比如政策文件。微调适合稳定的行为模式，比如输出格式、工具调用风格、领域表达习惯。规则适合确定性计算和强约束逻辑，比如退休年龄、最低缴费月数、缺口计算。  \n>  \n> 我的项目里，政策依据用 RAG，因为政策会更新且需要官方来源；个人化数字用规则，因为它必须确定；LLM 主要负责理解和表达。如果后续做 SFT，我会优先用高质量工具调用轨迹来提升 plan 和 tool arguments 的稳定性，而不是让模型记政策。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>RAG 适合知识更新频繁、需要引用来源的内容，比如政策文件。微调适合稳定的行为模式，比如输出格式、工具调用风格、领域表达习惯。规则适合确定性计算和强约束逻辑，比如退休年龄、最低缴费月数、缺口计算。  </p><p> </p><p>我的项目里，政策依据用 RAG，因为政策会更新且需要官方来源；个人化数字用规则，因为它必须确定；LLM 主要负责理解和表达。如果后续做 SFT，我会优先用高质量工具调用轨迹来提升 plan 和 tool arguments 的稳定性，而不是让模型记政策。</p></blockquote>","searchText":"Q57. RAG、微调、规则分别适合什么？ 9. 泛 Agent 高频题：详细回答 逐字稿： > RAG 适合知识更新频繁、需要引用来源的内容，比如政策文件。微调适合稳定的行为模式，比如输出格式、工具调用风格、领域表达习惯。规则适合确定性计算和强约束逻辑，比如退休年龄、最低缴费月数、缺口计算。 > > 我的项目里，政策依据用 RAG，因为政策会更新且需要官方来源；个人化数字用规则，因为它必须确定；LLM 主要负责理解和表达。如果后续做 SFT，我会优先用高质量工具调用轨迹来提升 plan 和 tool arguments 的稳定性，而不是让模型记政策。"},{"id":"s63-q58-reward-如果让你设计-你怎么设计","index":62,"number":"Q58","title":"Q58. Reward 如果让你设计，你怎么设计？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 如果做 Agent reward，我不会只奖励最终答案正确，而会加入过程 reward。  \n>  \n> 正奖励包括：意图识别正确、required tool 调用完整、工具参数正确、缺信息时正确追问、RAG 命中相关官方来源、最终 claim 有支撑。  \n>  \n> 负奖励包括：无依据政策数字、伪造 citation、缺字段仍然测算、调用不必要工具、忽略工具失败、把模型推断写入长期记忆。  \n>  \n> 这样 reward 才能对齐可信政策 Agent 的目标。否则只奖励最终答案，模型可能学会绕过工具，用记忆或猜测拿分，这就是 reward hacking。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>如果做 Agent reward，我不会只奖励最终答案正确，而会加入过程 reward。  </p><p> </p><p>正奖励包括：意图识别正确、required tool 调用完整、工具参数正确、缺信息时正确追问、RAG 命中相关官方来源、最终 claim 有支撑。  </p><p> </p><p>负奖励包括：无依据政策数字、伪造 citation、缺字段仍然测算、调用不必要工具、忽略工具失败、把模型推断写入长期记忆。  </p><p> </p><p>这样 reward 才能对齐可信政策 Agent 的目标。否则只奖励最终答案，模型可能学会绕过工具，用记忆或猜测拿分，这就是 reward hacking。</p></blockquote>","searchText":"Q58. Reward 如果让你设计，你怎么设计？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 如果做 Agent reward，我不会只奖励最终答案正确，而会加入过程 reward。 > > 正奖励包括：意图识别正确、required tool 调用完整、工具参数正确、缺信息时正确追问、RAG 命中相关官方来源、最终 claim 有支撑。 > > 负奖励包括：无依据政策数字、伪造 citation、缺字段仍然测算、调用不必要工具、忽略工具失败、把模型推断写入长期记忆。 > > 这样 reward 才能对齐可信政策 Agent 的目标。否则只奖励最终答案，模型可能学会绕过工具，用记忆或猜测拿分，这就是 reward hacking。"},{"id":"s64-q59-强化学习在-agent-里有什么挑战","index":63,"number":"Q59","title":"Q59. 强化学习在 Agent 里有什么挑战？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 主要挑战是长链路信用分配和 reward hacking。  \n>  \n> 一个最终回答错了，可能是 plan 错、工具参数错、RAG 召回错、规则版本错、回答整合错。只看最终 reward 很难知道该优化哪一步。  \n>  \n> 另外，如果 reward 设计不细，模型可能学会表面策略。比如为了拿高分，强行输出看似完整的回答，但没有真实 citation；或者为了避免错误，过度追问，影响体验。  \n>  \n> 所以我认为 Agent 在做 RL 前，要先有结构化 trace 和分层评测，这样 reward 才能更准确地绑定到中间行为。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>主要挑战是长链路信用分配和 reward hacking。  </p><p> </p><p>一个最终回答错了，可能是 plan 错、工具参数错、RAG 召回错、规则版本错、回答整合错。只看最终 reward 很难知道该优化哪一步。  </p><p> </p><p>另外，如果 reward 设计不细，模型可能学会表面策略。比如为了拿高分，强行输出看似完整的回答，但没有真实 citation；或者为了避免错误，过度追问，影响体验。  </p><p> </p><p>所以我认为 Agent 在做 RL 前，要先有结构化 trace 和分层评测，这样 reward 才能更准确地绑定到中间行为。</p></blockquote>","searchText":"Q59. 强化学习在 Agent 里有什么挑战？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 主要挑战是长链路信用分配和 reward hacking。 > > 一个最终回答错了，可能是 plan 错、工具参数错、RAG 召回错、规则版本错、回答整合错。只看最终 reward 很难知道该优化哪一步。 > > 另外，如果 reward 设计不细，模型可能学会表面策略。比如为了拿高分，强行输出看似完整的回答，但没有真实 citation；或者为了避免错误，过度追问，影响体验。 > > 所以我认为 Agent 在做 RL 前，要先有结构化 trace 和分层评测，这样 reward 才能更准确地绑定到中间行为。"},{"id":"s65-q60-你怎么看-agent-应用开发和算法岗位的区别","index":64,"number":"Q60","title":"Q60. 你怎么看 Agent 应用开发和算法岗位的区别？","chapterId":"s10-9-泛-agent-高频题-详细回答","chapterTitle":"9. 泛 Agent 高频题：详细回答","markdown":"逐字稿：\n\n> 算法岗位更关注模型本身，比如训练、推理优化、对齐和评测方法；Agent 应用开发更关注如何把模型接入真实业务流程，包括工具设计、状态管理、RAG、权限、安全、可观测性和产品体验。  \n>  \n> 我的项目更偏 Agent 应用开发，因为重点不是训练一个新模型，而是把 LLM、规则引擎、RAG、长期记忆和 guardrail 组合成一个可信系统。  \n>  \n> 这类工作要求既理解模型能力边界，也要有工程判断：什么交给模型，什么交给规则，什么必须评测，什么必须兜底。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>算法岗位更关注模型本身，比如训练、推理优化、对齐和评测方法；Agent 应用开发更关注如何把模型接入真实业务流程，包括工具设计、状态管理、RAG、权限、安全、可观测性和产品体验。  </p><p> </p><p>我的项目更偏 Agent 应用开发，因为重点不是训练一个新模型，而是把 LLM、规则引擎、RAG、长期记忆和 guardrail 组合成一个可信系统。  </p><p> </p><p>这类工作要求既理解模型能力边界，也要有工程判断：什么交给模型，什么交给规则，什么必须评测，什么必须兜底。</p></blockquote>","searchText":"Q60. 你怎么看 Agent 应用开发和算法岗位的区别？ 9. 泛 Agent 高频题：详细回答 逐字稿： > 算法岗位更关注模型本身，比如训练、推理优化、对齐和评测方法；Agent 应用开发更关注如何把模型接入真实业务流程，包括工具设计、状态管理、RAG、权限、安全、可观测性和产品体验。 > > 我的项目更偏 Agent 应用开发，因为重点不是训练一个新模型，而是把 LLM、规则引擎、RAG、长期记忆和 guardrail 组合成一个可信系统。 > > 这类工作要求既理解模型能力边界，也要有工程判断：什么交给模型，什么交给规则，什么必须评测，什么必须兜底。"},{"id":"s66-q61-你这个是不是只是-demo","index":65,"number":"Q61","title":"Q61. 你这个是不是只是 demo？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我会承认它还不是完整商业化产品，但它不是只做了一个聊天 UI 的 demo。  \n>  \n> 它覆盖了可信政策 Agent 的核心链路：Plan-and-Execute、画像抽取、信息完整性校验、规则引擎、RAG、长期记忆、上下文压缩和评测。  \n>  \n> 如果和生产系统相比，后续还要加强线上观测、权限体系、政策自动更新和人工复核。但从 Agent 应用开发角度，它已经体现了关键工程能力：流程可控、工具可追踪、结果可校验、bad case 可回归。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会承认它还不是完整商业化产品，但它不是只做了一个聊天 UI 的 demo。  </p><p> </p><p>它覆盖了可信政策 Agent 的核心链路：Plan-and-Execute、画像抽取、信息完整性校验、规则引擎、RAG、长期记忆、上下文压缩和评测。  </p><p> </p><p>如果和生产系统相比，后续还要加强线上观测、权限体系、政策自动更新和人工复核。但从 Agent 应用开发角度，它已经体现了关键工程能力：流程可控、工具可追踪、结果可校验、bad case 可回归。</p></blockquote>","searchText":"Q61. 你这个是不是只是 demo？ 10. 尖锐问题防守 逐字稿： > 我会承认它还不是完整商业化产品，但它不是只做了一个聊天 UI 的 demo。 > > 它覆盖了可信政策 Agent 的核心链路：Plan-and-Execute、画像抽取、信息完整性校验、规则引擎、RAG、长期记忆、上下文压缩和评测。 > > 如果和生产系统相比，后续还要加强线上观测、权限体系、政策自动更新和人工复核。但从 Agent 应用开发角度，它已经体现了关键工程能力：流程可控、工具可追踪、结果可校验、bad case 可回归。"},{"id":"s67-q62-你是不是为了简历数字调整测试集","index":66,"number":"Q62","title":"Q62. 你是不是为了简历数字调整测试集？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我会先澄清，简历里的 94% 是 RAG source-level Recall@3，不是最终回答准确率。  \n>  \n> 然后我会说明 benchmark 是按场景风险分层构造的，不是为了得到某个数字。easy set 用来防回归，分数接近 100% 正常；realistic set 会加入口语化、多轮省略、相似政策、过期政策和办理类问题，分数有区分度更合理。  \n>  \n> 如果一个 benchmark 永远 100%，我反而会怀疑它只覆盖了标准问法。可信的评测不是追求满分，而是能暴露真实问题。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会先澄清，简历里的 94% 是 RAG source-level Recall@3，不是最终回答准确率。  </p><p> </p><p>然后我会说明 benchmark 是按场景风险分层构造的，不是为了得到某个数字。easy set 用来防回归，分数接近 100% 正常；realistic set 会加入口语化、多轮省略、相似政策、过期政策和办理类问题，分数有区分度更合理。  </p><p> </p><p>如果一个 benchmark 永远 100%，我反而会怀疑它只覆盖了标准问法。可信的评测不是追求满分，而是能暴露真实问题。</p></blockquote>","searchText":"Q62. 你是不是为了简历数字调整测试集？ 10. 尖锐问题防守 逐字稿： > 我会先澄清，简历里的 94% 是 RAG source-level Recall@3，不是最终回答准确率。 > > 然后我会说明 benchmark 是按场景风险分层构造的，不是为了得到某个数字。easy set 用来防回归，分数接近 100% 正常；realistic set 会加入口语化、多轮省略、相似政策、过期政策和办理类问题，分数有区分度更合理。 > > 如果一个 benchmark 永远 100%，我反而会怀疑它只覆盖了标准问法。可信的评测不是追求满分，而是能暴露真实问题。"},{"id":"s68-q63-如果面试官说-这不就是规则系统套壳-llm","index":67,"number":"Q63","title":"Q63. 如果面试官说“这不就是规则系统套壳 LLM”？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我会说，规则系统承担高风险数字计算是有意设计，不是缺点。  \n>  \n> 如果只做规则系统，用户需要像填表一样提供完整字段，系统也很难回答政策解释和多轮追问。LLM 的价值在于理解用户自然语言、抽取画像、规划工具链路、整合政策依据并生成可读回答。  \n>  \n> 如果只做 LLM，又会有政策数字幻觉和时效性问题。这个项目的核心正是把 LLM 的灵活性和规则系统的确定性结合起来。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会说，规则系统承担高风险数字计算是有意设计，不是缺点。  </p><p> </p><p>如果只做规则系统，用户需要像填表一样提供完整字段，系统也很难回答政策解释和多轮追问。LLM 的价值在于理解用户自然语言、抽取画像、规划工具链路、整合政策依据并生成可读回答。  </p><p> </p><p>如果只做 LLM，又会有政策数字幻觉和时效性问题。这个项目的核心正是把 LLM 的灵活性和规则系统的确定性结合起来。</p></blockquote>","searchText":"Q63. 如果面试官说“这不就是规则系统套壳 LLM”？ 10. 尖锐问题防守 逐字稿： > 我会说，规则系统承担高风险数字计算是有意设计，不是缺点。 > > 如果只做规则系统，用户需要像填表一样提供完整字段，系统也很难回答政策解释和多轮追问。LLM 的价值在于理解用户自然语言、抽取画像、规划工具链路、整合政策依据并生成可读回答。 > > 如果只做 LLM，又会有政策数字幻觉和时效性问题。这个项目的核心正是把 LLM 的灵活性和规则系统的确定性结合起来。"},{"id":"s69-q64-如果面试官说-这不像-agent","index":68,"number":"Q64","title":"Q64. 如果面试官说“这不像 Agent”？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我会回到 Agent 的定义。Agent 不等于无限自主，也不等于必须多智能体。它的关键是能围绕目标规划、调用工具、维护状态并根据结果完成任务。  \n>  \n> 我的系统会根据用户意图生成 Execution Plan，调用画像抽取、规则引擎、RAG 和安全校验，并在长对话中维护用户画像。所以它是一个受约束的任务型 Agent。  \n>  \n> 在政策场景里，Agent 不应该追求最大自由度，而应该追求可控自主。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会回到 Agent 的定义。Agent 不等于无限自主，也不等于必须多智能体。它的关键是能围绕目标规划、调用工具、维护状态并根据结果完成任务。  </p><p> </p><p>我的系统会根据用户意图生成 Execution Plan，调用画像抽取、规则引擎、RAG 和安全校验，并在长对话中维护用户画像。所以它是一个受约束的任务型 Agent。  </p><p> </p><p>在政策场景里，Agent 不应该追求最大自由度，而应该追求可控自主。</p></blockquote>","searchText":"Q64. 如果面试官说“这不像 Agent”？ 10. 尖锐问题防守 逐字稿： > 我会回到 Agent 的定义。Agent 不等于无限自主，也不等于必须多智能体。它的关键是能围绕目标规划、调用工具、维护状态并根据结果完成任务。 > > 我的系统会根据用户意图生成 Execution Plan，调用画像抽取、规则引擎、RAG 和安全校验，并在长对话中维护用户画像。所以它是一个受约束的任务型 Agent。 > > 在政策场景里，Agent 不应该追求最大自由度，而应该追求可控自主。"},{"id":"s70-q65-如果没有真实用户数据-怎么说","index":69,"number":"Q65","title":"Q65. 如果没有真实用户数据，怎么说？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我会如实说目前主要是离线场景评测和模拟真实问法，没有大规模真实用户数据。  \n>  \n> 但我会补充，我在评测集构造上尽量模拟真实输入，包括口语化、多轮、省略、相似政策和缺信息场景。如果后续上线，会把真实日志脱敏后回流到 benchmark，并结合人工复核做线上 bad case 闭环。  \n>  \n> 这样回答比较稳，不会把离线效果包装成线上效果。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会如实说目前主要是离线场景评测和模拟真实问法，没有大规模真实用户数据。  </p><p> </p><p>但我会补充，我在评测集构造上尽量模拟真实输入，包括口语化、多轮、省略、相似政策和缺信息场景。如果后续上线，会把真实日志脱敏后回流到 benchmark，并结合人工复核做线上 bad case 闭环。  </p><p> </p><p>这样回答比较稳，不会把离线效果包装成线上效果。</p></blockquote>","searchText":"Q65. 如果没有真实用户数据，怎么说？ 10. 尖锐问题防守 逐字稿： > 我会如实说目前主要是离线场景评测和模拟真实问法，没有大规模真实用户数据。 > > 但我会补充，我在评测集构造上尽量模拟真实输入，包括口语化、多轮、省略、相似政策和缺信息场景。如果后续上线，会把真实日志脱敏后回流到 benchmark，并结合人工复核做线上 bad case 闭环。 > > 这样回答比较稳，不会把离线效果包装成线上效果。"},{"id":"s71-q66-如果面试官问-最大的不足是什么","index":70,"number":"Q66","title":"Q66. 如果面试官问“最大的不足是什么”？","chapterId":"s11-10-尖锐问题防守","chapterTitle":"10. 尖锐问题防守","markdown":"逐字稿：\n\n> 我认为最大不足是最终自然语言回答的 claim-level 自动评估还可以更系统。  \n>  \n> 当前规则计算、RAG 召回和工具链路相对容易做程序化评测，但最终回答是一段自然语言，里面可能有些 claim 有依据，有些没有依据。  \n>  \n> 后续我会重点做 claim-level evaluation 和线上 bad case 回流，把回答拆成事实声明，逐条检查是否由规则结果、用户显式信息或 citation 支撑。这个能力会直接决定政策 Agent 的可信上限。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我认为最大不足是最终自然语言回答的 claim-level 自动评估还可以更系统。  </p><p> </p><p>当前规则计算、RAG 召回和工具链路相对容易做程序化评测，但最终回答是一段自然语言，里面可能有些 claim 有依据，有些没有依据。  </p><p> </p><p>后续我会重点做 claim-level evaluation 和线上 bad case 回流，把回答拆成事实声明，逐条检查是否由规则结果、用户显式信息或 citation 支撑。这个能力会直接决定政策 Agent 的可信上限。</p></blockquote>","searchText":"Q66. 如果面试官问“最大的不足是什么”？ 10. 尖锐问题防守 逐字稿： > 我认为最大不足是最终自然语言回答的 claim-level 自动评估还可以更系统。 > > 当前规则计算、RAG 召回和工具链路相对容易做程序化评测，但最终回答是一段自然语言，里面可能有些 claim 有依据，有些没有依据。 > > 后续我会重点做 claim-level evaluation 和线上 bad case 回流，把回答拆成事实声明，逐条检查是否由规则结果、用户显式信息或 citation 支撑。这个能力会直接决定政策 Agent 的可信上限。"},{"id":"s72-q67-如果你真的把评测做到生产级-你会怎么介绍","index":71,"number":"Q67","title":"Q67. 如果你真的把评测做到生产级，你会怎么介绍？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 如果做到生产级，我会说我们建立了一套面向政策 Agent 的分层评测体系。它不是只看最终答案，而是覆盖 plan、tool、rule、RAG、answer、guardrail 和线上观测。  \n>  \n> 离线侧有模块评测和端到端评测。模块评测负责定位问题，端到端评测负责验证完整任务链路。回答层做 claim-level evaluation，确保每条政策数字和个人化结论都有工具结果或官方 citation 支撑。  \n>  \n> 线上侧记录 trace，监控工具失败率、RAG 降级率、guardrail 触发率、用户追问率和人工复核失败率。线上 bad case 脱敏后回流到离线 benchmark。  \n>  \n> 这套体系的目标是让 Agent 可验证、可追溯、可回归，而不是只给一个漂亮的平均分。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>如果做到生产级，我会说我们建立了一套面向政策 Agent 的分层评测体系。它不是只看最终答案，而是覆盖 plan、tool、rule、RAG、answer、guardrail 和线上观测。  </p><p> </p><p>离线侧有模块评测和端到端评测。模块评测负责定位问题，端到端评测负责验证完整任务链路。回答层做 claim-level evaluation，确保每条政策数字和个人化结论都有工具结果或官方 citation 支撑。  </p><p> </p><p>线上侧记录 trace，监控工具失败率、RAG 降级率、guardrail 触发率、用户追问率和人工复核失败率。线上 bad case 脱敏后回流到离线 benchmark。  </p><p> </p><p>这套体系的目标是让 Agent 可验证、可追溯、可回归，而不是只给一个漂亮的平均分。</p></blockquote>","searchText":"Q67. 如果你真的把评测做到生产级，你会怎么介绍？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 如果做到生产级，我会说我们建立了一套面向政策 Agent 的分层评测体系。它不是只看最终答案，而是覆盖 plan、tool、rule、RAG、answer、guardrail 和线上观测。 > > 离线侧有模块评测和端到端评测。模块评测负责定位问题，端到端评测负责验证完整任务链路。回答层做 claim-level evaluation，确保每条政策数字和个人化结论都有工具结果或官方 citation 支撑。 > > 线上侧记录 trace，监控工具失败率、RAG 降级率、guardrail 触发率、用户追问率和人工复核失败率。线上 bad case 脱敏后回流到离线 benchmark。 > > 这套体系的目标是让 Agent 可验证、可追溯、可回归，而不是只给一个漂亮的平均分。"},{"id":"s73-q68-生产级评测报告长什么样","index":72,"number":"Q68","title":"Q68. 生产级评测报告长什么样？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 我会按场景、模块和风险等级展示。  \n>  \n> 场景维度包括标准政策问答、多轮个人化测算、缺信息追问、相似政策区分、过期政策、对抗输入。模块维度包括 plan、tool、rule、RAG、answer、guardrail。风险维度区分低风险解释、高风险政策数字和资格判断。  \n>  \n> 报告会给出 Intent Accuracy、Tool Argument Accuracy、Rule Accuracy、Source Recall@3、RelevantOfficialHit@3、Claim Support Rate、Unsafe Answer Rate，同时列出 bad case breakdown。  \n>  \n> 我希望评测报告能直接指导迭代，而不是只告诉我“总体 90 分”。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会按场景、模块和风险等级展示。  </p><p> </p><p>场景维度包括标准政策问答、多轮个人化测算、缺信息追问、相似政策区分、过期政策、对抗输入。模块维度包括 plan、tool、rule、RAG、answer、guardrail。风险维度区分低风险解释、高风险政策数字和资格判断。  </p><p> </p><p>报告会给出 Intent Accuracy、Tool Argument Accuracy、Rule Accuracy、Source Recall@3、RelevantOfficialHit@3、Claim Support Rate、Unsafe Answer Rate，同时列出 bad case breakdown。  </p><p> </p><p>我希望评测报告能直接指导迭代，而不是只告诉我“总体 90 分”。</p></blockquote>","searchText":"Q68. 生产级评测报告长什么样？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 我会按场景、模块和风险等级展示。 > > 场景维度包括标准政策问答、多轮个人化测算、缺信息追问、相似政策区分、过期政策、对抗输入。模块维度包括 plan、tool、rule、RAG、answer、guardrail。风险维度区分低风险解释、高风险政策数字和资格判断。 > > 报告会给出 Intent Accuracy、Tool Argument Accuracy、Rule Accuracy、Source Recall@3、RelevantOfficialHit@3、Claim Support Rate、Unsafe Answer Rate，同时列出 bad case breakdown。 > > 我希望评测报告能直接指导迭代，而不是只告诉我“总体 90 分”。"},{"id":"s74-q69-如何做线上观测","index":73,"number":"Q69","title":"Q69. 如何做线上观测？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 线上观测首先要记录完整 trace，包括用户意图、profile、Execution Plan、工具调用、工具状态、规则结果、citations、guardrail 和 final answer。  \n>  \n> 指标上我会看 tool error rate、rag degraded rate、citation official rate、guardrail trigger rate、用户追问率、人工转接率和人工复核失败率。  \n>  \n> 比如用户频繁追问“依据是什么”，可能说明 citation 展示不足；RAG degraded rate 升高，可能说明向量检索或索引有问题；guardrail trigger rate 异常升高，可能说明 prompt 或 tool call 退化。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>线上观测首先要记录完整 trace，包括用户意图、profile、Execution Plan、工具调用、工具状态、规则结果、citations、guardrail 和 final answer。  </p><p> </p><p>指标上我会看 tool error rate、rag degraded rate、citation official rate、guardrail trigger rate、用户追问率、人工转接率和人工复核失败率。  </p><p> </p><p>比如用户频繁追问“依据是什么”，可能说明 citation 展示不足；RAG degraded rate 升高，可能说明向量检索或索引有问题；guardrail trigger rate 异常升高，可能说明 prompt 或 tool call 退化。</p></blockquote>","searchText":"Q69. 如何做线上观测？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 线上观测首先要记录完整 trace，包括用户意图、profile、Execution Plan、工具调用、工具状态、规则结果、citations、guardrail 和 final answer。 > > 指标上我会看 tool error rate、rag degraded rate、citation official rate、guardrail trigger rate、用户追问率、人工转接率和人工复核失败率。 > > 比如用户频繁追问“依据是什么”，可能说明 citation 展示不足；RAG degraded rate 升高，可能说明向量检索或索引有问题；guardrail trigger rate 异常升高，可能说明 prompt 或 tool call 退化。"},{"id":"s75-q70-如何把-bad-case-变成持续改进","index":74,"number":"Q70","title":"Q70. 如何把 bad case 变成持续改进？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 我会建立 bad case 闭环。第一，线上日志脱敏。第二，按 profile、plan、tool、rule、RAG、answer、guardrail 做归因。第三，高风险样本人工复核。第四，修复对应模块。第五，把 case 回流到离线 benchmark，防止同类问题复发。  \n>  \n> 这样每次线上问题都不是一次性修补，而是变成评测资产。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会建立 bad case 闭环。第一，线上日志脱敏。第二，按 profile、plan、tool、rule、RAG、answer、guardrail 做归因。第三，高风险样本人工复核。第四，修复对应模块。第五，把 case 回流到离线 benchmark，防止同类问题复发。  </p><p> </p><p>这样每次线上问题都不是一次性修补，而是变成评测资产。</p></blockquote>","searchText":"Q70. 如何把 bad case 变成持续改进？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 我会建立 bad case 闭环。第一，线上日志脱敏。第二，按 profile、plan、tool、rule、RAG、answer、guardrail 做归因。第三，高风险样本人工复核。第四，修复对应模块。第五，把 case 回流到离线 benchmark，防止同类问题复发。 > > 这样每次线上问题都不是一次性修补，而是变成评测资产。"},{"id":"s76-q71-如果-rag-召回高但最终回答错-怎么处理","index":75,"number":"Q71","title":"Q71. 如果 RAG 召回高但最终回答错，怎么处理？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 这说明召回不是瓶颈，问题可能在 answer grounding 或 claim support。  \n>  \n> 我会检查 citation 是否被正确使用，回答里的 claim 是否和 citation 对应。如果检索结果里有正确政策，但模型没有引用或推导错，就需要加强回答 prompt、结构化 citation 输入和 answer validator。  \n>  \n> 所以 RAG Recall 高只是材料给对了，不代表最终回答一定对。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>这说明召回不是瓶颈，问题可能在 answer grounding 或 claim support。  </p><p> </p><p>我会检查 citation 是否被正确使用，回答里的 claim 是否和 citation 对应。如果检索结果里有正确政策，但模型没有引用或推导错，就需要加强回答 prompt、结构化 citation 输入和 answer validator。  </p><p> </p><p>所以 RAG Recall 高只是材料给对了，不代表最终回答一定对。</p></blockquote>","searchText":"Q71. 如果 RAG 召回高但最终回答错，怎么处理？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 这说明召回不是瓶颈，问题可能在 answer grounding 或 claim support。 > > 我会检查 citation 是否被正确使用，回答里的 claim 是否和 citation 对应。如果检索结果里有正确政策，但模型没有引用或推导错，就需要加强回答 prompt、结构化 citation 输入和 answer validator。 > > 所以 RAG Recall 高只是材料给对了，不代表最终回答一定对。"},{"id":"s77-q72-如果缺信息追问太多影响体验怎么办","index":76,"number":"Q72","title":"Q72. 如果缺信息追问太多影响体验怎么办？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 我会按风险分级处理。影响个人化政策数字的字段必须追问，比如出生月份、缴费月数、女性身份类型。  \n>  \n> 但不影响核心结论的字段，可以先给通用政策解释，再提示“如果你补充某某信息，我可以继续测算”。  \n>  \n> 也就是说，不是所有缺信息都阻断，而是高风险结论必须阻断。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会按风险分级处理。影响个人化政策数字的字段必须追问，比如出生月份、缴费月数、女性身份类型。  </p><p> </p><p>但不影响核心结论的字段，可以先给通用政策解释，再提示“如果你补充某某信息，我可以继续测算”。  </p><p> </p><p>也就是说，不是所有缺信息都阻断，而是高风险结论必须阻断。</p></blockquote>","searchText":"Q72. 如果缺信息追问太多影响体验怎么办？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 我会按风险分级处理。影响个人化政策数字的字段必须追问，比如出生月份、缴费月数、女性身份类型。 > > 但不影响核心结论的字段，可以先给通用政策解释，再提示“如果你补充某某信息，我可以继续测算”。 > > 也就是说，不是所有缺信息都阻断，而是高风险结论必须阻断。"},{"id":"s78-q73-如何校准-llm-judge","index":77,"number":"Q73","title":"Q73. 如何校准 LLM judge？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 我会准备人工标注的 gold set，包含 supported、unsupported、contradicted、not_applicable 几类 claim。然后比较 LLM judge 和人工标注的一致性，看误判集中在哪些类型。  \n>  \n> 对政策数字类 claim，如果 LLM judge 和程序化校验冲突，以程序化校验为准。LLM judge 只能辅助判断自然语言表达，不应该裁决确定性政策数字。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会准备人工标注的 gold set，包含 supported、unsupported、contradicted、not_applicable 几类 claim。然后比较 LLM judge 和人工标注的一致性，看误判集中在哪些类型。  </p><p> </p><p>对政策数字类 claim，如果 LLM judge 和程序化校验冲突，以程序化校验为准。LLM judge 只能辅助判断自然语言表达，不应该裁决确定性政策数字。</p></blockquote>","searchText":"Q73. 如何校准 LLM judge？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 我会准备人工标注的 gold set，包含 supported、unsupported、contradicted、not_applicable 几类 claim。然后比较 LLM judge 和人工标注的一致性，看误判集中在哪些类型。 > > 对政策数字类 claim，如果 LLM judge 和程序化校验冲突，以程序化校验为准。LLM judge 只能辅助判断自然语言表达，不应该裁决确定性政策数字。"},{"id":"s79-q74-如何设置发布门禁","index":78,"number":"Q74","title":"Q74. 如何设置发布门禁？","chapterId":"s12-11-如果做到最好-生产级评测-15-问逐字稿","chapterTitle":"11. 如果做到最好：生产级评测 15 问逐字稿","markdown":"逐字稿：\n\n> 我会设置多层门禁。规则引擎回归必须 100% 通过；guardrail 高风险 case 必须 100% 通过；轻量 E2E 必须全过；RAG realistic benchmark 不能低于上一个稳定版本阈值；Unsafe Answer Rate 必须为 0 或低于极严格阈值。  \n>  \n> 如果新版本平均分提高，但安全指标退化，我不会放量。政策类 Agent 里安全边界优先级最高。","contentHtml":"<p>逐字稿：</p>\n<blockquote><p>我会设置多层门禁。规则引擎回归必须 100% 通过；guardrail 高风险 case 必须 100% 通过；轻量 E2E 必须全过；RAG realistic benchmark 不能低于上一个稳定版本阈值；Unsafe Answer Rate 必须为 0 或低于极严格阈值。  </p><p> </p><p>如果新版本平均分提高，但安全指标退化，我不会放量。政策类 Agent 里安全边界优先级最高。</p></blockquote>","searchText":"Q74. 如何设置发布门禁？ 11. 如果做到最好：生产级评测 15 问逐字稿 逐字稿： > 我会设置多层门禁。规则引擎回归必须 100% 通过；guardrail 高风险 case 必须 100% 通过；轻量 E2E 必须全过；RAG realistic benchmark 不能低于上一个稳定版本阈值；Unsafe Answer Rate 必须为 0 或低于极严格阈值。 > > 如果新版本平均分提高，但安全指标退化，我不会放量。政策类 Agent 里安全边界优先级最高。"},{"id":"s80-项目一句话","index":79,"number":"项目一句话","title":"项目一句话","chapterId":"s13-12-快速背诵版","chapterTitle":"12. 快速背诵版","markdown":"> 这是一个面向社保退休规划咨询的可信政策 Agent，通过 Plan-and-Execute 编排画像抽取、信息校验、规则引擎、政策 RAG 和回答安全校验，让个人化政策数字可计算、政策依据可追溯、缺信息场景可拦截。","contentHtml":"<blockquote><p>这是一个面向社保退休规划咨询的可信政策 Agent，通过 Plan-and-Execute 编排画像抽取、信息校验、规则引擎、政策 RAG 和回答安全校验，让个人化政策数字可计算、政策依据可追溯、缺信息场景可拦截。</p></blockquote>","searchText":"项目一句话 12. 快速背诵版 > 这是一个面向社保退休规划咨询的可信政策 Agent，通过 Plan-and-Execute 编排画像抽取、信息校验、规则引擎、政策 RAG 和回答安全校验，让个人化政策数字可计算、政策依据可追溯、缺信息场景可拦截。"},{"id":"s81-架构一句话","index":80,"number":"架构一句话","title":"架构一句话","chapterId":"s13-12-快速背诵版","chapterTitle":"12. 快速背诵版","markdown":"> LLM 负责理解意图和编排流程，规则引擎负责政策数字，RAG 负责官方依据，长期记忆负责跨轮画像恢复，guardrail 负责防止无依据输出。","contentHtml":"<blockquote><p>LLM 负责理解意图和编排流程，规则引擎负责政策数字，RAG 负责官方依据，长期记忆负责跨轮画像恢复，guardrail 负责防止无依据输出。</p></blockquote>","searchText":"架构一句话 12. 快速背诵版 > LLM 负责理解意图和编排流程，规则引擎负责政策数字，RAG 负责官方依据，长期记忆负责跨轮画像恢复，guardrail 负责防止无依据输出。"},{"id":"s82-评测一句话","index":81,"number":"评测一句话","title":"评测一句话","chapterId":"s13-12-快速背诵版","chapterTitle":"12. 快速背诵版","markdown":"> 我的评测不是只看最终答案，而是分层评 plan、tool、rule、RAG、answer 和 guardrail，再用端到端 case 和 claim-level evaluation 验证完整链路可信。","contentHtml":"<blockquote><p>我的评测不是只看最终答案，而是分层评 plan、tool、rule、RAG、answer 和 guardrail，再用端到端 case 和 claim-level evaluation 验证完整链路可信。</p></blockquote>","searchText":"评测一句话 12. 快速背诵版 > 我的评测不是只看最终答案，而是分层评 plan、tool、rule、RAG、answer 和 guardrail，再用端到端 case 和 claim-level evaluation 验证完整链路可信。"},{"id":"s83-bad-case-一句话","index":82,"number":"Bad Case 一句话","title":"Bad Case 一句话","chapterId":"s13-12-快速背诵版","chapterTitle":"12. 快速背诵版","markdown":"> 最典型的 bad case 是多轮对话最后一句太短导致检索 query 信息不足，我通过结合结构化 profile 和会话摘要来增强 RAG query，提升召回稳定性。","contentHtml":"<blockquote><p>最典型的 bad case 是多轮对话最后一句太短导致检索 query 信息不足，我通过结合结构化 profile 和会话摘要来增强 RAG query，提升召回稳定性。</p></blockquote>","searchText":"Bad Case 一句话 12. 快速背诵版 > 最典型的 bad case 是多轮对话最后一句太短导致检索 query 信息不足，我通过结合结构化 profile 和会话摘要来增强 RAG query，提升召回稳定性。"},{"id":"s84-mcp-一句话","index":83,"number":"MCP 一句话","title":"MCP 一句话","chapterId":"s13-12-快速背诵版","chapterTitle":"12. 快速背诵版","markdown":"> 当前工具边界很适合 MCP 化，可以把画像抽取、信息校验、规则测算、政策召回和回答校验封装成标准 MCP tools，但如果没有正式实现，不要说已经完成 MCP。","contentHtml":"<blockquote><p>当前工具边界很适合 MCP 化，可以把画像抽取、信息校验、规则测算、政策召回和回答校验封装成标准 MCP tools，但如果没有正式实现，不要说已经完成 MCP。</p></blockquote>","searchText":"MCP 一句话 12. 快速背诵版 > 当前工具边界很适合 MCP 化，可以把画像抽取、信息校验、规则测算、政策召回和回答校验封装成标准 MCP tools，但如果没有正式实现，不要说已经完成 MCP。"}]}</script>
+  <script>
+    const data = JSON.parse(document.getElementById('study-data').textContent);
+    const storageKey = 'ssp-agent-study-detailed';
+    const themeKey = storageKey + ':theme';
+    const state = {
+      activeId: data.items[0] ? data.items[0].id : '',
+      filter: 'all',
+      query: '',
+      chapterId: 'all',
+      showAnswer: true,
+      progress: loadProgress(),
+    };
+
+    const listEl = document.getElementById('questionList');
+    const cardEl = document.getElementById('readerCard');
+    const searchInput = document.getElementById('searchInput');
+    const chapterSelect = document.getElementById('chapterSelect');
+    const crumbEl = document.getElementById('crumb');
+    const totalCountEl = document.getElementById('totalCount');
+    const doneCountEl = document.getElementById('doneCount');
+    const starCountEl = document.getElementById('starCount');
+    const toggleAnswerBtn = document.getElementById('toggleAnswerBtn');
+    const starBtn = document.getElementById('starBtn');
+    const doneBtn = document.getElementById('doneBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    const resumeToggle = document.getElementById('resumeToggle');
+    const resumePanel = document.getElementById('resumePanel');
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey) || '{"done":{},"star":{}}');
+      } catch {
+        return { done: {}, star: {} };
+      }
+    }
+
+    function saveProgress() {
+      localStorage.setItem(storageKey, JSON.stringify(state.progress));
+    }
+
+    function currentTheme() {
+      const saved = localStorage.getItem(themeKey);
+      if (saved === 'light' || saved === 'dark') return saved;
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      themeToggle.textContent = theme === 'dark' ? '浅色模式' : '暗色模式';
+      themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
+      themeToggle.classList.toggle('active', theme === 'dark');
+    }
+
+    function filteredItems() {
+      const query = state.query.trim().toLowerCase();
+      return data.items.filter((item) => {
+        if (state.chapterId !== 'all' && item.chapterId !== state.chapterId) return false;
+        if (state.filter === 'todo' && state.progress.done[item.id]) return false;
+        if (state.filter === 'star' && !state.progress.star[item.id]) return false;
+        if (!query) return true;
+        return item.searchText.toLowerCase().includes(query);
+      });
+    }
+
+    function escapeRegExp(text) {
+      return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function highlight(html) {
+      return html;
+    }
+
+    function renderChapterSelect() {
+      chapterSelect.innerHTML = [
+        '<option value="all">全部章节</option>',
+        ...data.chapters.map((chapter) => '<option value="' + chapter.id + '">' + chapter.title + '（' + chapter.count + '）</option>'),
+      ].join('');
+      chapterSelect.value = state.chapterId;
+    }
+
+    function renderStats(items) {
+      totalCountEl.textContent = String(items.length);
+      doneCountEl.textContent = String(Object.values(state.progress.done).filter(Boolean).length);
+      starCountEl.textContent = String(Object.values(state.progress.star).filter(Boolean).length);
+    }
+
+    function renderList(items) {
+      if (items.length === 0) {
+        listEl.innerHTML = '<div class="empty">没有匹配题目</div>';
+        return;
+      }
+
+      listEl.innerHTML = items.map((item) => {
+        const done = state.progress.done[item.id] ? '已掌握' : '';
+        const star = state.progress.star[item.id] ? '收藏' : '';
+        const current = item.id === state.activeId ? ' current' : '';
+        return '<button class="q-item' + current + '" data-id="' + item.id + '" type="button">' +
+          '<span class="q-title">' + item.title + '</span>' +
+          '<span class="q-meta">' +
+          '<span>' + item.chapterTitle + '</span>' +
+          (done ? '<span>✓ ' + done + '</span>' : '') +
+          (star ? '<span>★ ' + star + '</span>' : '') +
+          '</span>' +
+          '</button>';
+      }).join('');
+    }
+
+    function activeItem(items) {
+      let item = data.items.find((entry) => entry.id === state.activeId);
+      if (!item || !items.some((entry) => entry.id === item.id)) {
+        item = items[0] || data.items[0];
+        if (item) state.activeId = item.id;
+      }
+      return item;
+    }
+
+    function renderReader(item) {
+      if (!item) {
+        cardEl.innerHTML = '<div class="empty">没有可显示内容</div>';
+        crumbEl.textContent = '';
+        return;
+      }
+
+      const done = Boolean(state.progress.done[item.id]);
+      const star = Boolean(state.progress.star[item.id]);
+      crumbEl.textContent = item.chapterTitle + ' · 第 ' + (item.index + 1) + ' / ' + data.items.length + ' 项';
+      toggleAnswerBtn.textContent = state.showAnswer ? '只看问题' : '显示答案';
+      starBtn.textContent = star ? '取消收藏' : '收藏';
+      doneBtn.textContent = done ? '取消掌握' : '标记掌握';
+      doneBtn.classList.toggle('primary', !done);
+      doneBtn.classList.toggle('active', done);
+      starBtn.classList.toggle('active', star);
+
+      const body = state.showAnswer
+        ? '<div class="answer-body">' + highlight(item.contentHtml) + '</div>'
+        : '<div class="answer-body hidden"><div>答案已隐藏。先口头回答，再点击“显示答案”核对。</div></div>';
+
+      cardEl.innerHTML =
+        '<div class="answer-head">' +
+        '<div class="badges">' +
+        '<span class="badge">' + item.chapterTitle + '</span>' +
+        (done ? '<span class="badge done">已掌握</span>' : '') +
+        (star ? '<span class="badge star">已收藏</span>' : '') +
+        '</div>' +
+        '<h2>' + item.title + '</h2>' +
+        '</div>' +
+        body;
+    }
+
+    function render() {
+      const items = filteredItems();
+      const item = activeItem(items);
+      renderStats(items);
+      renderList(items);
+      renderReader(item);
+    }
+
+    function move(delta) {
+      const items = filteredItems();
+      if (items.length === 0) return;
+      const currentIndex = Math.max(0, items.findIndex((item) => item.id === state.activeId));
+      const nextIndex = (currentIndex + delta + items.length) % items.length;
+      state.activeId = items[nextIndex].id;
+      render();
+    }
+
+    applyTheme(currentTheme());
+    renderChapterSelect();
+    render();
+
+    searchInput.addEventListener('input', (event) => {
+      state.query = event.target.value;
+      render();
+    });
+
+    chapterSelect.addEventListener('change', (event) => {
+      state.chapterId = event.target.value;
+      render();
+    });
+
+    listEl.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-id]');
+      if (!button) return;
+      state.activeId = button.dataset.id;
+      state.showAnswer = true;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.querySelectorAll('[data-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        state.filter = button.dataset.filter;
+        document.querySelectorAll('[data-filter]').forEach((entry) => entry.classList.toggle('active', entry === button));
+        render();
+      });
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => move(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => move(1));
+
+    toggleAnswerBtn.addEventListener('click', () => {
+      state.showAnswer = !state.showAnswer;
+      render();
+    });
+
+    starBtn.addEventListener('click', () => {
+      if (!state.activeId) return;
+      state.progress.star[state.activeId] = !state.progress.star[state.activeId];
+      saveProgress();
+      render();
+    });
+
+    doneBtn.addEventListener('click', () => {
+      if (!state.activeId) return;
+      state.progress.done[state.activeId] = !state.progress.done[state.activeId];
+      saveProgress();
+      render();
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(themeKey, nextTheme);
+      applyTheme(nextTheme);
+    });
+
+    resumeToggle.addEventListener('click', () => {
+      const isOpen = resumePanel.classList.toggle('open');
+      resumeToggle.setAttribute('aria-expanded', String(isOpen));
+      resumeToggle.classList.toggle('active', isOpen);
+    });
+
+    document.getElementById('resetProgress').addEventListener('click', () => {
+      if (!confirm('确认清空这个页面的掌握和收藏记录？')) return;
+      state.progress = { done: {}, star: {} };
+      saveProgress();
+      render();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.target.matches('input, select, textarea')) return;
+      if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'n') move(1);
+      if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'p') move(-1);
+      if (event.key === ' ') {
+        event.preventDefault();
+        state.showAnswer = !state.showAnswer;
+        render();
+      }
+    });
+  </script>
+</body>
+</html>

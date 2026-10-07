@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f6f8">
+<title>AI 面试面经汇总、合并题库与口语化逐字稿</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%230f766e'/%3E%3C/svg%3E">
+<style>
+:root{
+  --accent:#0f766e;
+  --bg:#f5f6f8; --panel:#ffffff; --panel-trans:rgba(255,255,255,.85);
+  --fg:#1e2430; --muted:#69707d; --border:#e4e7ec; --hover:#eef1f5;
+  --accent-soft:color-mix(in srgb, var(--accent) 10%, transparent);
+  --code-bg:#f2f4f7; --quote-bg:color-mix(in srgb, var(--accent) 6%, var(--panel));
+  --shadow:0 1px 3px rgba(16,24,40,.07);
+}
+html[data-theme="dark"]{
+  --bg:#0e1116; --panel:#151a22; --panel-trans:rgba(21,26,34,.85);
+  --fg:#d6dae2; --muted:#8a93a2; --border:#252c39; --hover:#1c2330;
+  --code-bg:#1a202b; --quote-bg:color-mix(in srgb, var(--accent) 12%, var(--panel));
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font-family:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",sans-serif;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  overflow-wrap:break-word}
+.skip-link{position:fixed;left:14px;top:8px;z-index:100;transform:translateY(-160%);
+  padding:7px 12px;border-radius:6px;background:var(--panel);color:var(--fg);
+  border:2px solid var(--accent);text-decoration:none;transition:transform .15s}
+.skip-link:focus-visible{transform:none}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--accent);z-index:60;transition:width .1s}
+/* ---------- 侧边栏 ---------- */
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:min(302px,86vw);background:var(--panel);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:50}
+.sb-head{padding:16px 14px 10px;border-bottom:1px solid var(--border)}
+.sb-title{font-weight:700;font-size:1.02rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sb-title a{color:var(--fg);text-decoration:none}
+.sb-title .dot{width:10px;height:10px;border-radius:3px;background:var(--accent);flex:none}
+#search{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg);color:var(--fg);font-size:.88rem}
+#search:focus-visible{border-color:var(--accent)}
+.search-empty{display:none;padding:16px 10px;color:var(--muted);font-size:.86rem;text-align:center}
+.search-empty.show{display:block}
+.sb-hint{font-size:.74rem;color:var(--muted);margin-top:6px}
+.sb-siblinks{display:none;margin-top:9px}
+.sb-siblinks a{color:var(--accent);text-decoration:none;font-size:.85rem;margin-right:14px;white-space:nowrap}
+#sidebar-scroll{overflow-y:auto;flex:1;padding:8px 6px 30px;scrollbar-width:thin}
+details.part>summary{list-style:none;cursor:pointer;user-select:none;padding:9px 10px 4px;
+  font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.03em}
+details.part>summary::-webkit-details-marker{display:none}
+details.part>summary::before{content:"\25B8";display:inline-block;margin-right:6px;
+  transition:transform .15s;font-size:.7rem}
+details.part[open]>summary::before{transform:rotate(90deg)}
+.chap{display:flex;align-items:center;border-radius:8px;margin:1px 4px}
+.chap:hover{background:var(--hover)}
+.chap.active{background:var(--accent-soft)}
+.chap.active .chap-title{color:var(--accent);font-weight:600}
+.chap-link{flex:1;display:flex;gap:8px;padding:6px 2px 6px 10px;color:var(--fg);
+  text-decoration:none;font-size:.9rem;line-height:1.4;min-width:0}
+.chap-num{color:var(--muted);font-size:.82em;min-width:1.5em;text-align:right;
+  font-variant-numeric:tabular-nums;padding-top:.15em;flex:none}
+.chap-title{overflow-wrap:anywhere}
+.twisty{width:36px;height:36px;border:none;background:none;color:var(--muted);cursor:pointer;
+  padding:0;font-size:.78rem;transition:transform .15s;flex:none}
+.twisty.open{transform:rotate(90deg)}
+.secs{display:none;margin:0 4px 5px 0;padding:0 0 0 32px;list-style:none}
+.secs.open{display:block}
+.secs a{display:block;padding:3.5px 8px;font-size:.84rem;color:var(--muted);
+  text-decoration:none;border-left:2px solid var(--border);line-height:1.45;overflow-wrap:anywhere}
+.secs a:hover{color:var(--fg);border-left-color:var(--muted)}
+.secs a.active{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+.hide{display:none!important}
+/* ---------- 顶栏与正文 ---------- */
+.main{margin-left:302px}
+.topbar{position:fixed;top:0;left:302px;right:0;height:52px;z-index:40;
+  display:flex;align-items:center;gap:14px;padding:0 22px;
+  background:var(--panel-trans);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+#menuBtn{display:none;border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 10px;font-size:1rem;cursor:pointer}
+.tb-title{font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-spacer{flex:1}
+.tb-link{color:var(--accent);text-decoration:none;font-size:.88rem;white-space:nowrap}
+.tb-link:hover{text-decoration:underline}
+#themeBtn{border:1px solid var(--border);background:var(--panel);color:var(--fg);
+  border-radius:8px;padding:4px 12px;font-size:.85rem;cursor:pointer;white-space:nowrap}
+#themeBtn:hover{border-color:var(--accent);color:var(--accent)}
+.content{max-width:900px;margin:0 auto;padding:84px 44px 140px}
+/* 标题层级 */
+.content h1{font-size:1.9rem;line-height:1.35;margin:.4rem 0 1.2rem}
+.content h1:not(:first-child){margin-top:3.6rem;padding-top:2.4rem;border-top:3px solid var(--accent-soft)}
+.content h2{font-size:1.55rem;line-height:1.4;margin:3rem 0 1.1rem;padding-top:2.4rem;
+  border-top:2px solid var(--border)}
+.content h3{font-size:1.22rem;margin:2.3rem 0 .8rem;padding-left:.72rem;
+  border-left:4px solid var(--accent);line-height:1.45}
+.content h4{display:inline-block;font-size:.98rem;margin:1.7rem 0 .55rem;
+  background:var(--accent-soft);border-radius:7px;padding:.28rem .7rem;line-height:1.5}
+h1,h2,h3,h4{scroll-margin-top:76px;text-wrap:balance}
+a.alias{scroll-margin-top:76px}
+.content a{color:var(--accent)}
+.content hr{border:none;border-top:1px solid var(--border);margin:2.4rem 0}
+.content strong{font-weight:650}
+/* 引用块（核心结论 / 回答模板 / 前置说明） */
+.content blockquote{margin:1.1rem 0;padding:.85rem 1.1rem;background:var(--quote-bg);
+  border-left:4px solid var(--accent);border-radius:0 10px 10px 0}
+.content blockquote p{margin:.3rem 0}
+/* 行内代码与代码块 */
+.content code{font-family:Consolas,"JetBrains Mono","Cascadia Code",Menlo,monospace;
+  background:var(--code-bg);padding:.14em .42em;border-radius:5px;font-size:.88em}
+.codehilite{border:1px solid var(--border);border-radius:10px;overflow:auto;
+  margin:1.1rem 0;box-shadow:var(--shadow)}
+.codehilite pre{margin:0;padding:14px 17px;line-height:1.62;font-size:.86rem}
+.codehilite code{background:none;padding:0;font-size:inherit;border-radius:0}
+/* Mermaid 图 */
+.mermaid{margin:1.2rem 0;padding:18px;overflow-x:auto;border:1px solid var(--border);
+  border-radius:8px;background:#fff;color:#1f2937;text-align:center;box-shadow:var(--shadow);
+  white-space:normal;overflow-wrap:normal}
+.mermaid svg{display:block;max-width:100%;height:auto;margin:0 auto}
+/* 表格 */
+.tblwrap{overflow-x:auto;margin:1.1rem 0;border:1px solid var(--border);
+  border-radius:10px;box-shadow:var(--shadow)}
+.content table{border-collapse:collapse;width:100%;font-size:.92rem;line-height:1.6}
+.content th{background:var(--hover);text-align:left;font-weight:650;white-space:nowrap}
+.content th,.content td{padding:8px 13px;border-bottom:1px solid var(--border);vertical-align:top}
+.content tr:last-child td{border-bottom:none}
+.content tbody tr:nth-child(even){background:color-mix(in srgb, var(--hover) 55%, transparent)}
+/* 列表 */
+.content ul,.content ol{padding-left:1.5em}
+.content li{margin:.28rem 0}
+/* 返回顶部 */
+#topBtn{position:fixed;right:28px;bottom:30px;width:42px;height:42px;border-radius:12px;
+  border:1px solid var(--border);background:var(--panel);color:var(--muted);font-size:1.1rem;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s,color .2s,border-color .2s;box-shadow:var(--shadow);z-index:45}
+#topBtn.show{opacity:1;pointer-events:auto}
+#topBtn:hover{color:var(--accent);border-color:var(--accent)}
+#backdrop{display:none;border:0;padding:0}
+/* 移动端 */
+@media (max-width:960px){
+  #sidebar{transform:translateX(-100%);transition:transform .22s}
+  body.nav-open #sidebar{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  body.nav-open #backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:49}
+  .main{margin-left:0}
+  .topbar{left:0;padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:max(14px,env(safe-area-inset-right));gap:10px}
+  #menuBtn{display:block}
+  .topbar .tb-link{display:none}
+  .sb-siblinks{display:block}
+  .content{padding:76px max(18px,env(safe-area-inset-right)) 110px max(18px,env(safe-area-inset-left))}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+::selection{background:var(--accent-soft)}
+/* pygments */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #ffffff; }
+.codehilite .c { color: #177500 } /* Comment */
+.codehilite .err { color: #000 } /* Error */
+.codehilite .k { color: #A90D91 } /* Keyword */
+.codehilite .l { color: #1C01CE } /* Literal */
+.codehilite .n { color: #000 } /* Name */
+.codehilite .o { color: #000 } /* Operator */
+.codehilite .ch { color: #177500 } /* Comment.Hashbang */
+.codehilite .cm { color: #177500 } /* Comment.Multiline */
+.codehilite .cp { color: #633820 } /* Comment.Preproc */
+.codehilite .cpf { color: #177500 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #177500 } /* Comment.Single */
+.codehilite .cs { color: #177500 } /* Comment.Special */
+.codehilite .kc { color: #A90D91 } /* Keyword.Constant */
+.codehilite .kd { color: #A90D91 } /* Keyword.Declaration */
+.codehilite .kn { color: #A90D91 } /* Keyword.Namespace */
+.codehilite .kp { color: #A90D91 } /* Keyword.Pseudo */
+.codehilite .kr { color: #A90D91 } /* Keyword.Reserved */
+.codehilite .kt { color: #A90D91 } /* Keyword.Type */
+.codehilite .ld { color: #1C01CE } /* Literal.Date */
+.codehilite .m { color: #1C01CE } /* Literal.Number */
+.codehilite .s { color: #C41A16 } /* Literal.String */
+.codehilite .na { color: #836C28 } /* Name.Attribute */
+.codehilite .nb { color: #A90D91 } /* Name.Builtin */
+.codehilite .nc { color: #3F6E75 } /* Name.Class */
+.codehilite .no { color: #000 } /* Name.Constant */
+.codehilite .nd { color: #000 } /* Name.Decorator */
+.codehilite .ni { color: #000 } /* Name.Entity */
+.codehilite .ne { color: #000 } /* Name.Exception */
+.codehilite .nf { color: #000 } /* Name.Function */
+.codehilite .nl { color: #000 } /* Name.Label */
+.codehilite .nn { color: #000 } /* Name.Namespace */
+.codehilite .nx { color: #000 } /* Name.Other */
+.codehilite .py { color: #000 } /* Name.Property */
+.codehilite .nt { color: #000 } /* Name.Tag */
+.codehilite .nv { color: #000 } /* Name.Variable */
+.codehilite .ow { color: #000 } /* Operator.Word */
+.codehilite .mb { color: #1C01CE } /* Literal.Number.Bin */
+.codehilite .mf { color: #1C01CE } /* Literal.Number.Float */
+.codehilite .mh { color: #1C01CE } /* Literal.Number.Hex */
+.codehilite .mi { color: #1C01CE } /* Literal.Number.Integer */
+.codehilite .mo { color: #1C01CE } /* Literal.Number.Oct */
+.codehilite .sa { color: #C41A16 } /* Literal.String.Affix */
+.codehilite .sb { color: #C41A16 } /* Literal.String.Backtick */
+.codehilite .sc { color: #2300CE } /* Literal.String.Char */
+.codehilite .dl { color: #C41A16 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #C41A16 } /* Literal.String.Doc */
+.codehilite .s2 { color: #C41A16 } /* Literal.String.Double */
+.codehilite .se { color: #C41A16 } /* Literal.String.Escape */
+.codehilite .sh { color: #C41A16 } /* Literal.String.Heredoc */
+.codehilite .si { color: #C41A16 } /* Literal.String.Interpol */
+.codehilite .sx { color: #C41A16 } /* Literal.String.Other */
+.codehilite .sr { color: #C41A16 } /* Literal.String.Regex */
+.codehilite .s1 { color: #C41A16 } /* Literal.String.Single */
+.codehilite .ss { color: #C41A16 } /* Literal.String.Symbol */
+.codehilite .bp { color: #5B269A } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #000 } /* Name.Function.Magic */
+.codehilite .vc { color: #000 } /* Name.Variable.Class */
+.codehilite .vg { color: #000 } /* Name.Variable.Global */
+.codehilite .vi { color: #000 } /* Name.Variable.Instance */
+.codehilite .vm { color: #000 } /* Name.Variable.Magic */
+.codehilite .il { color: #1C01CE } /* Literal.Number.Integer.Long */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+html[data-theme="dark"] .codehilite .hll { background-color: #49483e }
+html[data-theme="dark"] .codehilite { background: #272822; color: #F8F8F2 }
+html[data-theme="dark"] .codehilite .c { color: #959077 } /* Comment */
+html[data-theme="dark"] .codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+html[data-theme="dark"] .codehilite .esc { color: #F8F8F2 } /* Escape */
+html[data-theme="dark"] .codehilite .g { color: #F8F8F2 } /* Generic */
+html[data-theme="dark"] .codehilite .k { color: #66D9EF } /* Keyword */
+html[data-theme="dark"] .codehilite .l { color: #AE81FF } /* Literal */
+html[data-theme="dark"] .codehilite .n { color: #F8F8F2 } /* Name */
+html[data-theme="dark"] .codehilite .o { color: #FF4689 } /* Operator */
+html[data-theme="dark"] .codehilite .x { color: #F8F8F2 } /* Other */
+html[data-theme="dark"] .codehilite .p { color: #F8F8F2 } /* Punctuation */
+html[data-theme="dark"] .codehilite .ch { color: #959077 } /* Comment.Hashbang */
+html[data-theme="dark"] .codehilite .cm { color: #959077 } /* Comment.Multiline */
+html[data-theme="dark"] .codehilite .cp { color: #959077 } /* Comment.Preproc */
+html[data-theme="dark"] .codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+html[data-theme="dark"] .codehilite .c1 { color: #959077 } /* Comment.Single */
+html[data-theme="dark"] .codehilite .cs { color: #959077 } /* Comment.Special */
+html[data-theme="dark"] .codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+html[data-theme="dark"] .codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+html[data-theme="dark"] .codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+html[data-theme="dark"] .codehilite .gr { color: #F8F8F2 } /* Generic.Error */
+html[data-theme="dark"] .codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+html[data-theme="dark"] .codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+html[data-theme="dark"] .codehilite .go { color: #66D9EF } /* Generic.Output */
+html[data-theme="dark"] .codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+html[data-theme="dark"] .codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+html[data-theme="dark"] .codehilite .gu { color: #959077 } /* Generic.Subheading */
+html[data-theme="dark"] .codehilite .gt { color: #F8F8F2 } /* Generic.Traceback */
+html[data-theme="dark"] .codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+html[data-theme="dark"] .codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+html[data-theme="dark"] .codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+html[data-theme="dark"] .codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+html[data-theme="dark"] .codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+html[data-theme="dark"] .codehilite .kt { color: #66D9EF } /* Keyword.Type */
+html[data-theme="dark"] .codehilite .ld { color: #E6DB74 } /* Literal.Date */
+html[data-theme="dark"] .codehilite .m { color: #AE81FF } /* Literal.Number */
+html[data-theme="dark"] .codehilite .s { color: #E6DB74 } /* Literal.String */
+html[data-theme="dark"] .codehilite .na { color: #A6E22E } /* Name.Attribute */
+html[data-theme="dark"] .codehilite .nb { color: #F8F8F2 } /* Name.Builtin */
+html[data-theme="dark"] .codehilite .nc { color: #A6E22E } /* Name.Class */
+html[data-theme="dark"] .codehilite .no { color: #66D9EF } /* Name.Constant */
+html[data-theme="dark"] .codehilite .nd { color: #A6E22E } /* Name.Decorator */
+html[data-theme="dark"] .codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+html[data-theme="dark"] .codehilite .ne { color: #A6E22E } /* Name.Exception */
+html[data-theme="dark"] .codehilite .nf { color: #A6E22E } /* Name.Function */
+html[data-theme="dark"] .codehilite .nl { color: #F8F8F2 } /* Name.Label */
+html[data-theme="dark"] .codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+html[data-theme="dark"] .codehilite .nx { color: #A6E22E } /* Name.Other */
+html[data-theme="dark"] .codehilite .py { color: #F8F8F2 } /* Name.Property */
+html[data-theme="dark"] .codehilite .nt { color: #FF4689 } /* Name.Tag */
+html[data-theme="dark"] .codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+html[data-theme="dark"] .codehilite .ow { color: #FF4689 } /* Operator.Word */
+html[data-theme="dark"] .codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+html[data-theme="dark"] .codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+html[data-theme="dark"] .codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+html[data-theme="dark"] .codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+html[data-theme="dark"] .codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+html[data-theme="dark"] .codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+html[data-theme="dark"] .codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+html[data-theme="dark"] .codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+html[data-theme="dark"] .codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+html[data-theme="dark"] .codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+html[data-theme="dark"] .codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+html[data-theme="dark"] .codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+html[data-theme="dark"] .codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+html[data-theme="dark"] .codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+html[data-theme="dark"] .codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+html[data-theme="dark"] .codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+html[data-theme="dark"] .codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+html[data-theme="dark"] .codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+html[data-theme="dark"] .codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+html[data-theme="dark"] .codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+html[data-theme="dark"] .codehilite .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+html[data-theme="dark"] .codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+html[data-theme="dark"] .codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+html[data-theme="dark"] .codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+html[data-theme="dark"] .codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+html[data-theme="dark"] .codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+html[data-theme="dark"] .codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */
+.codehilite{background:var(--code-bg)}
+html[data-theme="dark"] .codehilite{background:var(--code-bg)}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<div id="progress"></div>
+<nav id="sidebar" aria-label="章节目录">
+  <div class="sb-head">
+    <div class="sb-title"><span class="dot" aria-hidden="true"></span><a href="#top">AI 面试面经汇总、合并题库与口语化逐字稿</a></div>
+    <input id="search" name="chapter-search" type="search" aria-label="搜索章节和小节"
+      placeholder="搜索章节 / 小节…" autocomplete="off" spellcheck="false">
+    <div class="sb-hint">共 32 章 · 按 / 快速聚焦搜索</div>
+    <div class="sb-siblinks"><a class="tb-link" href="../八股/传统计算机与后端核心复习.html">传统计算机与后端篇 →</a><a class="tb-link" href="../八股/大模型与智能体核心复习.html">LLM + Agent 篇 →</a><a class="tb-link" href="../八股/智能体面试八股笔记.html">Agent 八股篇 →</a></div>
+  </div>
+  <div id="sidebar-scroll"><details class="part" open><summary>AI 面试面经汇总、合并题库与口语化逐字稿</summary><div class="plist"><div class="chap" data-ch="ch1" data-text="0. 标记说明"><a class="chap-link" href="#ch1"><span class="chap-title">0. 标记说明</span></a></div><div class="chap" data-ch="ch2" data-text="一、先说结论：这批面经真正考什么"><a class="chap-link" href="#ch2"><span class="chap-title">一、先说结论：这批面经真正考什么</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch2" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch2" data-for="ch2" aria-hidden="true"><li data-text="1. 面经中反复出现的流程"><a href="#ch2-1">1. 面经中反复出现的流程</a></li><li data-text="2. 题目去重后的主干"><a href="#ch2-2">2. 题目去重后的主干</a></li></ul><div class="chap" data-ch="ch3" data-text="二、统一答题原则：把每个答案讲成一个“小闭环”"><a class="chap-link" href="#ch3"><span class="chap-title">二、统一答题原则：把每个答案讲成一个“小闭环”</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch3" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch3" data-for="ch3" aria-hidden="true"><li data-text="1. 个人经历题：用 bei/star，但说得像人在聊天"><a href="#ch3-1">1. 个人经历题：用 BEI/STAR，但说得像人在聊天</a></li><li data-text="2. 面试官连续追问时，优先补四类信息"><a href="#ch3-2">2. 面试官连续追问时，优先补四类信息</a></li><li data-text="3. 尽量少说这些空话"><a href="#ch3-3">3. 尽量少说这些空话</a></li><li data-text="4. 真实经历不够时怎么办"><a href="#ch3-4">4. 真实经历不够时怎么办</a></li></ul><div class="chap" data-ch="ch4" data-text="三、核心题库与口语化逐字稿"><a class="chap-link" href="#ch4"><span class="chap-title">三、核心题库与口语化逐字稿</span></a></div><div class="chap" data-ch="ch5" data-text="q1. 请做一下自我介绍"><a class="chap-link" href="#ch5"><span class="chap-title">Q1. 请做一下自我介绍</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch5" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch5" data-for="ch5" aria-hidden="true"><li data-text="面试官在看什么"><a href="#ch5-1">面试官在看什么</a></li><li data-text="【口语稿】你的专属版本"><a href="#ch5-2">【口语稿】你的专属版本</a></li><li data-text="可能追问 1：你刚才提到的项目，最能体现你的能力是什么？"><a href="#ch5-3">可能追问 1：你刚才提到的项目，最能体现你的能力是什么？</a></li><li data-text="可能追问 2：这个项目里你个人做了什么？不要只说“我们”"><a href="#ch5-4">可能追问 2：这个项目里你个人做了什么？不要只说“我们”</a></li><li data-text="可能追问 3：为什么选择目标公司/这个岗位？"><a href="#ch5-5">可能追问 3：为什么选择目标公司/这个岗位？</a></li><li data-text="可能追问 4：你最大的优势和短板是什么？"><a href="#ch5-6">可能追问 4：你最大的优势和短板是什么？</a></li></ul><div class="chap" data-ch="ch6" data-text="q2. 说说你在学习、科研或项目中遇到的一个困难，你是怎么解决的？"><a class="chap-link" href="#ch6"><span class="chap-title">Q2. 说说你在学习、科研或项目中遇到的一个困难，你是怎么解决的？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch6" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch6" data-for="ch6" aria-hidden="true"><li data-text="面试官在看什么"><a href="#ch6-1">面试官在看什么</a></li><li data-text="【逐字稿】机器人项目版本"><a href="#ch6-2">【逐字稿】机器人项目版本</a></li><li data-text="可能追问 1：你怎么确定这就是根因？"><a href="#ch6-3">可能追问 1：你怎么确定这就是根因？</a></li><li data-text="可能追问 2：如果最后结果没有达到预期，你怎么回答？"><a href="#ch6-4">可能追问 2：如果最后结果没有达到预期，你怎么回答？</a></li><li data-text="可能追问 3：你从这件事中学到的是什么？"><a href="#ch6-5">可能追问 3：你从这件事中学到的是什么？</a></li><li data-text="可能追问 4：如果只选一个困难，你为什么不选软件开发，而选硬件和末端工具？"><a href="#ch6-6">可能追问 4：如果只选一个困难，你为什么不选软件开发，而选硬件和末端工具？</a></li><li data-text="备用案例：agent 项目的 rag 检索问题"><a href="#ch6-7">备用案例：Agent 项目的 RAG 检索问题</a></li></ul><div class="chap" data-ch="ch7" data-text="q3. 讲一次你最有成就感的实习、科研、项目或校园经历"><a class="chap-link" href="#ch7"><span class="chap-title">Q3. 讲一次你最有成就感的实习、科研、项目或校园经历</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch7" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch7" data-for="ch7" aria-hidden="true"><li data-text="【逐字稿】机器人项目版本"><a href="#ch7-1">【逐字稿】机器人项目版本</a></li><li data-text="可能追问 1：为什么这件事让你有成就感？"><a href="#ch7-2">可能追问 1：为什么这件事让你有成就感？</a></li><li data-text="可能追问 2：如果把这件事交给别人，你觉得最容易出问题的地方是什么？"><a href="#ch7-3">可能追问 2：如果把这件事交给别人，你觉得最容易出问题的地方是什么？</a></li><li data-text="可能追问 3：你怎么证明这个机器人系统不是只完成了 demo？"><a href="#ch7-4">可能追问 3：你怎么证明这个机器人系统不是只完成了 Demo？</a></li><li data-text="可能追问 4：你在这个项目里最核心的个人贡献是什么？"><a href="#ch7-5">可能追问 4：你在这个项目里最核心的个人贡献是什么？</a></li></ul><div class="chap" data-ch="ch8" data-text="q4. 你在学习或工作中怎么使用 ai？怎么把它融进工作流？"><a class="chap-link" href="#ch8"><span class="chap-title">Q4. 你在学习或工作中怎么使用 AI？怎么把它融进工作流？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch8" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch8" data-for="ch8" aria-hidden="true"><li data-text="面试官在看什么"><a href="#ch8-1">面试官在看什么</a></li><li data-text="【口语稿】你的专属版本"><a href="#ch8-2">【口语稿】你的专属版本</a></li><li data-text="可能追问 1：你怎么判断 ai 说得对不对？"><a href="#ch8-3">可能追问 1：你怎么判断 AI 说得对不对？</a></li><li data-text="可能追问 2：你如何让 ai 给出更有针对性的结果，而不是泛泛而谈？"><a href="#ch8-4">可能追问 2：你如何让 AI 给出更有针对性的结果，而不是泛泛而谈？</a></li><li data-text="可能追问 3：哪些事情不能交给 ai 直接做？"><a href="#ch8-5">可能追问 3：哪些事情不能交给 AI 直接做？</a></li><li data-text="可能追问 4：你用 ai 有没有出过错？"><a href="#ch8-6">可能追问 4：你用 AI 有没有出过错？</a></li><li data-text="可能追问 5：为什么不直接让大模型计算退休年龄或缴费缺口？"><a href="#ch8-7">可能追问 5：为什么不直接让大模型计算退休年龄或缴费缺口？</a></li><li data-text="可能追问 6：为什么采用 plan-and-execute，而不是一次性让模型回答？"><a href="#ch8-8">可能追问 6：为什么采用 Plan-and-Execute，而不是一次性让模型回答？</a></li><li data-text="可能追问 7：你的结构化记忆具体解决什么问题？"><a href="#ch8-9">可能追问 7：你的结构化记忆具体解决什么问题？</a></li></ul><div class="chap" data-ch="ch9" data-text="q5. 如果给你一个完全没接触过的数据分析工具，要求 5 天内完成报告，你会怎么做？"><a class="chap-link" href="#ch9"><span class="chap-title">Q5. 如果给你一个完全没接触过的数据分析工具，要求 5 天内完成报告，你会怎么做？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch9" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch9" data-for="ch9" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch9-1">【口语稿】</a></li><li data-text="可能追问 1：你怎么把以前的工具经验迁移过来？"><a href="#ch9-2">可能追问 1：你怎么把以前的工具经验迁移过来？</a></li><li data-text="可能追问 2：如果输出结果和预期实验数据不一致，你怎么处理？"><a href="#ch9-3">可能追问 2：如果输出结果和预期实验数据不一致，你怎么处理？</a></li></ul><div class="chap" data-ch="ch10" data-text="q6. 时间紧、预算有限、人手不足，同时有多个任务，你怎么判断优先级？"><a class="chap-link" href="#ch10"><span class="chap-title">Q6. 时间紧、预算有限、人手不足，同时有多个任务，你怎么判断优先级？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch10" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch10" data-for="ch10" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch10-1">【口语稿】</a></li><li data-text="可能追问 1：除了时间、预算、人手，你还会考虑什么？"><a href="#ch10-2">可能追问 1：除了时间、预算、人手，你还会考虑什么？</a></li><li data-text="可能追问 2：怎么判断两个任务延期的实际影响差异？"><a href="#ch10-3">可能追问 2：怎么判断两个任务延期的实际影响差异？</a></li><li data-text="可能追问 3：如果所有人都说自己的任务最重要呢？"><a href="#ch10-4">可能追问 3：如果所有人都说自己的任务最重要呢？</a></li></ul><div class="chap" data-ch="ch11" data-text="q7. 如果导师或上级坚持老方法，你想推广一个新方法，你怎么沟通？"><a class="chap-link" href="#ch11"><span class="chap-title">Q7. 如果导师或上级坚持老方法，你想推广一个新方法，你怎么沟通？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch11" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch11" data-for="ch11" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch11-1">【口语稿】</a></li><li data-text="可能追问 1：如果对方根本不给你试验机会呢？"><a href="#ch11-2">可能追问 1：如果对方根本不给你试验机会呢？</a></li><li data-text="可能追问 2：如果最后证明你的方案是错的呢？"><a href="#ch11-3">可能追问 2：如果最后证明你的方案是错的呢？</a></li></ul><div class="chap" data-ch="ch12" data-text="q8. 团队成员拖延、摆烂或不认可任务，你会怎么沟通？"><a class="chap-link" href="#ch12"><span class="chap-title">Q8. 团队成员拖延、摆烂或不认可任务，你会怎么沟通？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch12" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch12" data-for="ch12" aria-hidden="true"><li data-text="【通用逐字稿】"><a href="#ch12-1">【通用逐字稿】</a></li><li data-text="可能追问 1：他说这个任务没有意义，怎么劝？"><a href="#ch12-2">可能追问 1：他说这个任务没有意义，怎么劝？</a></li><li data-text="可能追问 2：如果沟通后他仍然不做？"><a href="#ch12-3">可能追问 2：如果沟通后他仍然不做？</a></li><li data-text="可能追问 3：如果对方觉得你在批评他，情绪很大怎么办？"><a href="#ch12-4">可能追问 3：如果对方觉得你在批评他，情绪很大怎么办？</a></li></ul><div class="chap" data-ch="ch13" data-text="q9. 说一次你和同学、同事或导师意见不一致的经历"><a class="chap-link" href="#ch13"><span class="chap-title">Q9. 说一次你和同学、同事或导师意见不一致的经历</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch13" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch13" data-for="ch13" aria-hidden="true"><li data-text="【逐字稿】是否采用 ros 构建完整软件流程"><a href="#ch13-1">【逐字稿】是否采用 ROS 构建完整软件流程</a></li><li data-text="可能追问 1：如果你当时对 ros 也不熟，凭什么坚持？"><a href="#ch13-2">可能追问 1：如果你当时对 ROS 也不熟，凭什么坚持？</a></li><li data-text="可能追问 2：如果 ros 最后没有达到预期，你怎么办？"><a href="#ch13-3">可能追问 2：如果 ROS 最后没有达到预期，你怎么办？</a></li><li data-text="可能追问 3：你是怎么说服其他人的？"><a href="#ch13-4">可能追问 3：你是怎么说服其他人的？</a></li></ul><div class="chap" data-ch="ch14" data-text="q10. 说一次你优化流程、发现问题并推动改进的经历"><a class="chap-link" href="#ch14"><span class="chap-title">Q10. 说一次你优化流程、发现问题并推动改进的经历</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch14" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch14" data-for="ch14" aria-hidden="true"><li data-text="【逐字稿】agent 的 rag 评测与链路改进"><a href="#ch14-1">【逐字稿】Agent 的 RAG 评测与链路改进</a></li><li data-text="可能追问：你怎么证明改进是你的方案带来的？"><a href="#ch14-2">可能追问：你怎么证明改进是你的方案带来的？</a></li><li data-text="可能追问 2：你具体怎么解决多轮 query 丢失的问题？"><a href="#ch14-3">可能追问 2：你具体怎么解决多轮 query 丢失的问题？</a></li><li data-text="可能追问 3：为什么 chunk 切分会影响来源可信度？"><a href="#ch14-4">可能追问 3：为什么 chunk 切分会影响来源可信度？</a></li><li data-text="可能追问 4：recall@3 达到 94% 说明什么？"><a href="#ch14-5">可能追问 4：Recall@3 达到 94% 说明什么？</a></li></ul><div class="chap" data-ch="ch15" data-text="q11. 一个课程或产品点击率很高，但完成率很低，你怎么分析？"><a class="chap-link" href="#ch15"><span class="chap-title">Q11. 一个课程或产品点击率很高，但完成率很低，你怎么分析？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch15" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch15" data-for="ch15" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch15-1">【口语稿】</a></li><li data-text="可能追问 1：你会优先改哪里？"><a href="#ch15-2">可能追问 1：你会优先改哪里？</a></li><li data-text="可能追问 2：如果完成率提高了，但学习效果变差呢？"><a href="#ch15-3">可能追问 2：如果完成率提高了，但学习效果变差呢？</a></li></ul><div class="chap" data-ch="ch16" data-text="q12. 如果一个月后要和海外客户交流，你怎么提升英语口语？"><a class="chap-link" href="#ch16"><span class="chap-title">Q12. 如果一个月后要和海外客户交流，你怎么提升英语口语？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch16" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch16" data-for="ch16" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch16-1">【口语稿】</a></li><li data-text="可能追问：如果一个月后还是没有达到目标呢？"><a href="#ch16-2">可能追问：如果一个月后还是没有达到目标呢？</a></li></ul><div class="chap" data-ch="ch17" data-text="q13. 你最近主动学习了什么新东西？"><a class="chap-link" href="#ch17"><span class="chap-title">Q13. 你最近主动学习了什么新东西？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch17" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch17" data-for="ch17" aria-hidden="true"><li data-text="【逐字稿】agent 方向版本"><a href="#ch17-1">【逐字稿】Agent 方向版本</a></li><li data-text="可能追问：你怎么判断自己真的学会了？"><a href="#ch17-2">可能追问：你怎么判断自己真的学会了？</a></li></ul><div class="chap" data-ch="ch18" data-text="q14. 你如何看待 ai？日常怎么使用？"><a class="chap-link" href="#ch18"><span class="chap-title">Q14. 你如何看待 AI？日常怎么使用？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch18" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch18" data-for="ch18" aria-hidden="true"><li data-text="中文【口语稿】"><a href="#ch18-1">中文【口语稿】</a></li><li data-text="英文【可直接使用】"><a href="#ch18-2">英文【可直接使用】</a></li><li data-text="可能追问：ai 什么时候不能替代人？"><a href="#ch18-3">可能追问：AI 什么时候不能替代人？</a></li></ul><div class="chap" data-ch="ch19" data-text="q15. ai 能帮你解决什么问题？哪些工作需要人工决策？"><a class="chap-link" href="#ch19"><span class="chap-title">Q15. AI 能帮你解决什么问题？哪些工作需要人工决策？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch19" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch19" data-for="ch19" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch19-1">【口语稿】</a></li><li data-text="可能追问：如果 ai 给出的建议和你的判断相反呢？"><a href="#ch19-2">可能追问：如果 AI 给出的建议和你的判断相反呢？</a></li></ul><div class="chap" data-ch="ch20" data-text="q16. 你会怎么说服别人给你的方案提供资源？"><a class="chap-link" href="#ch20"><span class="chap-title">Q16. 你会怎么说服别人给你的方案提供资源？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch20" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch20" data-for="ch20" aria-hidden="true"><li data-text="【口语稿】"><a href="#ch20-1">【口语稿】</a></li><li data-text="可能追问：对方当场拒绝，你怎么办？"><a href="#ch20-2">可能追问：对方当场拒绝，你怎么办？</a></li></ul><div class="chap" data-ch="ch21" data-text="q17. 你觉得科技给生活带来了什么？"><a class="chap-link" href="#ch21"><span class="chap-title">Q17. 你觉得科技给生活带来了什么？</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch21" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch21" data-for="ch21" aria-hidden="true"><li data-text="中文【可直接使用】"><a href="#ch21-1">中文【可直接使用】</a></li><li data-text="英文【可直接使用】"><a href="#ch21-2">英文【可直接使用】</a></li><li data-text="可能追问：科技会不会让人变懒？"><a href="#ch21-3">可能追问：科技会不会让人变懒？</a></li></ul><div class="chap" data-ch="ch22" data-text="四、英语部分：朗读、听译和英文问答"><a class="chap-link" href="#ch22"><span class="chap-title">四、英语部分：朗读、听译和英文问答</span></a></div><div class="chap" data-ch="ch23" data-text="1. 朗读一段英文"><a class="chap-link" href="#ch23"><span class="chap-title">1. 朗读一段英文</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch23" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch23" data-for="ch23" aria-hidden="true"><li data-text="现场策略"><a href="#ch23-1">现场策略</a></li><li data-text="练习句"><a href="#ch23-2">练习句</a></li></ul><div class="chap" data-ch="ch24" data-text="2. 听一段英文并口译成中文"><a class="chap-link" href="#ch24"><span class="chap-title">2. 听一段英文并口译成中文</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch24" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch24" data-for="ch24" aria-hidden="true"><li data-text="口译时的安全表达"><a href="#ch24-1">口译时的安全表达</a></li><li data-text="练习材料与参考译文"><a href="#ch24-2">练习材料与参考译文</a></li></ul><div class="chap" data-ch="ch25" data-text="3. 英文问答逐字稿"><a class="chap-link" href="#ch25"><span class="chap-title">3. 英文问答逐字稿</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch25" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch25" data-for="ch25" aria-hidden="true"><li data-text="q：do you prefer studying alone or studying with other people?"><a href="#ch25-1">Q：Do you prefer studying alone or studying with other people?</a></li><li data-text="q：how do you usually use ai?"><a href="#ch25-2">Q：How do you usually use AI?</a></li><li data-text="q：what is your favorite technology product?"><a href="#ch25-3">Q：What is your favorite technology product?</a></li><li data-text="q：what kind of company do you hope to work for?"><a href="#ch25-4">Q：What kind of company do you hope to work for?</a></li><li data-text="q：what do you think of oppo?"><a href="#ch25-5">Q：What do you think of OPPO?</a></li><li data-text="q：how do you see ai?"><a href="#ch25-6">Q：How do you see AI?</a></li><li data-text="q：what can technology bring to our daily life?"><a href="#ch25-7">Q：What can technology bring to our daily life?</a></li></ul><div class="chap" data-ch="ch26" data-text="五、宝洁八大问：常见归纳版"><a class="chap-link" href="#ch26"><span class="chap-title">五、宝洁八大问：常见归纳版</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch26" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch26" data-for="ch26" aria-hidden="true"><li data-text="结合你目前经历的案例分配"><a href="#ch26-1">结合你目前经历的案例分配</a></li><li data-text="p&amp;g 1：举例说明你如何设定一个有挑战的目标，并最终完成它"><a href="#ch26-2">P&amp;G 1：举例说明你如何设定一个有挑战的目标，并最终完成它</a></li><li data-text="p&amp;g 2：举例说明你最成功的一次经历"><a href="#ch26-3">P&amp;G 2：举例说明你最成功的一次经历</a></li><li data-text="p&amp;g 3：举例说明你经历过的一次失败，以及从中学到了什么"><a href="#ch26-4">P&amp;G 3：举例说明你经历过的一次失败，以及从中学到了什么</a></li><li data-text="p&amp;g 4：举例说明你如何说服别人接受你的观点"><a href="#ch26-5">P&amp;G 4：举例说明你如何说服别人接受你的观点</a></li><li data-text="p&amp;g 5：举例说明你如何领导或推动一个团队"><a href="#ch26-6">P&amp;G 5：举例说明你如何领导或推动一个团队</a></li><li data-text="p&amp;g 6：举例说明你如何与别人合作完成任务"><a href="#ch26-7">P&amp;G 6：举例说明你如何与别人合作完成任务</a></li><li data-text="p&amp;g 7：举例说明你如何分析并解决一个复杂问题"><a href="#ch26-8">P&amp;G 7：举例说明你如何分析并解决一个复杂问题</a></li><li data-text="p&amp;g 8：举例说明你如何在有限资源下同时完成多个任务"><a href="#ch26-9">P&amp;G 8：举例说明你如何在有限资源下同时完成多个任务</a></li></ul><div class="chap" data-ch="ch27" data-text="六、常见行为面问题补充题库"><a class="chap-link" href="#ch27"><span class="chap-title">六、常见行为面问题补充题库</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch27" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch27" data-for="ch27" aria-hidden="true"><li data-text="1. 你为什么选择这个岗位？"><a href="#ch27-1">1. 你为什么选择这个岗位？</a></li><li data-text="2. 你为什么选择我们公司？"><a href="#ch27-2">2. 你为什么选择我们公司？</a></li><li data-text="3. 你对目标公司了解多少？（以 oppo 为例）"><a href="#ch27-3">3. 你对目标公司了解多少？（以 OPPO 为例）</a></li><li data-text="4. 你未来三到五年的规划是什么？"><a href="#ch27-4">4. 你未来三到五年的规划是什么？</a></li><li data-text="5. 你能接受加班、出差或压力吗？"><a href="#ch27-5">5. 你能接受加班、出差或压力吗？</a></li><li data-text="6. 你收到过最尖锐的一次反馈是什么？"><a href="#ch27-6">6. 你收到过最尖锐的一次反馈是什么？</a></li><li data-text="7. 你最不喜欢和什么样的人合作？"><a href="#ch27-7">7. 你最不喜欢和什么样的人合作？</a></li><li data-text="8. 你有没有做过不在职责范围内的事情？"><a href="#ch27-8">8. 你有没有做过不在职责范围内的事情？</a></li><li data-text="9. 如果任务很琐碎、重复，你能接受吗？"><a href="#ch27-9">9. 如果任务很琐碎、重复，你能接受吗？</a></li><li data-text="10. 你如何处理压力？"><a href="#ch27-10">10. 你如何处理压力？</a></li><li data-text="11. 你有没有犯过一个低级错误？"><a href="#ch27-11">11. 你有没有犯过一个低级错误？</a></li><li data-text="12. 你希望领导怎么管理你？"><a href="#ch27-12">12. 你希望领导怎么管理你？</a></li><li data-text="13. 如果你发现同事的数据有问题，但他马上要汇报，你怎么办？"><a href="#ch27-13">13. 如果你发现同事的数据有问题，但他马上要汇报，你怎么办？</a></li><li data-text="14. 你有什么想问我们的？"><a href="#ch27-14">14. 你有什么想问我们的？</a></li></ul><div class="chap" data-ch="ch28" data-text="七、把一个真实故事准备成“案例卡”"><a class="chap-link" href="#ch28"><span class="chap-title">七、把一个真实故事准备成“案例卡”</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch28" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch28" data-for="ch28" aria-hidden="true"><li data-text="案例卡模板"><a href="#ch28-1">案例卡模板</a></li><li data-text="已根据你经历填写的两张案例卡"><a href="#ch28-2">已根据你经历填写的两张案例卡</a></li></ul><div class="chap" data-ch="ch29" data-text="八、ai 面试现场策略与设备准备"><a class="chap-link" href="#ch29"><span class="chap-title">八、AI 面试现场策略与设备准备</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch29" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch29" data-for="ch29" aria-hidden="true"><li data-text="1. 面试前一天"><a href="#ch29-1">1. 面试前一天</a></li><li data-text="2. 面试中"><a href="#ch29-2">2. 面试中</a></li><li data-text="3. 被追问到很细时"><a href="#ch29-3">3. 被追问到很细时</a></li><li data-text="4. 不要这样回答"><a href="#ch29-4">4. 不要这样回答</a></li></ul><div class="chap" data-ch="ch30" data-text="九、企业心理测评准备指南"><a class="chap-link" href="#ch30"><span class="chap-title">九、企业心理测评准备指南</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch30" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch30" data-for="ch30" aria-hidden="true"><li data-text="1. 企业心理测评通常在看什么"><a href="#ch30-1">1. 企业心理测评通常在看什么</a></li><li data-text="2. 常见题型和答题形式"><a href="#ch30-2">2. 常见题型和答题形式</a></li><li data-text="3. 常见考察维度"><a href="#ch30-3">3. 常见考察维度</a></li><li data-text="4. 什么样的“人设”更容易适配企业测评"><a href="#ch30-4">4. 什么样的“人设”更容易适配企业测评</a></li><li data-text="5. 常见题目的作答思路"><a href="#ch30-5">5. 常见题目的作答思路</a></li><li data-text="6. 作答时最重要的几个原则"><a href="#ch30-6">6. 作答时最重要的几个原则</a></li><li data-text="7. 结合你的经历，建议形成的个人工作画像"><a href="#ch30-7">7. 结合你的经历，建议形成的个人工作画像</a></li><li data-text="8. 测评前的可执行准备"><a href="#ch30-8">8. 测评前的可执行准备</a></li><li data-text="9. 如果面试官问“你怎么看企业心理测评”"><a href="#ch30-9">9. 如果面试官问“你怎么看企业心理测评”</a></li><li data-text="10. 资料来源与可信度说明"><a href="#ch30-10">10. 资料来源与可信度说明</a></li></ul><div class="chap" data-ch="ch31" data-text="十、七天准备计划"><a class="chap-link" href="#ch31"><span class="chap-title">十、七天准备计划</span></a><button class="twisty" aria-label="展开本章小节" aria-controls="secs-ch31" aria-expanded="false">&#9656;</button></div><ul class="secs" id="secs-ch31" data-for="ch31" aria-hidden="true"><li data-text="第 1 天：搭建个人素材"><a href="#ch31-1">第 1 天：搭建个人素材</a></li><li data-text="第 2 天：困难、失败和复盘"><a href="#ch31-2">第 2 天：困难、失败和复盘</a></li><li data-text="第 3 天：合作、分歧和说服"><a href="#ch31-3">第 3 天：合作、分歧和说服</a></li><li data-text="第 4 天：优先级和流程改进"><a href="#ch31-4">第 4 天：优先级和流程改进</a></li><li data-text="第 5 天：ai 相关问题"><a href="#ch31-5">第 5 天：AI 相关问题</a></li><li data-text="第 6 天：英语与完整模拟"><a href="#ch31-6">第 6 天：英语与完整模拟</a></li><li data-text="第 7 天：轻量复盘"><a href="#ch31-7">第 7 天：轻量复盘</a></li></ul><div class="chap" data-ch="ch32" data-text="十一、最后的个人信息待补区"><a class="chap-link" href="#ch32"><span class="chap-title">十一、最后的个人信息待补区</span></a></div></div></details><div id="emptySearch" class="search-empty" aria-live="polite">未找到匹配内容</div></div>
+</nav>
+<button id="backdrop" type="button" aria-label="关闭目录" tabindex="-1"></button>
+<div class="main">
+  <header class="topbar">
+    <button id="menuBtn" type="button" aria-label="打开目录" aria-controls="sidebar"
+      aria-expanded="false">&#9776;</button>
+    <span class="tb-title">AI 面试面经汇总、合并题库与口语化逐字稿</span>
+    <span class="tb-spacer"></span>
+    <a class="tb-link" href="../八股/传统计算机与后端核心复习.html">传统计算机与后端篇 →</a><a class="tb-link" href="../八股/大模型与智能体核心复习.html">LLM + Agent 篇 →</a><a class="tb-link" href="../八股/智能体面试八股笔记.html">Agent 八股篇 →</a>
+    <button id="themeBtn" type="button">&#9681; 深色</button>
+  </header>
+  <main id="main-content" class="content"><h1 id="top">AI 面试面经汇总、合并题库与口语化逐字稿 <a id="ai-面试面经汇总合并题库与口语化逐字稿" class="alias"></a></h1>
+<blockquote>
+<p>适用场景：AI/科技公司校招、社招面试，以及相似的中文行为面 + 英语能力测试。本文以 OPPO 面经作为主要样本，但题目和回答结构可迁移到其他公司。<br />
+使用方式：先把所有「待替换」内容换成你的真实经历，再练习自然表达。不要把示例中的项目、数据和结果直接冒充成自己的经历。</p>
+</blockquote>
+<h2 id="ch1">0. 标记说明 <a id="0-标记说明" class="alias"></a></h2>
+<ul>
+<li>【可直接使用】表示方法论或假设题，可以直接练习；如果涉及个人经历，仍要替换方括号内容。</li>
+<li>【必须替换】表示必须放入你的真实学校、项目、实习、科研或学生工作经历。</li>
+<li>【追问重点】表示面试官很可能继续挖的地方。</li>
+<li>【口语稿】是适合面试现场直接说的版本，不建议逐字背得过于僵硬。</li>
+<li>文中的“AI 面试”是对截图面经的归纳，不代表每一批、每个岗位、每个平台完全一致。</li>
+</ul>
+<hr />
+<h2 id="ch2">一、先说结论：这批面经真正考什么 <a id="一先说结论这批面经真正考什么" class="alias"></a></h2>
+<p>工作区里共有 15 张面经截图，内容基本集中在 OPPO 秋招 AI 面试。不同作者的题目虽然表述不一样，但核心考察高度重复：</p>
+<ol>
+<li>能不能在 1～2 分钟内把自己和岗位讲清楚。</li>
+<li>有没有真实经历，能不能把“我做了什么”讲具体。</li>
+<li>遇到困难、分歧、资源不足和结果不理想时，能不能拆问题、找资源、做取舍、复盘。</li>
+<li>是否真的会使用 AI，而不是只会说“用 AI 写东西”。</li>
+<li>能不能判断 AI 输出是否可靠，知道哪些环节必须人工负责。</li>
+<li>英语是否能完成基础朗读、听译/口译和简单英文问答。</li>
+<li>被连续追问时是否稳定、坦诚、有逻辑。</li>
+</ol>
+<h3 id="ch2-1">1. 面经中反复出现的流程 <a id="1-面经中反复出现的流程" class="alias"></a></h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>环节</th>
+<th>反复出现的形式</th>
+<th>准备重点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>设备与身份确认</td>
+<td>电脑摄像头、手机扫码或手机锁定，具体平台略有差异</td>
+<td>提前测试摄像头、麦克风、浏览器和网络；遵守平台监考规则</td>
+</tr>
+<tr>
+<td>中文面</td>
+<td>通常 5 题左右</td>
+<td>自我介绍、学习/实习/科研、困难解决、合作沟通、AI 使用</td>
+</tr>
+<tr>
+<td>追问</td>
+<td>每题大约 1～3 个，个别题会连续追问较久</td>
+<td>不能只准备结论，要准备背景、个人动作、数据、遗憾和复盘</td>
+</tr>
+<tr>
+<td>英语面</td>
+<td>朗读一段、听力或口译一段、英文问答</td>
+<td>重点是流畅和能表达，不是追求复杂词汇</td>
+</tr>
+<tr>
+<td>其他测评</td>
+<td>部分面经提到性格测试、AI 基础笔试</td>
+<td>性格题保持前后一致；AI 基础另行复习</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch2-2">2. 题目去重后的主干 <a id="2-题目去重后的主干" class="alias"></a></h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>原始表述</th>
+<th>合并后的题型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自我介绍、学习经历、实习经历、科研情况、校园经历</td>
+<td>自我介绍与经历概览</td>
+</tr>
+<tr>
+<td>最难的课程、项目中的困难、学习/科研遇到的问题、结果不理想</td>
+<td>困难解决与复盘</td>
+</tr>
+<tr>
+<td>上级/导师意见不同、老方法与新方法、和领导意见不一致</td>
+<td>向上沟通与方案说服</td>
+</tr>
+<tr>
+<td>合作经历、组员摆烂、团队分歧、项目沟通分歧</td>
+<td>团队合作与冲突处理</td>
+</tr>
+<tr>
+<td>时间紧、预算少、人手不够、多任务并行</td>
+<td>任务优先级与资源协调</td>
+</tr>
+<tr>
+<td>用 AI、AI 融进工作流、AI 帮你解决问题、判断 AI 对错</td>
+<td>AI 使用、验证与边界</td>
+</tr>
+<tr>
+<td>五天学会新工具、一个月提升英语口语、主动学习 AI 工具</td>
+<td>快速学习与目标管理</td>
+</tr>
+<tr>
+<td>课程点击率高但完成率低、优化流程、如何分析原因</td>
+<td>数据诊断与流程改进</td>
+</tr>
+<tr>
+<td>拉校园赞助、说服别人同意方案、争取资源</td>
+<td>影响力与资源获取</td>
+</tr>
+<tr>
+<td>英文朗读、听录音翻译、英文自由问答</td>
+<td>英语能力测试</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="ch3">二、统一答题原则：把每个答案讲成一个“小闭环” <a id="二统一答题原则把每个答案讲成一个小闭环" class="alias"></a></h2>
+<h3 id="ch3-1">1. 个人经历题：用 BEI/STAR，但说得像人在聊天 <a id="1-个人经历题用-beistar但说得像人在聊天" class="alias"></a></h3>
+<p>建议顺序：</p>
+<blockquote>
+<p>先说结论 → 交代背景和目标 → 重点说“我”做了什么 → 说结果 → 补一句复盘。</p>
+</blockquote>
+<p>现场可以用下面这套开头：</p>
+<p><strong>【口语稿】</strong></p>
+<blockquote>
+<p>“我先说结论，这件事最后是解决了，但中间最大的难点是[难点]。当时的背景是[时间/团队/任务]，我的具体职责是[职责]。我主要做了三件事：第一，[动作一]；第二，[动作二]；第三，[动作三]。最后结果是[数据或事实]。现在回头看，我觉得做得比较好的是[优点]，如果再来一次，我会提前[改进点]。”</p>
+</blockquote>
+<h3 id="ch3-2">2. 面试官连续追问时，优先补四类信息 <a id="2-面试官连续追问时优先补四类信息" class="alias"></a></h3>
+<ul>
+<li>你当时到底负责哪一部分。</li>
+<li>你为什么这样判断，而不是凭感觉。</li>
+<li>结果能不能量化，或者至少能不能用事实证明。</li>
+<li>有没有没做好、没采纳、延期或返工的地方。</li>
+</ul>
+<h3 id="ch3-3">3. 尽量少说这些空话 <a id="3-尽量少说这些空话" class="alias"></a></h3>
+<p>“我们大家一起努力”“我提升了沟通能力”“最后取得了不错的效果”“我学到了很多”“我会积极面对”都太空。</p>
+<p>换成：</p>
+<blockquote>
+<p>“我负责把任务拆成三块，并每天晚上同步一次风险。第二天发现数据口径不一致，我先暂停了汇报，重新和业务方确认口径。最后虽然比原计划晚了半天，但避免了后续整份报告返工。”</p>
+</blockquote>
+<h3 id="ch3-4">4. 真实经历不够时怎么办 <a id="4-真实经历不够时怎么办" class="alias"></a></h3>
+<p>优先级建议是：</p>
+<ol>
+<li>实习或科研项目；</li>
+<li>课程项目；</li>
+<li>学生组织、社团、竞赛；</li>
+<li>个人学习或生活中的真实例子。</li>
+</ol>
+<p>没有经历可以说没有，但不要编造公司、客户、金额、QPS 和结果。面试官通常能通过追问判断故事是否真实。</p>
+<hr />
+<h2 id="ch4">三、核心题库与口语化逐字稿 <a id="三核心题库与口语化逐字稿" class="alias"></a></h2>
+<h2 id="ch5">Q1. 请做一下自我介绍 <a id="q1-请做一下自我介绍" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频破冰题<br />
+<strong>答案属性：</strong> 【已根据个人经历填写】<br />
+<strong>建议时长：</strong> 60～90 秒，最多不要超过 2 分钟</p>
+<h3 id="ch5-1">面试官在看什么 <a id="面试官在看什么" class="alias"></a></h3>
+<ul>
+<li>你能否快速提炼和岗位相关的经历；</li>
+<li>表达是否有结构；</li>
+<li>你后面最可能被深挖的项目是什么；</li>
+<li>你为什么适合这个岗位。</li>
+</ul>
+<h3 id="ch5-2">【口语稿】你的专属版本 <a id="口语稿你的专属版本" class="alias"></a></h3>
+<blockquote>
+<p>“面试官您好，我叫庄会城，本硕均就读于南京理工大学，目前是控制理论与控制工程方向的硕士，成绩排名前 5%。在校期间，我多次获得硕士学业一等奖学金，也获得过华为奖学金。  </p>
+<p>我的项目经历主要有两条主线。第一条是控制与机器人方向。我参与过国网配网带电作业人机协同机器人项目，主要负责遥操作系统的软件架构设计和核心功能开发，包括基于 ROS/C++ 的主从端控制链路、运动映射、状态回传以及上位机客户端。这段经历让我对复杂系统、状态反馈、安全边界和工程交付有了比较深入的理解。基于相关项目经历，我还参与发表了两篇论文，获得了一项国家发明专利授权和一项软件著作权。  </p>
+<p>第二条是 AI Agent 应用方向。我构建了一个面向社保规划场景的可信政策问答 Agent 系统，采用 Plan-and-Execute 工作流，先判断用户意图和工具需求，再把退休年龄、缴费缺口这类高风险数字交给规则引擎测算，把政策依据交给 RAG 检索来源，并通过结构化记忆保存多轮用户信息。经过 benchmark 验证，政策来源 Recall@3 达到 94%，官方来源命中率达到 98%，提升了政策类 Agent 输出的可解释性、可追溯性和可信度。  </p>
+<p>技术方面，我熟悉 C++、MATLAB/Simulink、Agent 的基本原理与设计模式，也熟练使用 Claude Code 等 AI 工具，并且有真实项目开发、复杂系统联调和现场问题处理经验。我认为自己的优势是学习新技术比较快，同时能够把软硬件、系统架构和实际交付结合起来。以上就是我的基本情况，谢谢面试官。”</p>
+</blockquote>
+<h3 id="ch5-3">可能追问 1：你刚才提到的项目，最能体现你的能力是什么？ <a id="可能追问-1你刚才提到的项目最能体现你的能力是什么" class="alias"></a></h3>
+<p><strong>【逐字稿】</strong></p>
+<blockquote>
+<p>“我觉得最能体现的是复杂问题拆解和工程落地能力。机器人项目早期技术储备比较少，很多事情要从设备选型、开发流程和作业方案一起摸索。我当时主要负责遥操作系统的软件架构和核心功能，同时也参与了硬件选型、末端工具适配和整体流程设计。  </p>
+<p>比如客户给的是人工拆搭引流线的流程，如果完全照搬，需要三台机械臂，但平台负载不够。我们后来围绕‘两台机械臂能不能完成同样的任务’重新拆解流程，找到通用猴头线夹，又和外部公司反复设计专用电动夹爪，最后基于新的末端工具重新制定作业流程。这个过程比较能体现我不是只负责写代码，而是能结合约束把软硬件和实际任务一起落地。”</p>
+</blockquote>
+<h3 id="ch5-4">可能追问 2：这个项目里你个人做了什么？不要只说“我们” <a id="可能追问-2这个项目里你个人做了什么不要只说我们" class="alias"></a></h3>
+<p><strong>【逐字稿】</strong></p>
+<blockquote>
+<p>“这个项目不是我一个人完成的，硬件、机械、电气和软件都有不同成员参与。我个人主要负责遥操作系统的软件架构和核心功能，包括 ROS/C++ 主从端控制链路、运动映射、状态回传和上位机客户端；另外，在前期硬件和末端工具适配阶段，我也参与了设备调研、需求分析以及和外部公司的方案沟通。  </p>
+<p>团队最终完成的是一个真实完整的带电作业机器人系统，而我直接负责的部分，主要是让操作端、机器人本体和上位机之间能够稳定联动，并把状态和安全边界反馈给操作者。”</p>
+</blockquote>
+<h3 id="ch5-5">可能追问 3：为什么选择目标公司/这个岗位？ <a id="可能追问-3为什么选择目标公司这个岗位" class="alias"></a></h3>
+<p><strong>【可直接使用】</strong></p>
+<blockquote>
+<p>“我主要看重三点。第一，这个岗位和我过去在控制、机器人、复杂系统以及 AI 应用方面的积累有连接，不是完全从零开始。第二，我希望进入一个能把技术能力落到真实产品和用户场景里的团队，而不是只停留在实验或 Demo 阶段。第三，我比较看重长期学习和跨团队协作，因为我过去的项目既需要写软件，也需要和硬件、机械以及外部单位一起解决实际问题。以 OPPO 这类智能设备公司为例，我比较关注智能设备和 AI 能力结合的方向，希望把自己在系统联调、工程交付和 AI 工具应用上的经验继续落到真实产品中。”</p>
+</blockquote>
+<h3 id="ch5-6">可能追问 4：你最大的优势和短板是什么？ <a id="可能追问-4你最大的优势和短板是什么" class="alias"></a></h3>
+<p>优势不要只说“认真负责”，要接事实：</p>
+<blockquote>
+<p>“我的优势是遇到不熟悉的问题时，能够比较快地拆解并形成行动计划，同时比较擅长复杂系统联调和现场问题处理。比如机器人项目早期，我需要快速掌握陌生遥操作主手的开发流程，还要面对平台负载不足和异形线夹难以夹持的问题。我先分别拆解设备、末端工具和作业流程，再通过资料调研、小范围验证和外部协作逐步收敛方案，最后支撑了两台机械臂完成整体作业。  </p>
+<p>我的短板是过去有时会在技术细节上投入过多，容易把方案打磨得比较充分后再同步。现在我会在前期先明确目标、约束和最小可行方案，在关键节点主动同步，让团队尽早发现方向问题。这个习惯还在持续加强。”</p>
+</blockquote>
+<hr />
+<h2 id="ch6">Q2. 说说你在学习、科研或项目中遇到的一个困难，你是怎么解决的？ <a id="q2-说说你在学习科研或项目中遇到的一个困难你是怎么解决的" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频经历题<br />
+<strong>答案属性：</strong> 【已根据个人经历填写】<br />
+<strong>建议时长：</strong> 90 秒左右</p>
+<h3 id="ch6-1">面试官在看什么 <a id="面试官在看什么-1" class="alias"></a></h3>
+<p>不是听你说“困难很大”，而是看你能不能把问题拆开、找到资源、验证方案、承担结果。</p>
+<h3 id="ch6-2">【逐字稿】机器人项目版本 <a id="逐字稿机器人项目版本" class="alias"></a></h3>
+<blockquote>
+<p>“我印象最深刻的困难，来源于国网配网带电作业人机协同机器人项目的前期准备。项目刚开始时技术储备比较有限，很多事情要从设备选型开始自己摸索。比如遥操作主手选定之后，这类设备网上公开资料比较少，我需要在较短时间内掌握它的开发流程、接口和数据获取方式，并判断它能不能和整个遥操作系统配合起来。  </p>
+<p>更大的挑战来自客户给出的作业需求。客户提供的是两名工人使用三根绝缘杆进行引流线拆搭的人工流程。如果完全照搬到机器人平台上，可能需要三台机械臂，但平台负载无法满足，所以我们不能简单复制人工动作，而要重新设计机器人作业流程。  </p>
+<p>我们后来围绕‘如何用两台机械臂完成同样的任务’重新分析约束，调研后找到了一种通用猴头线夹。但它是异形件，像 Robotiq 这类电动平行夹爪无法稳定固定。于是我们又和外部公司反复设计适配的专用电动夹爪或夹持机构，让它具备一定的导向性和夹持余量，同时能够把线夹夹紧。基于这个末端工具，我们重新制定了整套机器人的作业流程，并继续完成遥操作系统、状态反馈和整机联调。  </p>
+<p>这件事让我体会比较深的是，工程问题往往不是单点技术问题，而是硬件、软件、作业流程和安全约束共同作用的结果。遇到资源和平台限制时，不能只想着照搬原方案，而要回到任务目标，重新寻找可落地的实现路径。”</p>
+</blockquote>
+<h3 id="ch6-3">可能追问 1：你怎么确定这就是根因？ <a id="可能追问-1你怎么确定这就是根因" class="alias"></a></h3>
+<p><strong>【可直接套用，再替换细节】</strong></p>
+<blockquote>
+<p>“我当时主要通过三步确认。第一，看现象是不是稳定出现；第二，把变量拆开，做一个最小化测试；第三，用[历史数据/基准结果/另一种方法]交叉验证。如果只改一个地方结果就明显变化，我才会把它作为重点根因，而不是看到一个相关现象就直接下结论。”</p>
+</blockquote>
+<h3 id="ch6-4">可能追问 2：如果最后结果没有达到预期，你怎么回答？ <a id="可能追问-2如果最后结果没有达到预期你怎么回答" class="alias"></a></h3>
+<p><strong>【逐字稿】</strong></p>
+<blockquote>
+<p>“这个项目中有些方案并不是第一次就能达到预期。比如最初如果直接按照人工流程配置三台机械臂，虽然动作逻辑比较直观，但平台负载无法满足；如果直接使用常见的电动平行夹爪，也无法稳定夹持异形猴头线夹。我们没有把它简单理解成‘设备不行’，而是重新检查任务目标、平台约束和末端工具之间的关系，最后通过两台机械臂的流程重构和专用夹持机构解决。  </p>
+<p>如果再来一次，我会在更早阶段就把平台负载、末端工具可获得性和作业流程放在一起做联合评估，减少先分别选设备、后面再被动适配的情况。”</p>
+</blockquote>
+<h3 id="ch6-5">可能追问 3：你从这件事中学到的是什么？ <a id="可能追问-3你从这件事中学到的是什么" class="alias"></a></h3>
+<blockquote>
+<p>“我最大的收获是，复杂工程问题要尽早把目标、平台约束、验收标准和上下游接口放在一起看。不能先把某个局部做到最好，再发现它和整体系统不兼容。现在我会更早做最小可行验证，并在关键节点同步风险。”</p>
+</blockquote>
+<h3 id="ch6-6">可能追问 4：如果只选一个困难，你为什么不选软件开发，而选硬件和末端工具？ <a id="可能追问-4如果只选一个困难你为什么不选软件开发而选硬件和末端工具" class="alias"></a></h3>
+<blockquote>
+<p>“因为软件问题通常可以通过代码、日志和测试逐步定位，而这个硬件问题同时受到设备资料、平台负载、异形件夹持、机械结构和作业安全的影响，任何一个环节不成立，软件都无法独立解决。它更考验我能不能跳出自己的技术模块，从整个任务和系统约束出发找方案。”</p>
+</blockquote>
+<h3 id="ch6-7">备用案例：Agent 项目的 RAG 检索问题 <a id="备用案例agent-项目的-rag-检索问题" class="alias"></a></h3>
+<blockquote>
+<p>“如果面试官希望听 AI 项目的困难，我会讲另一个例子。社保政策问答 Agent 初期的 RAG 检测效果不够理想。复盘后我发现，一是多轮会话检测时只使用了用户最后一句话，前文信息丢失后，用户真实意图会判断不准确；二是说明文档切 chunk 后，一些来源信息没有被完整保留下来，导致回答依据虽然可能相关，但来源展示不够稳定。  </p>
+<p>后来我把多轮对话先整理成带上下文的独立查询，再交给检索模块，同时调整切块和元数据保留方式，确保政策来源能够随 chunk 一起被召回和展示。修改后通过 benchmark 验证，政策来源 Recall@3 达到 94%，官方来源命中率达到 98%。这个经历让我认识到，AI 系统的效果不能只靠调 prompt，还要结合数据、检索链路和评测指标定位问题。”</p>
+</blockquote>
+<hr />
+<h2 id="ch7">Q3. 讲一次你最有成就感的实习、科研、项目或校园经历 <a id="q3-讲一次你最有成就感的实习科研项目或校园经历" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频行为题<br />
+<strong>答案属性：</strong> 【已根据个人经历填写】</p>
+<h3 id="ch7-1">【逐字稿】机器人项目版本 <a id="逐字稿机器人项目版本-1" class="alias"></a></h3>
+<blockquote>
+<p>“我最有成就感的是国网配网带电作业人机协同机器人项目。它让我有成就感，不只是因为最后完成了一个项目，而是因为我们从前期准备开始，几乎经历了从零搭建真实系统的过程。  </p>
+<p>项目前期要先做设备选型，随后还要快速掌握陌生遥操作主手的开发流程；在作业方案上，我们又遇到了平台负载不足和异形线夹难以夹持的问题。我的主要工作是遥操作系统的软件架构和核心功能开发，包括 ROS/C++ 主从端控制链路、运动映射、状态回传和上位机客户端，同时也参与了末端工具适配和整体作业流程的重新设计。  </p>
+<p>最让我印象深刻的是，系统不再只是仿真或 Demo，而是真正搭建成了一个完整的带电作业机器人系统，并在高空环境中完成了整体作业流程。到那个时刻，我会明显感受到前期选型、软硬件设计、反复联调和现场问题处理都形成了真实结果，所以非常自豪，也很有成就感。基于相关项目经历，我们还形成了两篇论文、一项国家发明专利授权和一项软件著作权等成果。”</p>
+</blockquote>
+<h3 id="ch7-2">可能追问 1：为什么这件事让你有成就感？ <a id="可能追问-1为什么这件事让你有成就感" class="alias"></a></h3>
+<blockquote>
+<p>“因为它同时有两个特点。第一，目标不是停留在论文或仿真层面，而是要把系统真正做出来并完成现场作业；第二，结果和我的具体工作有直接关系。从设备和流程摸索，到软件架构、软硬件联调，再到高空环境中的实际作业，这个变化是可以被真实观察和验证的。”</p>
+</blockquote>
+<h3 id="ch7-3">可能追问 2：如果把这件事交给别人，你觉得最容易出问题的地方是什么？ <a id="可能追问-2如果把这件事交给别人你觉得最容易出问题的地方是什么" class="alias"></a></h3>
+<blockquote>
+<p>“我觉得最容易出问题的是末端工具和作业流程的接口，因为它同时依赖机械夹持稳定性、机械臂动作空间、平台负载和软件控制逻辑。如果交给别人，我会先把任务目标、线夹几何约束、夹持验收标准、动作边界和安全风险写清楚，再通过小范围测试和中间检查点确认，而不是等到整机联调时才发现工具和流程不匹配。”</p>
+</blockquote>
+<h3 id="ch7-4">可能追问 3：你怎么证明这个机器人系统不是只完成了 Demo？ <a id="可能追问-3你怎么证明这个机器人系统不是只完成了-demo" class="alias"></a></h3>
+<blockquote>
+<p>“我会从三个层面说明。第一，系统不是单个模块，而是包含遥操作主手、主从控制链路、运动映射、状态回传、上位机和末端工具的完整链路；第二，它不是只在仿真环境里运行，而是在真实平台和高空环境中完成了整体作业流程；第三，相关项目还沉淀出了论文、国家发明专利和软件著作权等成果。当然，如果面试官需要具体性能指标，我会进一步补充项目中实际记录的响应时间、成功率或联调结果。”</p>
+</blockquote>
+<h3 id="ch7-5">可能追问 4：你在这个项目里最核心的个人贡献是什么？ <a id="可能追问-4你在这个项目里最核心的个人贡献是什么" class="alias"></a></h3>
+<blockquote>
+<p>“我认为最核心的是把遥操作系统的关键链路真正串起来，并让它能和硬件、末端工具及作业流程对接。具体包括 ROS/C++ 主从端控制、运动映射、状态回传和上位机客户端；同时我没有把软件和硬件割裂开，在末端工具和流程约束变化后，也参与调整软件侧的控制和交互逻辑。”</p>
+</blockquote>
+<hr />
+<h2 id="ch8">Q4. 你在学习或工作中怎么使用 AI？怎么把它融进工作流？ <a id="q4-你在学习或工作中怎么使用-ai怎么把它融进工作流" class="alias"></a></h2>
+<p><strong>题型：</strong> 几乎必问<br />
+<strong>答案属性：</strong> 【已根据个人经历填写】</p>
+<h3 id="ch8-1">面试官在看什么 <a id="面试官在看什么-2" class="alias"></a></h3>
+<p>不是看你会不会报工具名称，而是看你有没有实际使用、有没有验证意识、是否注意隐私和责任边界。</p>
+<h3 id="ch8-2">【口语稿】你的专属版本 <a id="口语稿你的专属版本-1" class="alias"></a></h3>
+<blockquote>
+<p>“我不会把 AI 当成直接替我交付答案的工具，而是把它放在工作流的不同环节里。  </p>
+<p>在日常学习和开发中，我会使用 Claude Code 等工具做资料整理、代码阅读、任务拆解、初版代码和测试思路生成，也会让它模拟用户或面试官来帮助我发现遗漏。但我会先自己明确目标、输入、限制条件和验收标准，再让 AI 参与具体环节。  </p>
+<p>在社保规划政策问答 Agent 项目中，我把 AI 放在‘理解和组织信息’的位置，而不是让模型直接决定高风险数字。系统先通过 Plan-and-Execute 判断用户意图和工具需求，退休年龄、缴费缺口这类数字交给规则引擎计算，政策依据交给 RAG 检索，用户多轮信息则沉淀到结构化记忆中。这样做的原因是，不同任务需要不同的可靠性边界。  </p>
+<p>我还会在检查阶段验证 AI 的输出，比如和官方政策来源、规则计算结果或 benchmark 指标交叉对比。最终目标、关键数据、业务取舍和结果责任仍然由我自己确认。我的理解是，AI 更适合加快信息处理和初步生成，但不能替代人的判断和责任。”</p>
+</blockquote>
+<h3 id="ch8-3">可能追问 1：你怎么判断 AI 说得对不对？ <a id="可能追问-1你怎么判断-ai-说得对不对" class="alias"></a></h3>
+<p><strong>【通用逐字稿】</strong></p>
+<blockquote>
+<p>“我不会只看 AI 的回答是否流畅，而是会根据任务风险分层验证。第一，核对信息来源，优先看官方文档、教材、原始数据或专业论文；第二，检查它的前提、适用条件、数据口径和时间范围是不是和问题一致；第三，在条件允许时做小范围测试，看看结果能不能复现。  </p>
+<p>如果是代码或计算结果，我会用测试用例、边界条件或独立方法复核；如果是开放性建议，我会把它当作候选方案，再结合实际约束判断。发现不准确时，我会先判断是提示词不清、上下文不足、数据有问题，还是模型本身的能力边界，而不是继续无条件地让它生成。”</p>
+</blockquote>
+<h3 id="ch8-4">可能追问 2：你如何让 AI 给出更有针对性的结果，而不是泛泛而谈？ <a id="可能追问-2你如何让-ai-给出更有针对性的结果而不是泛泛而谈" class="alias"></a></h3>
+<blockquote>
+<p>“我会把问题写成任务说明，而不是只问一句‘帮我分析一下’。一般会交代背景、目标、输入、限制条件、输出格式和评价标准。对于多轮对话，我还会先把历史信息整理成一个相对完整、独立的 query，避免模型只看到最后一句。对于政策类问题，我会明确要求返回结论、依据、适用条件和不确定性。第一轮输出后，我再针对具体环节追问或补充数据，这样比一次性让它生成一个大而全的答案更容易得到可用结果。”</p>
+</blockquote>
+<h3 id="ch8-5">可能追问 3：哪些事情不能交给 AI 直接做？ <a id="可能追问-3哪些事情不能交给-ai-直接做" class="alias"></a></h3>
+<blockquote>
+<p>“涉及最终责任、敏感隐私、价值判断和复杂人际关系的事情，我不会让 AI 直接替我决定。尤其是在社保政策咨询里，模型可以帮助理解问题和检索依据，但退休年龄、缴费缺口等高风险数字必须由规则引擎或人工核实；政策来源也必须能够追溯。最终的项目取舍、对外承诺、重要实验结论和对人的评价，都不能只依据模型生成结果。”</p>
+</blockquote>
+<h3 id="ch8-6">可能追问 4：你用 AI 有没有出过错？ <a id="可能追问-4你用-ai-有没有出过错" class="alias"></a></h3>
+<p><strong>【逐字稿】</strong></p>
+<blockquote>
+<p>“有过一次是在社保政策 Agent 的 RAG 评测中。初期看起来回答和政策主题相关，但检测效果并不理想。后来我定位到两个问题：第一，多轮会话里只拿最后一句做检索，导致用户真正的意图和前文条件丢失；第二，文档切 chunk 后，一些政策来源信息没有保留下来，导致依据展示不稳定。  </p>
+<p>我先把多轮历史整理成独立查询，再调整 chunk 和来源元数据的保留方式，同时用 benchmark 重新验证。修改后政策来源 Recall@3 达到 94%，官方来源命中率达到 98%。这个经历让我意识到，AI 输出越流畅，越不能把流畅当成正确，必须从输入、检索、工具调用和评测结果整条链路去检查。”</p>
+</blockquote>
+<h3 id="ch8-7">可能追问 5：为什么不直接让大模型计算退休年龄或缴费缺口？ <a id="可能追问-5为什么不直接让大模型计算退休年龄或缴费缺口" class="alias"></a></h3>
+<blockquote>
+<p>“因为这类数字对政策版本、个人条件和计算规则都比较敏感，而且需要可重复、可审计。大模型可以帮助理解用户表达、提取参数和组织结果，但不适合作为最终计算器。我会让模型把结构化参数交给规则引擎，再把计算过程和适用条件返回给用户，这样更容易复核，也更容易定位错误。”</p>
+</blockquote>
+<h3 id="ch8-8">可能追问 6：为什么采用 Plan-and-Execute，而不是一次性让模型回答？ <a id="可能追问-6为什么采用-plan-and-execute而不是一次性让模型回答" class="alias"></a></h3>
+<blockquote>
+<p>“一次性回答容易把意图识别、工具选择、检索和生成混在一起，出了问题不容易定位。Plan-and-Execute 可以先判断用户到底需要政策检索、规则计算还是补充信息，再执行对应工具。这样做虽然链路更长，但任务边界更清楚，也更适合政策咨询这种需要可追溯的场景。”</p>
+</blockquote>
+<h3 id="ch8-9">可能追问 7：你的结构化记忆具体解决什么问题？ <a id="可能追问-7你的结构化记忆具体解决什么问题" class="alias"></a></h3>
+<blockquote>
+<p>“它主要解决多轮对话中用户信息容易丢失或被无关上下文干扰的问题。相比把整段历史原样塞给模型，我更倾向于把参保地区、缴费年限、年龄、用户目标等字段结构化保存，并记录字段来源和是否需要确认。下一轮提问时，系统可以先读取相关字段，再决定是否需要向用户补充确认。”</p>
+</blockquote>
+<hr />
+<h2 id="ch9">Q5. 如果给你一个完全没接触过的数据分析工具，要求 5 天内完成报告，你会怎么做？ <a id="q5-如果给你一个完全没接触过的数据分析工具要求-5-天内完成报告你会怎么做" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频情景题<br />
+<strong>答案属性：</strong> 【可直接使用，也可结合遥操作主手经历】</p>
+<h3 id="ch9-1">【口语稿】 <a id="口语稿" class="alias"></a></h3>
+<blockquote>
+<p>“我会先以交付结果为导向，不会一开始就试图把工具所有功能都学完。  </p>
+<p>第一天先确认报告的目标、数据口径、最终格式和验收标准，再快速过一遍工具最核心的功能，找一份官方教程或可靠示例跑通最小流程。第二天把我以前使用其他工具的经验映射过来，比如数据清洗、透视、可视化和统计检验分别在新工具里怎么实现。第三天用真实数据做一个小样本，从导入、清洗到输出完整走一遍。第四天重点处理异常、复核结果，并和预期的业务逻辑或基准结果对照。第五天留出时间整理报告、检查口径和准备解释。  </p>
+<p>过程中如果遇到卡点，我会先自己定位到具体环节，再带着最小复现案例请教别人，而不是只说‘这个工具不会用’。这样既能保证五天内交付，也能把学习沉淀成以后可复用的方法。”</p>
+</blockquote>
+<p>如果面试官希望听你的真实经历，可以补一句：</p>
+<blockquote>
+<p>“我之前在机器人项目中也遇到过类似情况。遥操作主手的公开资料比较少，我不是试图一次性把所有功能都学完，而是先围绕系统真正需要的接口、数据读取和控制链路建立最小闭环，再逐步补齐开发细节。这个过程让我形成了‘先跑通关键路径，再扩展能力’的学习习惯。”</p>
+</blockquote>
+<h3 id="ch9-2">可能追问 1：你怎么把以前的工具经验迁移过来？ <a id="可能追问-1你怎么把以前的工具经验迁移过来" class="alias"></a></h3>
+<blockquote>
+<p>“我迁移的不是具体按钮，而是分析逻辑。无论用什么工具，通常都可以拆成数据理解、清洗、计算、可视化和解释几个步骤。我会先列出原来熟悉的操作和新工具的对应关系，再通过一个小数据集验证。工具界面可以变，但数据口径、指标定义和验证逻辑不能变。”</p>
+</blockquote>
+<h3 id="ch9-3">可能追问 2：如果输出结果和预期实验数据不一致，你怎么处理？ <a id="可能追问-2如果输出结果和预期实验数据不一致你怎么处理" class="alias"></a></h3>
+<blockquote>
+<p>“我会先停下来确认是不是预期错了，而不是为了让结果符合预期去改数据。具体会依次检查数据版本、字段类型、缺失值和异常值、筛选条件、指标公式、时间范围以及代码或工具的默认设置。然后用一个已知结果的小样本重新跑一遍，定位差异出在哪一步。  </p>
+<p>如果确认是我的方法有问题，我会修正并保留过程；如果确认数据或原始假设有问题，我会及时说明差异和影响。最终报告里我会把口径、限制和不确定性写清楚。”</p>
+</blockquote>
+<hr />
+<h2 id="ch10">Q6. 时间紧、预算有限、人手不足，同时有多个任务，你怎么判断优先级？ <a id="q6-时间紧预算有限人手不足同时有多个任务你怎么判断优先级" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频情景/行为题<br />
+<strong>答案属性：</strong> 方法可直接使用；机器人项目可以作为具体案例</p>
+<h3 id="ch10-1">【口语稿】 <a id="口语稿-1" class="alias"></a></h3>
+<blockquote>
+<p>“我会先把所有任务放到同一张清单里，避免谁声音大就先做谁。然后从四个维度判断优先级：对最终目标的影响、截止时间和延误成本、任务之间的依赖关系，以及是否容易被替代或补救。  </p>
+<p>一般我会先做影响大、时间紧、又会卡住其他任务的事情；影响小但很急的事情看能不能模板化或委派；重要但不紧急的事情提前锁资源；低影响任务则明确延期或降级。确定顺序后，我会和相关人对齐‘做什么、什么时候交、如果资源不够牺牲什么’，而不是只承诺全部都按原计划完成。  </p>
+<p>如果结合真实经历，我会进一步说明当时面对的任务、优先级判断依据、协调动作和最终结果；如果不能全部按期完成，我会尽早暴露风险，同时给出保底版本和延期版本。”</p>
+</blockquote>
+<p>结合你的机器人项目，可以这样回答：</p>
+<blockquote>
+<p>“在机器人项目早期，我实际上同时面对设备选型、遥操作主手开发流程摸索、末端工具适配和作业流程设计几个问题。我的判断是，末端工具和平台负载属于前置约束，如果不先解决，后面的软件联调很可能返工，所以我会优先确认平台能承受什么、两台机械臂能完成什么、线夹如何稳定夹持，再逐步推进软件链路和整机联调。如果不能所有事情同时推进，我会先保证影响整体方案的关键路径，其他功能先做保底版本，并把资源不足可能造成的延期和返工风险提前同步。”</p>
+</blockquote>
+<h3 id="ch10-2">可能追问 1：除了时间、预算、人手，你还会考虑什么？ <a id="可能追问-1除了时间预算人手你还会考虑什么" class="alias"></a></h3>
+<blockquote>
+<p>“我还会考虑任务之间的依赖、失败后的可逆性、对客户或用户的影响、是否会造成后续返工、数据或合规风险，以及团队当前的学习成本。比如一个任务虽然看起来不急，但如果它是其他任务的前置条件，实际优先级可能更高。”</p>
+</blockquote>
+<h3 id="ch10-3">可能追问 2：怎么判断两个任务延期的实际影响差异？ <a id="可能追问-2怎么判断两个任务延期的实际影响差异" class="alias"></a></h3>
+<blockquote>
+<p>“我会看延期会影响什么，而不是只比较任务大小。具体看四点：是否影响外部承诺，是否卡住后续工作，是否会造成收入、体验或质量损失，以及延期后有没有补救窗口。能量化就量化，比如影响多少用户、多少人天或哪个节点；不能量化时，也要把假设和风险说清楚。”</p>
+</blockquote>
+<h3 id="ch10-4">可能追问 3：如果所有人都说自己的任务最重要呢？ <a id="可能追问-3如果所有人都说自己的任务最重要呢" class="alias"></a></h3>
+<blockquote>
+<p>“我会把争论从‘谁更重要’转成‘哪个目标的损失更大’。先把截止时间、依赖关系和影响列出来，请项目负责人或相关方确认统一目标；如果仍然无法同时满足，就给出两个方案和各自代价，请对方做取舍，而不是自己默默承担所有延期。”</p>
+</blockquote>
+<hr />
+<h2 id="ch11">Q7. 如果导师或上级坚持老方法，你想推广一个新方法，你怎么沟通？ <a id="q7-如果导师或上级坚持老方法你想推广一个新方法你怎么沟通" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频情景题<br />
+<strong>答案属性：</strong> 方法可直接使用，真实经历【建议准备】</p>
+<h3 id="ch11-1">【口语稿】 <a id="口语稿-2" class="alias"></a></h3>
+<blockquote>
+<p>“我不会一上来就说原来的方法过时，而是先确认对方坚持它的原因，可能是稳定性、时间、成本、风险，或者以前已经验证过。然后我会把新方法和共同目标联系起来，说明它具体解决什么问题，而不是只介绍技术本身。  </p>
+<p>如果条件允许，我会先做一个低成本的小范围试验，用结果比较两种方法在效率、质量和风险上的差异。沟通时我会说：‘我理解您更关注[对方关心点]。我想先在[小范围]试一下，投入是[成本]，如果达不到[标准]就回到原方案；如果达到标准，再决定是否扩大。’  </p>
+<p>如果最后仍然不采纳，只要不是原则性或合规问题，我会尊重最终决策，把方案执行好，并记录这次判断的依据。我的目标是把事情做好，不是证明自己一定正确。”</p>
+</blockquote>
+<p>结合你的机器人项目，可以这样落到实际场景：</p>
+<blockquote>
+<p>“在机器人项目中，我们没有简单照搬人工使用三根绝缘杆的流程，因为这样可能需要三台机械臂，而平台负载不满足。我们把问题重新定义为‘如何在平台约束下完成同样的作业目标’，再围绕两台机械臂寻找通用线夹和专用夹持机构。这个过程不只是换一个零件，而是用新的末端工具反过来重新设计作业流程。它让我认识到，向别人推动新方案时，最好先把共同目标和硬约束讲清楚，再用小范围验证说明新方案为什么更可行。”</p>
+</blockquote>
+<h3 id="ch11-2">可能追问 1：如果对方根本不给你试验机会呢？ <a id="可能追问-1如果对方根本不给你试验机会呢" class="alias"></a></h3>
+<blockquote>
+<p>“我会先确认是不是时间或风险不允许。如果只是沟通方式不合适，我会把方案压缩成一页，突出投入、收益、风险和退出条件；如果确实不适合试，我会先按现有方案执行，同时在不影响主线的情况下保留学习和验证。对于涉及安全、合规或重大质量风险的问题，我会把事实和风险正式说明，而不是为了服从就不报告。”</p>
+</blockquote>
+<h3 id="ch11-3">可能追问 2：如果最后证明你的方案是错的呢？ <a id="可能追问-2如果最后证明你的方案是错的呢" class="alias"></a></h3>
+<blockquote>
+<p>“我会先承认结果，不把问题归因给别人。然后复盘当时的假设、数据和验证范围，判断是方法错了、样本不够，还是我忽略了约束。下一次我会提前增加[验证动作]。我认为提出不同意见本身不是问题，关键是能不能用证据承担判断，也能接受结果。”</p>
+</blockquote>
+<hr />
+<h2 id="ch12">Q8. 团队成员拖延、摆烂或不认可任务，你会怎么沟通？ <a id="q8-团队成员拖延摆烂或不认可任务你会怎么沟通" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频合作题<br />
+<strong>答案属性：</strong> 通用情景回答，不要求绑定真实经历</p>
+<h3 id="ch12-1">【通用逐字稿】 <a id="通用逐字稿" class="alias"></a></h3>
+<blockquote>
+<p>“我不会一开始就给对方贴上‘摆烂’的标签，而是先私下沟通，确认问题到底来自目标不清、工作量太大、资源不足、优先级冲突，还是对任务价值有疑问。  </p>
+<p>了解原因后，我会把任务和最终目标重新讲清楚，再把工作拆成更小的交付物，明确完成标准、截止时间和中间检查点。如果是能力或资源问题，我会提供示例、协调支持；如果是优先级冲突，我会和负责人确认取舍；如果是目标不合理，我会把问题和替代方案一起提出来。  </p>
+<p>如果沟通后仍然没有进展，我会同步已经确认的事实、当前影响和需要的决策，必要时调整分工，但不会在群里情绪化指责。我的目标是让任务继续推进，同时保留基本的合作关系。”</p>
+</blockquote>
+<h3 id="ch12-2">可能追问 1：他说这个任务没有意义，怎么劝？ <a id="可能追问-1他说这个任务没有意义怎么劝" class="alias"></a></h3>
+<blockquote>
+<p>“我会先问清楚他认为没意义的原因，再把任务和最终目标连接起来。如果确实是重复工作，我会考虑能不能删减或改流程；如果它虽然不显眼但属于关键前置，我会解释不做会影响什么；如果价值仍然有争议，我会把两种方案的成本和风险整理出来，请负责人做取舍。沟通重点是让他理解任务，而不是要求他无条件服从。”</p>
+</blockquote>
+<h3 id="ch12-3">可能追问 2：如果沟通后他仍然不做？ <a id="可能追问-2如果沟通后他仍然不做" class="alias"></a></h3>
+<blockquote>
+<p>“我会先把已经沟通的内容、当前影响和需要的支持同步给项目负责人，尽量用事实描述，不给对方贴标签。同时我会先做能做的部分，避免整个项目停住。后续如果调整分工，也会把新的责任人和时间点明确下来。”</p>
+</blockquote>
+<h3 id="ch12-4">可能追问 3：如果对方觉得你在批评他，情绪很大怎么办？ <a id="可能追问-3如果对方觉得你在批评他情绪很大怎么办" class="alias"></a></h3>
+<blockquote>
+<p>“我会先把沟通从‘你为什么没做’改成‘当前任务遇到了什么阻碍’。我会承认对方的压力和顾虑，再回到共同目标、具体交付物和下一步动作上。如果确实是我的表达方式让对方不舒服，我会调整表达，但任务边界、时间节点和风险影响仍然要说清楚。”</p>
+</blockquote>
+<hr />
+<h2 id="ch13">Q9. 说一次你和同学、同事或导师意见不一致的经历 <a id="q9-说一次你和同学同事或导师意见不一致的经历" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频合作/价值观题<br />
+<strong>答案属性：</strong> 【已根据真实经历填写】</p>
+<h3 id="ch13-1">【逐字稿】是否采用 ROS 构建完整软件流程 <a id="逐字稿是否采用-ros-构建完整软件流程" class="alias"></a></h3>
+<blockquote>
+<p>“在带电作业机器人项目的前期选型阶段，团队曾经讨论过，是否要在 ROS 系统下构建整套机器人的软件流程。当时大家比较谨慎，因为我们对 ROS 的了解还不够深入，直接采用可能会带来学习成本和开发风险。  </p>
+<p>我的观点是，虽然学习 ROS 需要投入，但从整个系统的长期维护和扩展来看，它比较适合这个项目。一方面，ROS 的通信机制便于连接遥操作主手、机械臂、状态反馈和上位机等不同部件；另一方面，采用 ROS 也能让我系统性补齐机器人软件开发能力，这对后续联调和扩展都有帮助。  </p>
+<p>我没有只用‘ROS 比较流行’来坚持，而是把争议拆成学习成本、模块通信、系统扩展和项目风险几个方面，说明短期投入和长期收益。最后团队选择在 ROS 下构建整体软件流程，我也在后续开发中逐步把主从端控制链路、运动映射、状态回传和上位机等模块串联起来。  </p>
+<p>这件事让我认识到，表达不同意见时，不能只说自己喜欢什么技术，而要把共同目标、现实约束和方案取舍讲清楚；如果提出了方案，也要承担学习和落地的责任。”</p>
+</blockquote>
+<h3 id="ch13-2">可能追问 1：如果你当时对 ROS 也不熟，凭什么坚持？ <a id="可能追问-1如果你当时对-ros-也不熟凭什么坚持" class="alias"></a></h3>
+<blockquote>
+<p>“我并不是因为熟悉 ROS 才推荐它，恰恰是因为当时不熟，所以我把学习成本也纳入了判断。我比较看重的是它对多部件通信、模块化开发和后续扩展的帮助。这个判断不是无视短期风险，而是认为项目本身就是机器人系统开发，投入学习 ROS 也属于项目能力建设的一部分。”</p>
+</blockquote>
+<h3 id="ch13-3">可能追问 2：如果 ROS 最后没有达到预期，你怎么办？ <a id="可能追问-2如果-ros-最后没有达到预期你怎么办" class="alias"></a></h3>
+<blockquote>
+<p>“我会先承认方案判断可能不完整，再定位问题是学习成本、性能、稳定性还是工程维护造成的。如果问题可以通过模块边界、接口设计或培训解决，我会先做局部改进；如果确实不适合关键链路，我也会接受调整方案。技术选型不是为了证明某个框架一定正确，而是要对项目结果负责。”</p>
+</blockquote>
+<h3 id="ch13-4">可能追问 3：你是怎么说服其他人的？ <a id="可能追问-3你是怎么说服其他人的" class="alias"></a></h3>
+<blockquote>
+<p>“我主要通过共同目标和具体取舍来沟通。先承认大家担心学习成本和开发风险是合理的，再说明 ROS 在部件通信、模块解耦和后续扩展上的价值，同时把我愿意承担的学习和落地工作讲清楚。这样沟通的重点就不是‘我想用 ROS’，而是‘这个系统为什么需要这样的架构，以及我会怎么把风险控制住’。”</p>
+</blockquote>
+<hr />
+<h2 id="ch14">Q10. 说一次你优化流程、发现问题并推动改进的经历 <a id="q10-说一次你优化流程发现问题并推动改进的经历" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频行为题<br />
+<strong>答案属性：</strong> 【已根据 Agent 项目填写】</p>
+<h3 id="ch14-1">【逐字稿】Agent 的 RAG 评测与链路改进 <a id="逐字稿agent-的-rag-评测与链路改进" class="alias"></a></h3>
+<blockquote>
+<p>“在社保规划政策问答 Agent 项目中，我发现 RAG 的检测效果不够理想。表面上看，回答和用户问题是相关的，但进一步检查发现，政策来源召回和多轮意图理解存在不稳定。  </p>
+<p>我先把整个流程拆成多轮 query 构造、意图识别、chunk 切分、来源元数据保留、检索和最终回答几个环节，逐步检查问题出现在哪里。最后定位到两个主要原因：一是多轮会话只使用用户最后一句做检测，前文条件丢失后会影响意图识别；二是说明文档切 chunk 后，一些来源信息没有完整保留下来，导致回答依据展示不稳定。  </p>
+<p>针对这两个问题，我把多轮历史整理成带上下文的独立查询，同时调整切块策略和来源元数据的保留方式，确保检索结果能够追溯到政策来源。修改后通过 benchmark 重新验证，政策来源 Recall@3 达到 94%，官方来源命中率达到 98%。  </p>
+<p>这次经历让我认识到，Agent 的效果优化不能只靠调 prompt，必须从输入、检索、工具调用和评测指标整条链路定位问题。如果再做一次，我会在项目早期就把多轮场景、来源完整性和评测口径设计进测试集。”</p>
+</blockquote>
+<h3 id="ch14-2">可能追问：你怎么证明改进是你的方案带来的？ <a id="可能追问你怎么证明改进是你的方案带来的" class="alias"></a></h3>
+<blockquote>
+<p>“我会尽量设置基线和对照，比如比较优化前后同口径数据，或者选择一部分范围先试运行。还要排除同时发生的其他变化。如果不能做严格实验，我会至少说明数据限制，不把相关性直接说成因果。”</p>
+</blockquote>
+<h3 id="ch14-3">可能追问 2：你具体怎么解决多轮 query 丢失的问题？ <a id="可能追问-2你具体怎么解决多轮-query-丢失的问题" class="alias"></a></h3>
+<blockquote>
+<p>“我没有直接把整段历史原样拼接，而是先根据当前问题和历史上下文，整理成一个相对独立、能够表达用户完整意图的 query，再交给检索模块。比如用户前面已经说明了自己的参保情况，最后只问‘那我还差多少’，如果只看最后一句就无法判断‘多少’指什么，所以需要把前文条件补回去，同时控制无关历史带来的噪声。”</p>
+</blockquote>
+<h3 id="ch14-4">可能追问 3：为什么 chunk 切分会影响来源可信度？ <a id="可能追问-3为什么-chunk-切分会影响来源可信度" class="alias"></a></h3>
+<blockquote>
+<p>“政策文档的正文和来源信息如果被分开，检索可能召回了相关句子，但回答时无法稳定展示政策名称、发布部门或原文位置。因此切 chunk 时不能只保留正文，还要把文档级和段落级的来源元数据一起保留，并在召回和生成阶段继续传递。”</p>
+</blockquote>
+<h3 id="ch14-5">可能追问 4：Recall@3 达到 94% 说明什么？ <a id="可能追问-4recall3-达到-94-说明什么" class="alias"></a></h3>
+<blockquote>
+<p>“它说明在评测样本中，正确的政策来源有较高概率出现在前 3 个检索结果里，但不等于所有回答都绝对正确。我还要结合官方来源命中率、回答是否引用了正确来源、数字计算是否走规则引擎等指标综合判断，不能只看一个 Recall 数字。”</p>
+</blockquote>
+<hr />
+<h2 id="ch15">Q11. 一个课程或产品点击率很高，但完成率很低，你怎么分析？ <a id="q11-一个课程或产品点击率很高但完成率很低你怎么分析" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频开放题<br />
+<strong>答案属性：</strong> 【可直接使用】</p>
+<h3 id="ch15-1">【口语稿】 <a id="口语稿-3" class="alias"></a></h3>
+<blockquote>
+<p>“我会先把‘完成率低’拆开，而不是马上判断课程内容不好。第一步先确认指标定义和漏斗：曝光、点击、开始、关键节点完成、最终完成分别是多少，用户主要在哪一步流失。第二步按用户类型、来源、设备、课程难度和时间段分层，确认是不是某一类人群的问题。  </p>
+<p>如果点击高但开始低，可能是标题或入口承诺和实际内容不一致，也可能是加载或登录成本高；如果开始后很快退出，可能是内容太难、节奏太慢、任务太长，或者用户没有明确收益；如果接近结尾才流失，要看作业、考试、付费或技术问题。  </p>
+<p>解决上我会先做低成本验证，比如优化课程介绍、增加难度提示、拆成更短的章节、提供进度和阶段性反馈，同时检查播放和页面性能。之后用 A/B 测试或分批发布观察完成率、关键节点留存、学习效果和投诉率，不能只看点击率。最终要以‘用户是否真正完成并获得结果’作为核心判断。”</p>
+</blockquote>
+<h3 id="ch15-2">可能追问 1：你会优先改哪里？ <a id="可能追问-1你会优先改哪里" class="alias"></a></h3>
+<blockquote>
+<p>“我会优先改流失人数最多、又容易验证的节点。比如大部分用户在开始后两分钟离开，我会先看内容预期、首屏和前两分钟体验；如果是最后提交环节掉得多，我会优先排查表单、作业难度和技术故障。优先级取决于流失规模、影响和改动成本。”</p>
+</blockquote>
+<h3 id="ch15-3">可能追问 2：如果完成率提高了，但学习效果变差呢？ <a id="可能追问-2如果完成率提高了但学习效果变差呢" class="alias"></a></h3>
+<blockquote>
+<p>“那说明可能是为了完成而降低了难度，不能只看一个指标。我会同时看测验成绩、作业质量、复学率、用户反馈等结果指标，设置完成率和学习效果的双重门槛，必要时按用户目标分层，而不是追求一个数字好看。”</p>
+</blockquote>
+<hr />
+<h2 id="ch16">Q12. 如果一个月后要和海外客户交流，你怎么提升英语口语？ <a id="q12-如果一个月后要和海外客户交流你怎么提升英语口语" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频情景题<br />
+<strong>答案属性：</strong> 【可直接使用】</p>
+<h3 id="ch16-1">【口语稿】 <a id="口语稿-4" class="alias"></a></h3>
+<blockquote>
+<p>“我会先做一个小测试，确认问题主要是词汇、听力、发音，还是面对客户时组织语言不够快。然后围绕真实工作场景准备，而不是泛泛背单词。  </p>
+<p>第一周整理客户交流中最高频的主题和词汇，准备自我介绍、产品介绍、确认需求、解释延期和处理异议这几类固定表达。第二周每天做听力跟读和复述，重点练语音、节奏和听关键词。第三周开始做角色扮演，模拟客户提问、澄清和突发情况。第四周用完整场景演练，并请别人从准确性、流畅度和是否能推动事情三个维度给反馈。  </p>
+<p>我会用可观察的指标判断效果，比如三分钟自我介绍是否能不中断、能否听懂并复述关键信息、能否在规定时间内回答常见问题。这样计划会比较具体，也能知道到底是哪一部分还没达到要求。”</p>
+</blockquote>
+<h3 id="ch16-2">可能追问：如果一个月后还是没有达到目标呢？ <a id="可能追问如果一个月后还是没有达到目标呢" class="alias"></a></h3>
+<blockquote>
+<p>“我会把目标拆成最低可交付标准和进阶标准。最低标准是能准确确认需求、复述重点、说明下一步；复杂表达可以提前准备模板。每周复盘一次，如果发现听力是瓶颈，就把时间从泛读转到场景听力；如果是开口速度问题，就增加角色扮演。目标没达成时，我会调整方法，同时提前向团队说明我能独立完成和需要支持的边界。”</p>
+</blockquote>
+<hr />
+<h2 id="ch17">Q13. 你最近主动学习了什么新东西？ <a id="q13-你最近主动学习了什么新东西" class="alias"></a></h2>
+<p><strong>题型：</strong> 高频适应性题<br />
+<strong>答案属性：</strong> 【已根据个人经历填写】</p>
+<h3 id="ch17-1">【逐字稿】Agent 方向版本 <a id="逐字稿agent-方向版本" class="alias"></a></h3>
+<blockquote>
+<p>“我最近主动深入学习的是 Agent 应用的工作流设计和评测方法。起因是我希望把大模型从简单问答，进一步应用到社保政策这种需要来源、计算和多轮信息管理的严肃场景中。  </p>
+<p>我先学习 Plan-and-Execute、RAG、结构化记忆和工具调用这些基本模式，再把目标拆成意图识别、规则计算、政策检索和多轮记忆几个模块。过程中发现 RAG 的多轮 query 和来源信息处理效果不够好，我就通过构造评测集、检查失败样本和拆解链路来定位问题，而不是只继续调整提示词。最后系统的政策来源 Recall@3 达到 94%，官方来源命中率达到 98%，并且我把检索、规则引擎和记忆模块的设计沉淀成了可复用的流程。  </p>
+<p>这次学习让我发现，快速学习不等于资料看得最多，而是尽快做出一个最小可验证成果，再用真实失败样本推动迭代。”</p>
+</blockquote>
+<p>如果面试官追问偏硬件的学习经历，也可以补充：</p>
+<blockquote>
+<p>“在机器人项目中，我还主动学习过陌生遥操作主手的开发流程。由于公开资料有限，我先围绕系统需要的接口和数据链路建立最小闭环，再逐步补齐设备细节，最后把它接入 ROS/C++ 的主从控制链路中。”</p>
+</blockquote>
+<h3 id="ch17-2">可能追问：你怎么判断自己真的学会了？ <a id="可能追问你怎么判断自己真的学会了" class="alias"></a></h3>
+<blockquote>
+<p>“我不会只用‘看懂了’判断，而是看能不能独立完成一个小任务、解释关键原理、定位常见错误，并把方法迁移到新的场景。如果只能照着教程复现，还不能算真正掌握。”</p>
+</blockquote>
+<hr />
+<h2 id="ch18">Q14. 你如何看待 AI？日常怎么使用？ <a id="q14-你如何看待-ai日常怎么使用" class="alias"></a></h2>
+<p><strong>题型：</strong> 中文或英文都可能出现<br />
+<strong>答案属性：</strong> 【可直接使用】</p>
+<h3 id="ch18-1">中文【口语稿】 <a id="中文口语稿" class="alias"></a></h3>
+<blockquote>
+<p>“我认为 AI 更像是能力放大器，而不是完全替代人的工具。它擅长处理大量信息、生成初稿、发现模式和提供不同角度，可以明显提高学习和工作的效率，但它不一定理解真实目标、上下文和责任边界，也可能产生看起来合理但事实错误的内容。  </p>
+<p>我日常会使用 Claude Code 等工具做代码阅读、任务拆解、初版实现、测试思路和文档整理。在社保规划 Agent 项目中，我进一步把 AI 放进了真实工作流：让模型负责意图理解和信息组织，把高风险数字交给规则引擎，把政策依据交给 RAG，并通过 benchmark 验证结果。我的习惯是先明确目标和约束，再让 AI 参与具体环节，最后用官方来源、数据和小范围测试复核。涉及隐私、最终决策和重要结果时，我不会直接照搬。”</p>
+</blockquote>
+<h3 id="ch18-2">英文【可直接使用】 <a id="英文可直接使用" class="alias"></a></h3>
+<blockquote>
+<p>“In my opinion, AI is a powerful assistant rather than a complete replacement for people. It can help us process information, generate drafts and learn new skills more efficiently. However, it may misunderstand the context or produce incorrect information.  </p>
+<p>I usually use AI for brainstorming, summarizing documents, improving my writing and checking possible mistakes. I always verify important answers with reliable sources or real data. For final decisions, sensitive information and communication with people, I believe human judgment and responsibility are still necessary.”</p>
+</blockquote>
+<h3 id="ch18-3">可能追问：AI 什么时候不能替代人？ <a id="可能追问ai-什么时候不能替代人" class="alias"></a></h3>
+<blockquote>
+<p>“当任务需要明确目标、复杂取舍、责任承担、伦理判断或真正理解人的情绪时，AI 不能直接替代人。它可以给建议，但不能替我承担后果。比如项目最终是否上线、是否对外承诺、如何处理敏感数据，这些都必须由人确认。”</p>
+</blockquote>
+<hr />
+<h2 id="ch19">Q15. AI 能帮你解决什么问题？哪些工作需要人工决策？ <a id="q15-ai-能帮你解决什么问题哪些工作需要人工决策" class="alias"></a></h2>
+<p><strong>题型：</strong> 面经中多次出现<br />
+<strong>答案属性：</strong> 【可直接使用】</p>
+<h3 id="ch19-1">【口语稿】 <a id="口语稿-5" class="alias"></a></h3>
+<blockquote>
+<p>“AI 最适合帮我降低信息处理和重复工作的成本，比如把长资料整理成结构、生成初版代码或报告、把大问题拆成小问题、模拟用户或面试官，以及帮我检查遗漏。在我的 Agent 项目里，AI 负责理解用户问题和组织政策信息，但退休年龄、缴费缺口等高风险数字由规则引擎计算，政策依据由 RAG 提供来源。  </p>
+<p>但目标是什么、指标怎么定、不同方案怎么取舍、结果是否符合真实业务、是否会影响别人，以及最终是否对外发布，这些仍然需要人工决策。简单说，AI 可以参与‘怎么做得更快’，但‘为什么做、做到什么程度、出了问题谁负责’，不能完全交给 AI。”</p>
+</blockquote>
+<h3 id="ch19-2">可能追问：如果 AI 给出的建议和你的判断相反呢？ <a id="可能追问如果-ai-给出的建议和你的判断相反呢" class="alias"></a></h3>
+<blockquote>
+<p>“我会先检查双方的前提是否一致，再看有没有可靠数据或小实验可以验证。如果只是偏好不同，就把利弊和风险列出来讨论；如果涉及安全、合规或重要质量问题，我会优先遵守明确规则和可验证证据。AI 的建议可以促使我重新检查，但不会自动成为最终结论。”</p>
+</blockquote>
+<hr />
+<h2 id="ch20">Q16. 你会怎么说服别人给你的方案提供资源？ <a id="q16-你会怎么说服别人给你的方案提供资源" class="alias"></a></h2>
+<p><strong>题型：</strong> 说服、赞助、争取资源的合并题<br />
+<strong>答案属性：</strong> 方法可直接使用，具体故事【建议准备】</p>
+<h3 id="ch20-1">【口语稿】 <a id="口语稿-6" class="alias"></a></h3>
+<blockquote>
+<p>“我会先弄清楚对方为什么愿意提供资源，以及他最关心的是曝光、收益、效率、风险还是长期合作。然后我会把方案从‘请你帮我’改成‘你能得到什么’：目标是什么、受众是谁、需要什么资源、对方能获得什么、投入多大、风险如何控制、结果怎么反馈。  </p>
+<p>沟通时我会先用一页材料讲清楚价值和执行方案，再给出不同档位或不同投入的选择，而不是只提出一个没有退路的请求。如果对方担心风险，我会先提出小范围试点和退出条件。最后无论结果是否同意，我都会把后续安排、责任和反馈方式说清楚。”</p>
+</blockquote>
+<h3 id="ch20-2">可能追问：对方当场拒绝，你怎么办？ <a id="可能追问对方当场拒绝你怎么办" class="alias"></a></h3>
+<blockquote>
+<p>“我会先确认拒绝的具体原因，是价值不匹配、资源不够、时间不合适，还是风险没讲清楚。如果是方案问题，我会调整；如果是当前时机不合适，我会保留后续联系；如果确实不匹配，我会及时换其他资源来源。被拒绝不等于方案一定错，但要把原因问清楚。”</p>
+</blockquote>
+<hr />
+<h2 id="ch21">Q17. 你觉得科技给生活带来了什么？ <a id="q17-你觉得科技给生活带来了什么" class="alias"></a></h2>
+<h3 id="ch21-1">中文【可直接使用】 <a id="中文可直接使用" class="alias"></a></h3>
+<blockquote>
+<p>“我觉得科技最直接的价值是让信息、服务和工具更容易获得，提高效率，也让很多以前门槛很高的事情变得更普及。比如移动设备和 AI 让学习、沟通、办公和生活服务更加方便。与此同时，科技也带来了隐私、信息真假和过度依赖的问题，所以我认为技术进步不能只看功能，还要看是否安全、可靠、真正改善了人的体验。”</p>
+</blockquote>
+<h3 id="ch21-2">英文【可直接使用】 <a id="英文可直接使用-1" class="alias"></a></h3>
+<blockquote>
+<p>“Technology has made our lives more efficient, connected and convenient. We can learn, communicate and solve problems much faster than before. It also gives more people access to information and useful services.  </p>
+<p>At the same time, technology brings challenges such as privacy, misinformation and overdependence. So I think good technology should not only be powerful, but also reliable, safe and helpful to real users.”</p>
+</blockquote>
+<h3 id="ch21-3">可能追问：科技会不会让人变懒？ <a id="可能追问科技会不会让人变懒" class="alias"></a></h3>
+<blockquote>
+<p>“有这个可能，尤其是把工具当成替自己思考的捷径时。但我认为关键不在于用不用工具，而在于是否保留理解、判断和复核。合理使用可以把时间从重复劳动转到更有价值的思考上。”</p>
+</blockquote>
+<hr />
+<h2 id="ch22">四、英语部分：朗读、听译和英文问答 <a id="四英语部分朗读听译和英文问答" class="alias"></a></h2>
+<h2 id="ch23">1. 朗读一段英文 <a id="1-朗读一段英文" class="alias"></a></h2>
+<h3 id="ch23-1">现场策略 <a id="现场策略" class="alias"></a></h3>
+<ul>
+<li>先快速扫一遍句子结构，不要逐词翻译。</li>
+<li>生词不要停太久，保证句子节奏。</li>
+<li>专有名词和长词不会读时，尽量按拼写读，不要沉默。</li>
+<li>句号、逗号和转折词处自然停顿。</li>
+<li>不要因为一个词读错就反复重来。</li>
+</ul>
+<h3 id="ch23-2">练习句 <a id="练习句" class="alias"></a></h3>
+<blockquote>
+<p>“Artificial intelligence is changing the way people learn and work. It can help us process information faster, but human judgment is still important when we make decisions.”</p>
+</blockquote>
+<h2 id="ch24">2. 听一段英文并口译成中文 <a id="2-听一段英文并口译成中文" class="alias"></a></h2>
+<p>面经中有的可以播放两遍，有的只能播放一遍，也有作者反映按钮或网络不稳定。因此不要把准备建立在“肯定能听两遍”上。</p>
+<h3 id="ch24-1">口译时的安全表达 <a id="口译时的安全表达" class="alias"></a></h3>
+<p>听完后可以先说：</p>
+<blockquote>
+<p>“这段话主要讲的是……”</p>
+</blockquote>
+<p>然后按“主题—两个关键点—结论”复述。没有听清的细节不要硬编，可以说：</p>
+<blockquote>
+<p>“我没有完全听清最后一个细节，但前面的核心意思是……”</p>
+</blockquote>
+<p>英文听译的目标是传达主要意思，不是逐字翻译。</p>
+<h3 id="ch24-2">练习材料与参考译文 <a id="练习材料与参考译文" class="alias"></a></h3>
+<p><strong>英文：</strong></p>
+<blockquote>
+<p>“Learning from mistakes is an important part of personal growth. When a plan does not work as expected, we should not only look for someone to blame. We should understand what happened, improve the process and try again.”</p>
+</blockquote>
+<p><strong>参考中文：</strong></p>
+<blockquote>
+<p>“从错误中学习是个人成长的重要部分。当计划没有达到预期时，我们不应该只是寻找责任人，而应该弄清楚发生了什么，改进过程，然后重新尝试。”</p>
+</blockquote>
+<h2 id="ch25">3. 英文问答逐字稿 <a id="3-英文问答逐字稿" class="alias"></a></h2>
+<h3 id="ch25-1">Q：Do you prefer studying alone or studying with other people? <a id="qdo-you-prefer-studying-alone-or-studying-with-other-people" class="alias"></a></h3>
+<blockquote>
+<p>“I prefer a combination of both. When I need to understand a new concept, I usually study alone first because I can control my own pace. After that, I like discussing it with other people. Different opinions can help me find gaps in my understanding. So I would say I learn independently first, and then improve through communication.”</p>
+</blockquote>
+<h3 id="ch25-2">Q：How do you usually use AI? <a id="qhow-do-you-usually-use-ai" class="alias"></a></h3>
+<blockquote>
+<p>“I use AI mainly for brainstorming, summarizing information, improving my writing and checking possible mistakes. I do not simply copy its answers. I usually give it a clear task and background, and then verify important information with reliable sources or real data.”</p>
+</blockquote>
+<h3 id="ch25-3">Q：What is your favorite technology product? <a id="qwhat-is-your-favorite-technology-product" class="alias"></a></h3>
+<blockquote>
+<p>“My favorite technology product is [a smartphone / a laptop / another real product]. I like it because it is not only powerful, but also easy to use in daily life. The feature I use most is [feature]. It helps me [real benefit]. If I could improve it, I would improve [one realistic point], because that would make the user experience better.”</p>
+</blockquote>
+<h3 id="ch25-4">Q：What kind of company do you hope to work for? <a id="qwhat-kind-of-company-do-you-hope-to-work-for" class="alias"></a></h3>
+<blockquote>
+<p>“I hope to work for a company with clear goals, strong products and a supportive learning environment. I would like to work with people from different backgrounds and contribute to real projects. At the same time, I value a culture where people communicate directly, take responsibility and learn from feedback.”</p>
+</blockquote>
+<h3 id="ch25-5">Q：What do you think of OPPO? <a id="qwhat-do-you-think-of-oppo" class="alias"></a></h3>
+<blockquote>
+<p>“From my perspective, OPPO is a technology company with strong experience in smart devices and consumer products. I am interested in how technology is turned into products that real users can understand and use. I also pay attention to areas such as imaging, charging, smart devices and overseas markets. What attracts me most is the opportunity to combine my experience in system integration and AI engineering with real product and user scenarios.”</p>
+</blockquote>
+<h3 id="ch25-6">Q：How do you see AI? <a id="qhow-do-you-see-ai" class="alias"></a></h3>
+<blockquote>
+<p>“I see AI as a powerful assistant. It can improve efficiency and help people learn faster, but it may still make mistakes or misunderstand the context. I think the best way to use AI is to let it handle repetitive work while people remain responsible for goals, judgment and final decisions.”</p>
+</blockquote>
+<h3 id="ch25-7">Q：What can technology bring to our daily life? <a id="qwhat-can-technology-bring-to-our-daily-life" class="alias"></a></h3>
+<blockquote>
+<p>“Technology can make daily life more convenient, efficient and connected. It helps people communicate, learn and solve problems more easily. However, technology should also be reliable and safe. In my opinion, the real value of technology is not just more functions, but a better experience for users.”</p>
+</blockquote>
+<hr />
+<h2 id="ch26">五、宝洁八大问：常见归纳版 <a id="五宝洁八大问常见归纳版" class="alias"></a></h2>
+<blockquote>
+<p>“宝洁八大问”在不同资料里的具体措辞会有差异。下面按最常见的行为面版本整理。八道题本质上不是八个孤立故事，最好准备 5～6 个真实案例，让同一个案例可以从不同角度回答。</p>
+</blockquote>
+<h3 id="ch26-1">结合你目前经历的案例分配 <a id="结合你目前经历的案例分配" class="alias"></a></h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>面试主题</th>
+<th>优先使用的案例</th>
+<th>目前准备状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最有成就感、复杂问题、挑战目标</td>
+<td>带电作业机器人：两台机械臂、末端工具和流程重构</td>
+<td>已有较完整逐字稿</td>
+</tr>
+<tr>
+<td>有限资源、多任务、工程取舍</td>
+<td>机器人项目：平台负载、设备选型、工具适配和软件联调</td>
+<td>已有核心逻辑，还可补充具体时间和任务数量</td>
+</tr>
+<tr>
+<td>主动学习、AI 使用、流程优化</td>
+<td>社保规划政策问答 Agent：RAG、规则引擎、结构化记忆和 benchmark</td>
+<td>已有较完整逐字稿</td>
+</tr>
+<tr>
+<td>失败经历</td>
+<td>选择一次真实的返工、延期、实验失败或判断失误</td>
+<td>仍需补充，不能用“结果不理想”代替完整事件</td>
+</tr>
+<tr>
+<td>团队冲突、领导团队、说服别人</td>
+<td>机器人项目中的跨角色协作或外部夹爪设计沟通</td>
+<td>需要补充具体冲突、你的表达和最终采纳情况</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch26-2">P&amp;G 1：举例说明你如何设定一个有挑战的目标，并最终完成它 <a id="pg-1举例说明你如何设定一个有挑战的目标并最终完成它" class="alias"></a></h3>
+<p><strong>【逐字稿】机器人项目版本</strong></p>
+<blockquote>
+<p>“在带电作业机器人项目中，一个比较有挑战的目标是：在平台负载无法支持三台机械臂的前提下，仍然完成客户要求的引流线拆搭作业。这个目标的难点在于，客户提供的人工流程需要两名工人配合三根绝缘杆，如果简单照搬，机器人平台的负载条件就不满足。  </p>
+<p>我们先把任务拆成平台约束、末端工具和作业流程三个部分，重新分析两台机械臂能承担哪些动作；随后调研并找到通用猴头线夹，再针对异形件和夹持稳定性，与外部公司反复设计专用电动夹爪或夹持机构。最后基于新的末端工具重新制定作业流程，并完成了两台机械臂的整体作业方案。  </p>
+<p>这个过程让我认识到，挑战目标不一定是把原方案硬做出来，而是在约束条件下找到可行的替代路径。”</p>
+</blockquote>
+<p><strong>追问及答法：</strong></p>
+<ul>
+<li><strong>为什么这个目标有挑战？</strong>  <blockquote>
+<p>“因为人工流程和机器人平台的约束并不一致。人工可以用三根绝缘杆完成，但平台负载无法支持三台机械臂，末端线夹又是异形件，常见平行夹爪不能稳定夹持，所以必须同时解决硬件、工具和流程三个问题。”</p>
+</blockquote>
+</li>
+<li><strong>如果没完成怎么办？</strong>  <blockquote>
+<p>“我会如实说完成到什么程度、差距在哪里、采取过什么补救，以及下一次会提前改什么，不会把部分完成说成完全达成。”</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="ch26-3">P&amp;G 2：举例说明你最成功的一次经历 <a id="pg-2举例说明你最成功的一次经历" class="alias"></a></h3>
+<p><strong>【逐字稿】机器人项目版本</strong></p>
+<blockquote>
+<p>“我认为最成功的是国网配网带电作业人机协同机器人项目。它的成功不只是完成了一个软件模块，而是从前期设备选型、陌生硬件开发流程摸索，到软硬件架构、末端工具和作业流程设计，最后搭建出一个真实完整的机器人系统，并在高空环境中完成整体作业流程。  </p>
+<p>我个人主要负责遥操作系统的软件架构和核心功能，包括 ROS/C++ 主从端控制链路、运动映射、状态回传和上位机客户端，同时参与了硬件调研、末端工具适配和整机联调。团队其他成员则在机械、电气、硬件和现场实施方面承担了重要工作。  </p>
+<p>这段经历最能证明我的能力是复杂系统拆解、跨专业协作和工程落地。相关项目还形成了两篇论文、一项国家发明专利授权和一项软件著作权等成果。”</p>
+</blockquote>
+<p><strong>追问：</strong>“如果没有团队支持，你还能完成吗？”  </p>
+<blockquote>
+<p>“我能独立完成自己负责的遥操作软件部分，但不能把团队成果全部归到自己身上。这个项目之所以成功，也依赖机械、电气、硬件和现场团队的协作。我个人的价值主要在于把操作端、机器人本体和上位机之间的控制、状态反馈和安全边界串起来，并参与推动末端工具和作业流程与软件系统对接。”</p>
+</blockquote>
+<h3 id="ch26-4">P&amp;G 3：举例说明你经历过的一次失败，以及从中学到了什么 <a id="pg-3举例说明你经历过的一次失败以及从中学到了什么" class="alias"></a></h3>
+<p><strong>【逐字稿】Agent 初期 RAG 方案版本</strong></p>
+<blockquote>
+<p>“在社保规划政策问答 Agent 项目中，我经历过一次结果没有达到预期的情况。最初我认为只要把政策文档切块后交给 RAG，模型就能够根据用户问题找到相关依据，所以前期重点放在了检索和回答流程上。  </p>
+<p>但评测时发现，RAG 检测效果不够理想。复盘后我发现，我忽略了两个关键因素：多轮会话里只使用用户最后一句，导致前文条件丢失；文档切 chunk 后，部分来源信息也没有完整保留。我的责任是前期没有把多轮 query 和来源完整性纳入测试设计。  </p>
+<p>后来我把历史对话整理成带上下文的独立 query，调整 chunk 和来源元数据保留方式，再通过失败样本和 benchmark 复测。最终政策来源 Recall@3 达到 94%，官方来源命中率达到 98%。这件事让我学到，AI 系统不能只验证‘能不能回答’，还要验证输入上下文、来源可追溯性和评测指标。”</p>
+</blockquote>
+<p><strong>追问：</strong>“这次失败有没有你的责任？”  </p>
+<blockquote>
+<p>“有，我的责任主要是前期测试设计不够完整，没有提前覆盖多轮 query 和来源元数据这两个风险点。客观上，政策文档结构复杂、用户问题也存在多轮依赖，但如果我一开始就按失败样本设计评测，应该可以更早发现。现在我会在项目早期同时准备正常样本、边界样本和失败样本，而不是只验证最理想的问法。”</p>
+</blockquote>
+<h3 id="ch26-5">P&amp;G 4：举例说明你如何说服别人接受你的观点 <a id="pg-4举例说明你如何说服别人接受你的观点" class="alias"></a></h3>
+<p><strong>【逐字稿】ROS 架构选型版本</strong></p>
+<blockquote>
+<p>“在带电作业机器人项目的前期选型阶段，团队讨论过是否要在 ROS 下构建完整的软件流程。当时大家比较担心 ROS 学习成本高、团队了解不够深入，可能影响项目进度。  </p>
+<p>我先承认这个担心是合理的，再从系统目标出发说明我的观点：机器人系统需要连接遥操作主手、机械臂、状态反馈和上位机，ROS 的通信机制和模块化方式更利于部件连接、后续扩展和联调；同时，学习 ROS 本身也能补齐机器人软件开发能力。  </p>
+<p>我没有只说‘ROS 比较流行’，而是把学习成本、通信效率、模块扩展和长期维护几个因素放在一起比较，并说明我愿意承担前期学习和核心链路落地。最后团队选择在 ROS 下构建整体软件流程，我也负责把主从端控制、运动映射、状态回传和上位机等模块逐步串起来。这件事让我认识到，说服别人不是坚持自己的偏好，而是把共同目标、方案价值和风险承担讲清楚。”</p>
+</blockquote>
+<p><strong>追问：</strong>“如果对方职位比你高呢？”  </p>
+<blockquote>
+<p>“职位差异不会改变沟通原则。我会更注意表达方式，先确认目标和约束，再用事实提出建议，最后尊重决策。涉及重大风险时，我会把风险正式说明并留下依据。像 ROS 这个例子，我并不是要求对方接受我的个人偏好，而是把架构收益、学习成本和我愿意承担的工作一起讲清楚。”</p>
+</blockquote>
+<h3 id="ch26-6">P&amp;G 5：举例说明你如何领导或推动一个团队 <a id="pg-5举例说明你如何领导或推动一个团队" class="alias"></a></h3>
+<p><strong>【逐字稿】跨模块联调推动版本</strong></p>
+<blockquote>
+<p>“我没有正式管理一个很大的团队，但在机器人项目的系统联调阶段，我承担过跨模块推动的角色。当时需要把遥操作主手、ROS 控制链路、机械臂、末端工具和上位机逐步串起来，任何一个接口没有对齐，整机都无法验证。  </p>
+<p>我先把整体链路拆成设备通信、运动映射、状态回传和作业流程几个部分，分别明确输入、输出和验收标准，再按关键路径安排联调顺序。出现问题时，我会先判断是接口定义、硬件状态还是软件逻辑的问题，再和对应成员一起做最小化复现，而不是笼统地说‘系统不通’。  </p>
+<p>最后我们完成了从操作端到机器人本体再到上位机的联动，并支撑了整体作业流程。这个经历让我理解，推动团队不一定靠职位，更重要的是把目标拆清楚、把接口定清楚，并在出现风险时主动协调。”</p>
+</blockquote>
+<p><strong>追问：</strong>“你怎么处理能力较弱的成员？”  </p>
+<blockquote>
+<p>“先判断是目标不清、不会做、资源不足还是意愿问题。对于能力问题，我会拆小任务、提供示例和设置检查点；对于资源问题，我会协调支持；如果目标和意愿都清楚仍然不执行，就及时同步负责人并调整分工。”</p>
+</blockquote>
+<h3 id="ch26-7">P&amp;G 6：举例说明你如何与别人合作完成任务 <a id="pg-6举例说明你如何与别人合作完成任务" class="alias"></a></h3>
+<p><strong>【逐字稿】外部公司协作设计夹持机构版本</strong></p>
+<blockquote>
+<p>“在机器人项目中，我们需要为异形的猴头线夹设计能够稳定夹持的专用电动夹爪或夹持机构，这件事涉及内部的软件、机械团队和外部供应商。合作的难点是，外部公司更关注机构能不能加工和实现，内部团队则更关注夹持稳定性、导向性、余量以及能不能融入实际作业流程。  </p>
+<p>我在沟通时没有只描述‘需要一个夹爪’，而是把线夹形状、夹持目标、机械臂动作约束和验收标准尽量明确下来，再和对方一起讨论哪些要求是必须满足的，哪些可以通过结构调整折中。每轮方案出来后，我们都根据实际夹持效果继续修改，而不是等到最后一次性验收。  </p>
+<p>最后通过反复设计和验证，形成了适配该异形线夹的夹持机构，并据此重新制定了机器人作业流程。这让我体会到，跨团队合作最重要的是把抽象需求变成可验证的接口和标准，同时理解对方的约束。”</p>
+</blockquote>
+<h3 id="ch26-8">P&amp;G 7：举例说明你如何分析并解决一个复杂问题 <a id="pg-7举例说明你如何分析并解决一个复杂问题" class="alias"></a></h3>
+<p><strong>【逐字稿】Agent 项目版本</strong></p>
+<blockquote>
+<p>“在社保规划政策问答 Agent 中，表面问题是 RAG 检测效果不够高，但我没有直接把它归结为模型能力问题，而是把链路拆成多轮 query、意图识别、chunk 切分、来源元数据、检索和最终回答几个环节。  </p>
+<p>通过分析失败样本，我发现两个主要原因：多轮会话检测时只使用最后一句，导致用户意图和前文条件丢失；文档切 chunk 后部分来源信息丢失，导致召回依据展示不稳定。之后我把多轮历史整理成独立查询，调整 chunk 和元数据保留方式，再用 benchmark 进行验证。最终政策来源 Recall@3 达到 94%，官方来源命中率达到 98%。  </p>
+<p>这个问题让我比较深地体会到，复杂 AI 系统需要同时从输入、数据、工具和评测指标定位，而不是只在模型或 prompt 层面反复尝试。”</p>
+</blockquote>
+<h3 id="ch26-9">P&amp;G 8：举例说明你如何在有限资源下同时完成多个任务 <a id="pg-8举例说明你如何在有限资源下同时完成多个任务" class="alias"></a></h3>
+<p><strong>【逐字稿】机器人项目版本</strong></p>
+<blockquote>
+<p>“在机器人项目早期，资源和技术储备都比较有限，但要同时推进设备选型、遥操作主手学习、末端工具适配、作业流程设计和软件系统开发。我先按对整体方案的影响和前置依赖排序，把平台负载、末端工具和作业流程放在关键路径上，因为这几项如果不成立，后面的软件联调很可能返工。  </p>
+<p>对于软件部分，我先建立主从端控制、运动映射和状态回传的最小闭环；对于硬件部分，先验证平台和夹持机构能否满足作业约束，再逐步扩大整机联调范围。过程中如果某个功能不能一次完成，我会先保留保底方案，并提前同步可能的延期和返工风险。  </p>
+<p>最终我们没有简单复制三机械臂的人工流程，而是通过末端工具和流程重构，形成了两台机械臂完成作业的方案。这次经历让我知道，资源有限时最重要的不是承诺所有事情同时完成，而是透明地做取舍，优先保证关键目标。”</p>
+</blockquote>
+<hr />
+<h2 id="ch27">六、常见行为面问题补充题库 <a id="六常见行为面问题补充题库" class="alias"></a></h2>
+<p>下面这些问题不一定出现在截图中，但属于 AI 面、HR 面和宝洁八大问的高频变体。</p>
+<h3 id="ch27-1">1. 你为什么选择这个岗位？ <a id="1-你为什么选择这个岗位" class="alias"></a></h3>
+<blockquote>
+<p>“我选择这个岗位，主要是因为它和我过去积累的几项能力有比较直接的连接：控制与机器人系统开发、复杂软硬件联调，以及 AI Agent 的工程化应用。我不只是想找一个名称相近的岗位，更希望参与真实产品或用户场景，把技术能力转化成可验证的结果。对我来说，下一步最重要的是在已有基础上继续补齐产品化、工程规范和团队协作能力。”</p>
+</blockquote>
+<p><strong>追问：</strong>“如果工作内容和你想象的不一样呢？”  </p>
+<blockquote>
+<p>“我会先确认核心目标和评价标准，先把基础工作做扎实，再判断哪些部分可以发挥自己的优势。只要方向和长期发展一致，我可以接受前期有学习成本和一定的重复工作。”</p>
+</blockquote>
+<h3 id="ch27-2">2. 你为什么选择我们公司？ <a id="2-你为什么选择我们公司" class="alias"></a></h3>
+<blockquote>
+<p>“我关注 OPPO 主要有三点。第一，OPPO 的业务和智能设备、消费科技以及 AI 能力落地有关，和我在机器人、复杂系统和 Agent 应用上的积累有连接。第二，我希望进入一个能把技术能力落到真实产品和用户体验中的团队，而不是只停留在实验或 Demo 阶段。第三，我比较看重跨团队协作和持续学习，因为我过去的项目也需要和硬件、机械、外部单位以及不同软件模块一起解决问题。相比只看公司名气，我更看重这个岗位能不能让我持续做出有反馈的事情。”</p>
+</blockquote>
+<h3 id="ch27-3">3. 你对目标公司了解多少？（以 OPPO 为例） <a id="3-你对目标公司了解多少以-oppo-为例" class="alias"></a></h3>
+<blockquote>
+<p>“我目前的了解主要集中在智能设备和消费科技产品，以及影像、快充、智能生态和海外市场等方向。我不会只把 OPPO 理解成某一个单品，而是更关注产品、技术和用户体验如何结合。结合我的背景，我希望把自己在控制系统、软硬件联调、复杂系统交付和 AI Agent 方面的经验应用到真实产品场景中，同时继续补齐产品化和大规模工程协作方面的能力。”</p>
+</blockquote>
+<h3 id="ch27-4">4. 你未来三到五年的规划是什么？ <a id="4-你未来三到五年的规划是什么" class="alias"></a></h3>
+<blockquote>
+<p>“短期我希望先把岗位需要的业务流程、工程规范和核心技术做扎实，能够独立承担一个完整模块。中期希望在智能硬件、机器人系统或 AI 工程化应用中的一个方向形成更稳定的优势，能够负责更完整的系统，并和不同团队有效协作。长期我希望成为既理解专业细节、又能对整体结果负责的人。这个规划不是固定的职位名称，而是围绕能力和责任逐步增加。”</p>
+</blockquote>
+<p><strong>追问：</strong>“如果没有晋升怎么办？”  </p>
+<blockquote>
+<p>“我会先看自己是否持续获得更复杂的任务、是否有可验证的产出，以及能力差距在哪里。职级很重要，但我不会只用职级判断成长；如果长期没有学习和承担更大责任的空间，我再认真评估下一步。”</p>
+</blockquote>
+<h3 id="ch27-5">5. 你能接受加班、出差或压力吗？ <a id="5-你能接受加班出差或压力吗" class="alias"></a></h3>
+<blockquote>
+<p>“我可以接受项目关键阶段的加班或必要出差，前提是目标、优先级和安排是清楚的。我会尽量通过提前计划、暴露风险和提高效率减少无效加班。如果长期压力很大，我也会关注工作方式、资源和目标是否需要重新对齐，而不是只靠消耗自己。”</p>
+</blockquote>
+<h3 id="ch27-6">6. 你收到过最尖锐的一次反馈是什么？ <a id="6-你收到过最尖锐的一次反馈是什么" class="alias"></a></h3>
+<p><strong>【可用示例】</strong></p>
+<blockquote>
+<p>“我收到过一个比较直接的反馈：技术讨论时我容易陷入实现细节，但没有先把结论、风险和需要别人决策的地方讲清楚。这个反馈对我触动比较大，因为在机器人项目里，很多问题确实很复杂，但如果一开始就讲接口和代码细节，别人不一定能快速理解重点。  </p>
+<p>后来我调整了表达方式，先用一两句话讲结论，再说明背景、方案、风险和需要对方确认的事项，最后再根据对方需要展开技术细节。现在做方案汇报或联调沟通时，我会提前准备一页简要说明，并在沟通结束时确认下一步动作。这个反馈让我意识到，技术能力不仅是把问题解决，还要让别人能快速理解并参与决策。”</p>
+</blockquote>
+<h3 id="ch27-7">7. 你最不喜欢和什么样的人合作？ <a id="7-你最不喜欢和什么样的人合作" class="alias"></a></h3>
+<blockquote>
+<p>“我不太适应的是目标不清、遇到问题又不及时同步的人。但我不会先给对方贴标签，而是会先把目标、分工、时间点和风险机制明确下来。如果仍然影响项目，我会用事实和结果沟通，必要时请负责人协调。我的重点是解决协作问题，而不是评价一个人。”</p>
+</blockquote>
+<h3 id="ch27-8">8. 你有没有做过不在职责范围内的事情？ <a id="8-你有没有做过不在职责范围内的事情" class="alias"></a></h3>
+<p><strong>【逐字稿】</strong></p>
+<blockquote>
+<p>“有。在带电作业机器人项目中，我的主要职责是遥操作系统的软件架构和核心功能开发，但项目早期的硬件选型、末端工具适配和作业流程也会直接影响软件能不能落地，所以我没有只等硬件方案确定后再开始写代码。  </p>
+<p>我参与了遥操作主手调研、平台负载约束分析、猴头线夹和夹持机构的方案讨论，并把这些约束同步到软件控制和整机联调中。最后项目形成了两台机械臂完成作业的方案。我的理解是，主动补位可以帮助项目推进，但要明确边界，不能把所有事情都变成自己的长期职责。”</p>
+</blockquote>
+<h3 id="ch27-9">9. 如果任务很琐碎、重复，你能接受吗？ <a id="9-如果任务很琐碎重复你能接受吗" class="alias"></a></h3>
+<blockquote>
+<p>“可以接受。基础工作本身也是理解业务和建立准确性的过程。我会先保证质量和稳定性，同时观察有没有可以模板化、自动化或优化的地方。如果确认流程长期重复且有明确收益，我会在不影响交付的前提下提出改进。”</p>
+</blockquote>
+<h3 id="ch27-10">10. 你如何处理压力？ <a id="10-你如何处理压力" class="alias"></a></h3>
+<blockquote>
+<p>“我通常先区分压力来自任务太多、目标不清、能力不足，还是沟通不充分。然后把事情拆成可执行的下一步，先处理最影响结果的部分，并尽早同步风险。如果是能力问题，我会快速补齐；如果是资源或优先级问题，我会主动协调。这样比单纯告诉自己‘要抗压’更有效。”</p>
+</blockquote>
+<h3 id="ch27-11">11. 你有没有犯过一个低级错误？ <a id="11-你有没有犯过一个低级错误" class="alias"></a></h3>
+<p><strong>【逐字稿】Agent 初期 query 处理问题版本</strong></p>
+<blockquote>
+<p>“有过一次是在社保规划政策 Agent 的初期评测中。当时我默认用用户最后一句话做检索，没有充分考虑多轮会话中的上下文，导致一些问题的用户意图判断不准确。这个问题最开始不容易发现，因为单轮问题测试时结果看起来是正常的。  </p>
+<p>我确认问题后，先补充了多轮对话样本，再把历史信息整理成相对独立的 query，并重新评测检索效果。之后我把多轮场景和边界场景加入测试集，不再只验证单轮、表达完整的理想问题。这个问题让我认识到，靠直觉选择最简单的输入方式容易漏掉真实场景，测试集也必须覆盖用户实际使用方式。”</p>
+</blockquote>
+<h3 id="ch27-12">12. 你希望领导怎么管理你？ <a id="12-你希望领导怎么管理你" class="alias"></a></h3>
+<blockquote>
+<p>“我希望目标、优先级和验收标准比较清楚，同时在执行方式上有一定自主空间。遇到关键风险时我会及时同步，不会等到最后才汇报。我也希望能得到具体反馈，知道哪些地方做得好、哪些地方需要改，而不是只在结果出来后评价。”</p>
+</blockquote>
+<h3 id="ch27-13">13. 如果你发现同事的数据有问题，但他马上要汇报，你怎么办？ <a id="13-如果你发现同事的数据有问题但他马上要汇报你怎么办" class="alias"></a></h3>
+<blockquote>
+<p>“我会先快速确认问题是否真实，以及它会不会影响结论。如果影响，我会尽快私下告诉他，给出证据和可行的修正方式；如果时间来不及，至少明确哪些结论可以保留、哪些需要标注限制。涉及重大风险时，我会按流程向负责人说明。重点是保护结果质量，不是让对方难堪。”</p>
+</blockquote>
+<h3 id="ch27-14">14. 你有什么想问我们的？ <a id="14-你有什么想问我们的" class="alias"></a></h3>
+<p>建议不要问官网能查到的问题，可以问：</p>
+<blockquote>
+<p>“如果新人加入这个岗位，前三个月最希望他解决或交付什么问题？”</p>
+<p>“这个岗位目前最大的挑战是技术、业务还是协作，您希望新人先补哪一块？”</p>
+<p>“团队通常如何定义一个项目做得好？更看重效率、质量、用户反馈，还是其他指标？”</p>
+<p>“如果我有机会加入，您建议我在入职前优先准备什么？”</p>
+</blockquote>
+<hr />
+<h2 id="ch28">七、把一个真实故事准备成“案例卡” <a id="七把一个真实故事准备成案例卡" class="alias"></a></h2>
+<p>建议你至少准备下面 6 张卡，每张控制在 150～250 字，面试现场再展开：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>案例卡</th>
+<th>需要覆盖的题目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最有成就感的项目</td>
+<td>自我介绍、成功、项目深挖</td>
+</tr>
+<tr>
+<td>一次困难或失败</td>
+<td>挫折、复盘、抗压</td>
+</tr>
+<tr>
+<td>一次团队分歧</td>
+<td>合作、冲突、向上沟通</td>
+</tr>
+<tr>
+<td>一次多任务并行</td>
+<td>优先级、资源协调</td>
+</tr>
+<tr>
+<td>一次主动学习</td>
+<td>快速学习、新工具、AI</td>
+</tr>
+<tr>
+<td>一次推动改进</td>
+<td>流程优化、影响力、结果导向</td>
+</tr>
+</tbody>
+</table></div>
+<p>每张卡写清楚：</p>
+<ol>
+<li>背景：什么时候、什么场景、谁参与；</li>
+<li>目标：要完成什么，验收标准是什么；</li>
+<li>难点：真正难在哪里；</li>
+<li>个人动作：至少三个动词开头的动作；</li>
+<li>结果：数字、事实或反馈；</li>
+<li>复盘：做得好和没做好的地方；</li>
+<li>可能追问：为什么、你负责什么、如果重来怎么做。</li>
+</ol>
+<h3 id="ch28-1">案例卡模板 <a id="案例卡模板" class="alias"></a></h3>
+<blockquote>
+<p><strong>案例名称：</strong> [名称]<br />
+<strong>背景：</strong> [时间/团队/任务]<br />
+<strong>目标：</strong> [目标和截止时间]<br />
+<strong>难点：</strong> [限制或冲突]<br />
+<strong>我的动作：</strong> 1）[动作]；2）[动作]；3）[动作]。<br />
+<strong>结果：</strong> [量化结果/事实反馈]<br />
+<strong>遗憾：</strong> [真实不足]<br />
+<strong>复盘：</strong> [下一次会怎么改]<br />
+<strong>可回答的问题：</strong> [列 3～5 个]</p>
+</blockquote>
+<h3 id="ch28-2">已根据你经历填写的两张案例卡 <a id="已根据你经历填写的两张案例卡" class="alias"></a></h3>
+<h4>案例卡 A：带电作业机器人——从硬件选型到真实作业</h4>
+<blockquote>
+<p><strong>背景：</strong> 国网配网带电作业人机协同机器人项目早期，技术储备有限，需要从遥操作主手选型和开发流程摸索开始推进。<br />
+<strong>目标：</strong> 在平台负载不支持三台机械臂的情况下，完成客户要求的引流线拆搭作业，并建立真实可运行的机器人系统。<br />
+<strong>难点：</strong> 人工流程依赖两名工人和三根绝缘杆；通用猴头线夹是异形件，常见电动平行夹爪无法稳定夹持；软硬件和作业流程需要一起设计。<br />
+<strong>我的动作：</strong> 1）调研遥操作主手并快速掌握接口和开发流程；2）围绕两台机械臂重新拆解作业任务；3）参与寻找通用猴头线夹并与外部公司反复设计专用电动夹爪/夹持机构；4）负责 ROS/C++ 主从控制链路、运动映射、状态回传和上位机客户端，并参与整机联调。<br />
+<strong>结果：</strong> 基于新的末端工具重新制定了作业流程，形成了两台机械臂完成任务的方案，搭建出真实完整的带电作业机器人系统，并在高空环境中完成整体作业流程；相关项目形成两篇论文、一项国家发明专利授权和一项软件著作权等成果。<br />
+<strong>复盘：</strong> 前期应该更早把平台负载、末端工具、作业流程和软件接口放在一起做联合评估，减少后期被动适配。<br />
+<strong>可回答的问题：</strong> 自我介绍、最有成就感、最大困难、挑战目标、有限资源、复杂问题、快速学习、工程取舍。</p>
+</blockquote>
+<h4>案例卡 B：社保规划政策问答 Agent——从效果问题到可验证改进</h4>
+<blockquote>
+<p><strong>背景：</strong> 面向社保规划场景构建可信政策问答 Agent，需要处理政策依据、退休年龄、缴费缺口和多轮用户信息。<br />
+<strong>目标：</strong> 让不同类型的问题由合适的模块处理，并让回答来源可追溯、数字可验证。<br />
+<strong>难点：</strong> 初期 RAG 检测效果不理想；多轮 query 只使用最后一句导致意图识别不准确；chunk 切分后部分来源信息丢失。<br />
+<strong>我的动作：</strong> 1）采用 Plan-and-Execute 判断用户意图和工具需求；2）把高风险数字交给规则引擎计算；3）把政策依据交给 RAG 检索；4）用结构化记忆保存多轮信息；5）根据失败样本重构独立 query，调整 chunk 和来源元数据保留方式；6）用 benchmark 重新评测。<br />
+<strong>结果：</strong> 政策来源 Recall@3 达到 94%，官方来源命中率达到 98%，提升了政策类 Agent 输出的可解释性、可追溯性和可信度。<br />
+<strong>复盘：</strong> Agent 优化不能只依赖 prompt 调整，需要从输入、检索、工具调用、来源传递和评测指标整条链路分析。<br />
+<strong>可回答的问题：</strong> AI 使用、AI 可靠性、主动学习、流程优化、复杂问题、失败复盘、技术边界。</p>
+</blockquote>
+<hr />
+<h2 id="ch29">八、AI 面试现场策略与设备准备 <a id="八ai-面试现场策略与设备准备" class="alias"></a></h2>
+<h3 id="ch29-1">1. 面试前一天 <a id="1-面试前一天" class="alias"></a></h3>
+<ul>
+<li>准备电脑，确认摄像头拍到上半身、光线和背景正常；</li>
+<li>测试麦克风、耳机、浏览器权限和网络；</li>
+<li>读一段英文，录音后听自己的语速和吞音；</li>
+<li>把自我介绍压到 90 秒以内；</li>
+<li>把 6 张案例卡各讲一遍；</li>
+<li>练习“回答 60 秒后主动收束”，避免越说越散；</li>
+<li>准备纸和笔，只有在平台允许的情况下使用；</li>
+<li>认真阅读设备和监考要求，不尝试绕过摄像头、手机锁定或其他监控。</li>
+</ul>
+<h3 id="ch29-2">2. 面试中 <a id="2-面试中" class="alias"></a></h3>
+<ul>
+<li>听完题先停 1～2 秒再答，不要抢话；</li>
+<li>先给结论，面试官更容易继续追问；</li>
+<li>题目很长时，可以先复述：“我理解您主要想问的是……”</li>
+<li>没听清可以礼貌请求重复一次，不要直接猜；</li>
+<li>回答个人经历时多说“我”，明确团队和个人边界；</li>
+<li>英文不会复杂表达时，用简单句把意思说完；</li>
+<li>网络或设备异常时先保持冷静，按平台提示处理，并简短说明。</li>
+</ul>
+<h3 id="ch29-3">3. 被追问到很细时 <a id="3-被追问到很细时" class="alias"></a></h3>
+<p>可以用这些自然衔接：</p>
+<blockquote>
+<p>“我把这部分具体展开一下。”</p>
+<p>“这件事里我个人负责的是……团队其他成员负责的是……”</p>
+<p>“这个结果我当时没有做严格的因果验证，所以我更准确的说法是……”</p>
+<p>“我当时的判断依据主要有两个……”</p>
+<p>“这部分我没有直接经验，但如果让我现在处理，我会先……”</p>
+</blockquote>
+<h3 id="ch29-4">4. 不要这样回答 <a id="4-不要这样回答" class="alias"></a></h3>
+<ul>
+<li>不要把 AI 面试当成可以照稿朗读的考试；</li>
+<li>不要为了显得厉害虚构数据；</li>
+<li>不要说“我没有缺点”“我从来没有失败过”；</li>
+<li>不要把“我们完成了”说成“我一个人完成了”；</li>
+<li>不要把“会用 AI”理解成“让 AI 替自己做决定”；</li>
+<li>不要为了规避设备监控而使用未被允许的设备或方法。</li>
+</ul>
+<hr />
+<h2 id="ch30">九、企业心理测评准备指南 <a id="九企业心理测评准备指南" class="alias"></a></h2>
+<blockquote>
+<p>先说结论：不存在一套能保证通过所有企业测评的“万能人设”。不同公司、岗位、测评供应商和评分常模关注点可能不同。最稳妥的准备方式，是把自己稳定、真实的工作状态想清楚，答题时保持前后一致，并让这种状态与目标岗位的基本要求匹配。</p>
+</blockquote>
+<p>这一章讨论的是招聘中的人才测评或工作风格测评，不是临床心理诊断。企业可能把性格问卷、情境判断、诚信与风险倾向、认知或注意力题组合在一起；有些平台还会加入限时、视频、语言或其他能力环节。所以不要把所有测评都简单理解成 MBTI 或“选一个最讨喜的性格”。</p>
+<h3 id="ch30-1">1. 企业心理测评通常在看什么 <a id="1-企业心理测评通常在看什么" class="alias"></a></h3>
+<p>从公开测评机构资料和求职者经验分享看，企业测评通常想了解的是一个人“在工作场景中大概率怎么做”，而不是判断一个人是不是绝对意义上的好人。常见目的包括：</p>
+<ul>
+<li>了解责任心、可靠性和任务完成习惯；</li>
+<li>了解面对压力、变化和挫折时的稳定性；</li>
+<li>了解沟通、合作、冲突处理和影响他人的方式；</li>
+<li>了解主动性、执行力、学习意愿和适应能力；</li>
+<li>了解规则意识、诚信边界、风险意识和安全意识；</li>
+<li>判断个人的工作风格是否与岗位、团队和组织环境匹配。</li>
+</ul>
+<p>测评机构 SHL 的公开资料把人格测评、行为测评、技能测评、编码和语言模拟等都列为人才评估产品；SHL Direct 的练习页面也把能力测试和性格测试描述为用于评估解决问题、沟通、创新等工作相关资格的方法。由此可以看出，具体测评内容并不固定，不能只根据某一篇“某公司测评题库”推断所有企业。</p>
+<h3 id="ch30-2">2. 常见题型和答题形式 <a id="2-常见题型和答题形式" class="alias"></a></h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>题型</th>
+<th>常见形式</th>
+<th>主要考察</th>
+<th>准备时怎么理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Likert 量表题</td>
+<td>“我喜欢提前规划工作”，从“非常不同意”到“非常同意”</td>
+<td>工作倾向、稳定性和强弱程度</td>
+<td>以自己通常的工作状态作答，不要每道正向题都选最高分</td>
+</tr>
+<tr>
+<td>强制选择题</td>
+<td>“以下两句话哪句更像你”，或选择“最像我/最不像我”</td>
+<td>不同特质之间的相对偏好</td>
+<td>两个选项都不错时，选更接近自己真实行为的一项</td>
+</tr>
+<tr>
+<td>同义或变体题</td>
+<td>前后用不同说法重复询问责任心、合作、规则等</td>
+<td>回答一致性和是否过度美化自己</td>
+<td>不用刻意记选项，只要对同一个工作场景保持相同理解</td>
+</tr>
+<tr>
+<td>反向表述题</td>
+<td>“我经常把任务拖到最后”“我很少检查自己的工作”</td>
+<td>粗心、拖延、冲动等风险倾向</td>
+<td>先看清“经常、从不、几乎总是”等绝对词，再判断频率</td>
+</tr>
+<tr>
+<td>情境判断题</td>
+<td>“同事出错但马上要汇报，你会怎么做？”</td>
+<td>判断、沟通、责任和风险处理</td>
+<td>优先事实、透明、及时沟通；涉及安全和合规时边界要明确</td>
+</tr>
+<tr>
+<td>诚信与风险题</td>
+<td>是否隐瞒错误、绕过流程、甩锅、报复或占用公司资源</td>
+<td>诚信、底线和组织风险</td>
+<td>不能为了效率合理化重大违规，也不要把自己包装成从不犯错的人</td>
+</tr>
+<tr>
+<td>认知、注意力或逻辑题</td>
+<td>数字推理、图形规律、信息筛选、限时判断</td>
+<td>基础认知效率、细致程度和抗干扰能力</td>
+<td>先确认题型和时间规则，再练习速度与准确率的平衡</td>
+</tr>
+<tr>
+<td>限时或组合测评</td>
+<td>性格问卷后接能力题、视频题或岗位情境题</td>
+<td>综合匹配度和持续作答状态</td>
+<td>提前确认设备、网络和规则；经验贴里提到的题量和时长不代表所有平台都一样</td>
+</tr>
+</tbody>
+</table></div>
+<p>求职者经验分享中经常出现“题目很多”“同一维度反复出现”“有时间限制”等描述，这些可以作为心理预期，但不能当作测评机构的统一规则。真正参加测评时，应以招聘方发来的页面说明为准。</p>
+<h3 id="ch30-3">3. 常见考察维度 <a id="3-常见考察维度" class="alias"></a></h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>企业希望看到的工作行为</th>
+<th>需要避免的极端表达</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>责任心与可靠性</td>
+<td>接到任务会确认目标、按节点推进、发现风险及时同步</td>
+<td>只承诺不交付，或者把所有事情都说成自己一个人扛下来</td>
+</tr>
+<tr>
+<td>规则、诚信与安全</td>
+<td>重要流程不擅自绕过，出错后如实说明并补救</td>
+<td>“只要结果好，过程怎么做都可以”</td>
+</tr>
+<tr>
+<td>情绪稳定</td>
+<td>能识别压力，通过拆解、排序、沟通和复盘恢复状态</td>
+<td>“我从来不焦虑”“压力越大越兴奋”这类绝对化表述</td>
+</tr>
+<tr>
+<td>团队合作</td>
+<td>能独立负责，也能共享信息、听取意见和协调分工</td>
+<td>只喜欢单打独斗，或为了维持关系完全不表达不同意见</td>
+</tr>
+<tr>
+<td>主动性与执行力</td>
+<td>对陌生任务先查资料、做小验证、给出阶段性结果</td>
+<td>没有明确指令就完全不行动，或者未经验证就贸然推进</td>
+</tr>
+<tr>
+<td>学习与适应</td>
+<td>能迁移已有方法，接受反馈并调整方案</td>
+<td>把“坚持”理解成不接受新信息</td>
+</tr>
+<tr>
+<td>细致与质量意识</td>
+<td>有检查、测试、记录和回溯习惯</td>
+<td>只看最终结果，不关心过程质量和可复现性</td>
+</tr>
+<tr>
+<td>用户或客户导向</td>
+<td>先理解真实需求，再平衡体验、成本、风险和交付</td>
+<td>只追求技术炫技，忽略用户和业务约束</td>
+</tr>
+<tr>
+<td>影响力与领导力</td>
+<td>用事实、试验和清晰分工推动共识</td>
+<td>把领导力理解成强势要求别人服从</td>
+</tr>
+</tbody>
+</table></div>
+<p>对于机器人、控制、AI Agent 等岗位，还可能隐含考察几项专业场景中的工作习惯：是否重视安全边界，是否验证数据和来源，是否能在软硬件之间协作，是否能承认模型或系统的局限，是否会在不确定时及时升级风险。</p>
+<h3 id="ch30-4">4. 什么样的“人设”更容易适配企业测评 <a id="4-什么样的人设更容易适配企业测评" class="alias"></a></h3>
+<p>更准确的说法不是“演出一个人设”，而是形成一组可持续、前后一致的工作行为画像。对大多数技术研发和 AI 应用岗位来说，比较稳妥的画像是：</p>
+<blockquote>
+<p>严谨但不僵化，主动但不冒进；能够独立拆解问题，也愿意和别人协作；重视规则、安全、数据和质量；遇到压力会排序、验证、沟通和求助；发现错误能承认、定位和复盘；有自己的判断，但会用事实和小范围试验说服别人。</p>
+</blockquote>
+<p>可以把它拆成几个具体特征：</p>
+<ol>
+<li>
+<p><strong>稳定，而不是极端完美。</strong><br />
+   你可以有压力、犯错误、需要帮助，这很正常；关键是你有处理和改进的方法。比起“我从来不犯错”，更可信的是“我会犯错，所以会设置检查点并及时复盘”。</p>
+</li>
+<li>
+<p><strong>负责，但不是无边界硬扛。</strong><br />
+   企业需要可靠的人，也需要能识别资源不足并及时沟通的人。真正的责任感不是把延期风险藏到最后，而是尽早暴露问题、提出方案、争取资源。</p>
+</li>
+<li>
+<p><strong>主动，但不是冲动。</strong><br />
+   遇到陌生任务可以先查资料、拆目标、做最小验证，再同步方案；主动性不等于没有信息就直接做重大决策。</p>
+</li>
+<li>
+<p><strong>能合作，也能表达不同意见。</strong><br />
+   不要把“团队合作”理解成永远同意别人。更好的状态是先理解对方目标，再基于事实提出不同意见，最后服从已经确定的团队决策并把事情做好。</p>
+</li>
+<li>
+<p><strong>尊重规则，但能推动改进。</strong><br />
+   安全、合规、数据和质量底线不能为了速度绕过；低价值的重复流程可以在获得授权、保留记录和验证风险的前提下优化。</p>
+</li>
+<li>
+<p><strong>有压力管理方法，而不是宣称没有压力。</strong><br />
+   可以说自己会通过列优先级、拆阶段目标、设置检查点和及时沟通来管理压力，不必把自己说成“任何压力都不会影响”。</p>
+</li>
+<li>
+<p><strong>对错误和反馈开放。</strong><br />
+   面对批评先确认事实和影响，再判断如何改进；如果自己确实有问题，直接承认并给出修正动作，通常比急于解释更可靠。</p>
+</li>
+<li>
+<p><strong>边界清楚。</strong><br />
+   不隐瞒重大问题、不伪造数据、不泄露隐私、不报复提出问题的人，也不在没有授权的情况下替别人做高风险决定。</p>
+</li>
+</ol>
+<p>不建议刻意扮演以下几种“看起来很优秀”的极端人设：</p>
+<ul>
+<li>“我永远正确、从不犯错、从不焦虑”的完美人；</li>
+<li>“所有事情都自己做、绝不需要别人”的孤狼；</li>
+<li>“只要效率高就可以绕流程”的结果主义者；</li>
+<li>“为了团队和谐永远同意别人”的讨好型人格；</li>
+<li>“遇到问题先隐藏，等最后看能不能蒙混过去”的回避者；</li>
+<li>“我特别能扛，所以不需要沟通和求助”的硬扛型员工。</li>
+</ul>
+<p>这些回答的问题不只是可能与测评的其他题目矛盾，也可能和后续面试、入职后的实际工作方式不一致。</p>
+<h3 id="ch30-5">5. 常见题目的作答思路 <a id="5-常见题目的作答思路" class="alias"></a></h3>
+<p>下面不是“标准答案”，而是把题目翻译成工作行为时可以采用的思考方向。正式测评应根据自己的真实状态选择，而不是机械照抄。</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>题目示例</th>
+<th>更稳妥的思考方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“我几乎从不犯错。”</td>
+<td>不要追求绝对完美。可以承认会犯错，同时说明自己会通过检查、测试和复盘降低重复犯错</td>
+</tr>
+<tr>
+<td>“为了提高效率，偶尔绕过流程是可以接受的。”</td>
+<td>普通低风险流程可以提出优化；但安全、合规、数据、质量等关键流程不能擅自绕过</td>
+</tr>
+<tr>
+<td>“我喜欢独自完成所有任务。”</td>
+<td>保留独立推进的优点，但复杂任务要同步信息、明确分工，必要时寻求帮助</td>
+</tr>
+<tr>
+<td>“遇到陌生任务，我通常会拖到最后再开始。”</td>
+<td>更符合职场的做法是先澄清目标、查资料、拆小任务，尽快做出一个最小验证</td>
+</tr>
+<tr>
+<td>“压力越大，我的表现越好。”</td>
+<td>不必夸张。更可信的是说明自己会通过排优先级、拆阶段目标和及时沟通管理压力</td>
+</tr>
+<tr>
+<td>“同事犯错时，我会直接当众指出。”</td>
+<td>先基于事实确认问题，优先私下沟通和共同解决；涉及重大风险时及时向负责人报告</td>
+</tr>
+<tr>
+<td>“我不喜欢接受批评。”</td>
+<td>可以表达自己会先理解反馈，再判断事实，并把有效部分转化成改进动作</td>
+</tr>
+<tr>
+<td>“只要最后结果好，过程怎样都无所谓。”</td>
+<td>研发和 AI 场景中，安全、诚信、隐私、质量和可追溯性本身就是结果的一部分</td>
+</tr>
+<tr>
+<td>“领导不同意我的方案时，我会坚持到底。”</td>
+<td>先确认目标和反对理由，补充证据或建议小范围验证；如果决策已确定，就执行并观察结果</td>
+</tr>
+<tr>
+<td>“即使发现数据可能有问题，我也会先把报告交上去。”</td>
+<td>先标记不确定性、核查关键数据并同步风险；不能把可能影响结论的问题藏起来</td>
+</tr>
+<tr>
+<td>“任务太多时，我会自己默默加班解决。”</td>
+<td>先按影响、紧急程度和依赖关系排序；资源确实不足时尽早沟通，而不是等到无法补救</td>
+</tr>
+<tr>
+<td>“重复工作让我无法接受。”</td>
+<td>可以表达希望优化和自动化，但在流程改进前仍能保持质量和稳定交付</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="ch30-6">6. 作答时最重要的几个原则 <a id="6-作答时最重要的几个原则" class="alias"></a></h3>
+<ul>
+<li>以“通常的工作状态”作答，而不是只根据今天的心情作答；</li>
+<li>看清“经常、通常、偶尔、从不、几乎总是”等频率词和绝对词；</li>
+<li>不要把所有正向陈述都选成“非常同意”，适度和边界会更可信；</li>
+<li>不要为了显得抗压而选择“从不紧张、从不焦虑、从不需要帮助”；</li>
+<li>遇到重复题，不用刻意背答案，但对同一个场景应保持同一原则；</li>
+<li>强制选择题里两个选项都不错时，选更像自己真实行为的，不要猜“企业更喜欢哪个词”；</li>
+<li>对隐瞒、欺骗、甩锅、报复、伪造、泄露隐私和绕过重大安全流程等题目，要有清晰底线；</li>
+<li>参加正式测评时遵守平台、监考和设备要求，不使用 AI、搜索、他人代答或未经允许的辅助工具。</li>
+</ul>
+<h3 id="ch30-7">7. 结合你的经历，建议形成的个人工作画像 <a id="7-结合你的经历建议形成的个人工作画像" class="alias"></a></h3>
+<p>你可以把下面这段当作自己的“测评前自我校准”，不需要在测评中逐字背诵：</p>
+<blockquote>
+<p>我在工作中通常会先厘清目标、约束和风险，再把问题拆成几个可以验证的小步骤。对机器人系统，我会比较关注安全边界、软硬件接口、状态反馈和现场可交付性；对 AI Agent，我会关注来源、数据、规则和结果能不能被验证。遇到陌生技术，我会主动查资料、做最小实验并尽快形成阶段性结果。复杂任务我可以独立推进，但会及时同步依赖和风险；出现问题时，我倾向于先承认现象、定位根因，再复盘流程，而不是掩盖问题。遇到不同意见，我会尽量用事实、对比实验和小范围验证沟通。</p>
+</blockquote>
+<p>这组画像与你已有经历是相互对应的：</p>
+<ul>
+<li>机器人项目中的设备选型、两台机械臂约束和专用夹爪适配，体现的是在资源和安全约束下解决问题，而不是盲目照搬人工流程；</li>
+<li>ROS 架构选型体现的是有自己的判断，同时愿意学习新技术并用系统性理由沟通；</li>
+<li>Agent 项目中的规则引擎、RAG、结构化记忆和来源评测，体现的是对数据验证、可追溯性和系统边界的重视；</li>
+<li>RAG 初期问题的定位和修正，体现的是发现错误后能够承认、分析原因并改进，而不是把结果不理想归咎于工具。</li>
+</ul>
+<p>如果目标岗位更偏算法、Agent 或软件工程，可以适当突出学习能力、验证意识、用户导向和跨团队沟通；如果更偏机器人、控制或硬件系统，可以适当突出安全意识、接口意识、故障定位和工程交付。</p>
+<h3 id="ch30-8">8. 测评前的可执行准备 <a id="8-测评前的可执行准备" class="alias"></a></h3>
+<ol>
+<li>先看岗位描述，写下该岗位最重要的三项工作要求，例如“可靠交付、快速学习、跨团队协作”。</li>
+<li>为每项要求各准备一个真实例子，只需要记住场景、自己的动作和结果，不必背成长篇故事。</li>
+<li>想清楚自己在压力、分歧、犯错、陌生任务和资源不足时的通常做法。</li>
+<li>提前确认测评平台、浏览器、摄像头、麦克风和网络，保证环境安静、光线正常。</li>
+<li>正式开始前先看清题型、计分说明和是否限时；过程中不要在某一道题上过度纠结。</li>
+<li>如果测评包含认知或逻辑部分，再单独练习对应题型的速度和准确率；不要把性格测评和能力测评混在一起准备。</li>
+<li>保证睡眠和状态。心理问卷最忌讳一边紧张一边反复修改自己想呈现的形象。</li>
+</ol>
+<h3 id="ch30-9">9. 如果面试官问“你怎么看企业心理测评” <a id="9-如果面试官问你怎么看企业心理测评" class="alias"></a></h3>
+<p>可以这样回答：</p>
+<blockquote>
+<p>我理解企业心理测评主要是帮助公司了解候选人的工作风格、稳定性、合作方式和岗位匹配度，它不应该简单地把人分成好或坏。不同岗位需要的特征也不完全一样，比如研发岗位可能更看重责任心、学习能力、问题解决和质量意识。对我来说，比较重要的是按照自己真实、通常的工作状态作答，并保持前后一致。我平时在复杂项目中比较重视先厘清约束、再做验证，对安全、数据和结果可追溯性也比较敏感，所以我希望测评反映的是一个真实、可靠、能够持续成长的工作状态。</p>
+</blockquote>
+<h3 id="ch30-10">10. 资料来源与可信度说明 <a id="10-资料来源与可信度说明" class="alias"></a></h3>
+<p>本章资料检索时间为 2026 年 8 月。资料分为两类，不能混用：</p>
+<ul>
+<li><strong>相对权威的框架资料：</strong> <a href="https://www.shl.com/shldirect/shz/practice-tests/">SHL Direct 实践测试</a>、<a href="https://www.shl.com/products/">SHL 产品说明</a>、<a href="https://www.siop.org/">国际工业与组织心理学学会 SIOP</a>，以及人格特质与工作绩效关系的经典研究 <a href="https://doi.org/10.1037/0021-9010.76.1.1">Barrick &amp; Mount（1991）</a>。这类资料适合用来理解测评目的、工作相关维度和测量边界。</li>
+<li><strong>求职者经验分享：</strong> <a href="https://zhuanlan.zhihu.com/p/644485581">知乎：四大都在用的 SHL 测试到底是什么？SHL 测试如何通关？</a>、<a href="https://zhuanlan.zhihu.com/p/1931366402566108383">知乎：SHL 测评题库综合能力 Verify 攻略</a>。这类内容适合了解题目形式、作答体验和常见误区，但不能证明某个技巧适用于所有企业。</li>
+</ul>
+<p>因此，网上“所有正向题都选非常同意”“背一套人格答案就能通关”“某个 MBTI 一定受企业欢迎”等说法，只能作为经验贴观点，不能当成可靠规律。真正通用的原则只有一句话：<strong>真实、稳定、一致、守边界，并与目标岗位的真实工作要求匹配。</strong></p>
+<hr />
+<h2 id="ch31">十、七天准备计划 <a id="十七天准备计划" class="alias"></a></h2>
+<h3 id="ch31-1">第 1 天：搭建个人素材 <a id="第-1-天搭建个人素材" class="alias"></a></h3>
+<p>完成自我介绍和 6 张案例卡，所有数字、时间、角色和结果都核对一遍。</p>
+<h3 id="ch31-2">第 2 天：困难、失败和复盘 <a id="第-2-天困难失败和复盘" class="alias"></a></h3>
+<p>练 Q2、Q3、P&amp;G 3，重点练“结果不理想时怎么说”。</p>
+<h3 id="ch31-3">第 3 天：合作、分歧和说服 <a id="第-3-天合作分歧和说服" class="alias"></a></h3>
+<p>练 Q7、Q8、Q9、P&amp;G 4～6，重点练“对方为什么不同意”和“最后是否采纳”。</p>
+<h3 id="ch31-4">第 4 天：优先级和流程改进 <a id="第-4-天优先级和流程改进" class="alias"></a></h3>
+<p>练 Q6、Q10、Q11、P&amp;G 7～8，准备至少一个有数据的例子。</p>
+<h3 id="ch31-5">第 5 天：AI 相关问题 <a id="第-5-天ai-相关问题" class="alias"></a></h3>
+<p>练 Q4、Q5、Q13、Q14、Q15，明确自己真实用过哪些工具、完成过什么任务、如何验证。</p>
+<h3 id="ch31-6">第 6 天：英语与完整模拟 <a id="第-6-天英语与完整模拟" class="alias"></a></h3>
+<p>完成 3 轮朗读、3 段听译、5 个英文问答；再做一次 30～45 分钟完整模拟。</p>
+<h3 id="ch31-7">第 7 天：轻量复盘 <a id="第-7-天轻量复盘" class="alias"></a></h3>
+<p>只看关键词和案例卡，不再大段背稿；检查设备、网络和时间安排，保证状态。</p>
+<hr />
+<h2 id="ch32">十一、最后的个人信息待补区 <a id="十一最后的个人信息待补区" class="alias"></a></h2>
+<p>以下信息已经根据你补充的内容完成：</p>
+<ul>
+<li>姓名：庄会城</li>
+<li>学校与学历：南京理工大学，本硕均就读；控制理论与控制工程方向硕士</li>
+<li>学业表现：成绩排名前 5%；多次获得硕士学业一等奖学金；获得华为奖学金</li>
+<li>主要方向：控制与机器人；AI Agent 应用</li>
+<li>机器人项目：国网配网带电作业人机协同机器人；负责遥操作系统架构和 ROS/C++ 核心功能，并参与硬件选型、末端工具适配和整机联调</li>
+<li>Agent 项目：面向社保规划的可信政策问答 Agent；采用 Plan-and-Execute、规则引擎、RAG 和结构化记忆</li>
+<li>技术栈：C++、MATLAB/Simulink、Agent 基本原理与设计模式、Claude Code 等 AI 工具</li>
+<li>项目成果：两篇论文、一项国家发明专利授权、一项软件著作权；Agent 政策来源 Recall@3 为 94%，官方来源命中率为 98%</li>
+<li>核心优势：学习新技术较快；具备复杂系统联调和现场问题处理经验</li>
+</ul>
+<p>仍建议你在面试前补充：</p>
+<ul>
+<li>目标岗位的准确名称，以及该岗位最看重的技术能力；</li>
+<li>机器人项目的团队规模、项目周期、你负责的具体模块边界和是否有可量化的性能指标；</li>
+<li>一次真正的失败、返工、延期或判断失误；</li>
+<li>一次具体的团队分歧、说服上级或外部协作经历，包括对方最初的反对理由和最终结果；</li>
+<li>实际使用 Claude Code 或其他 AI 工具的具体任务和效果；</li>
+<li>英语水平和最担心的环节；</li>
+<li>你真正想去目标公司的岗位匹配原因。</li>
+</ul>
+<blockquote>
+<p>目前最值得优先补齐的是“失败案例”和“团队分歧案例”。机器人项目和 Agent 项目已经足够支撑大多数项目深挖题，但如果所有行为题都只讲成功经历，面试官可能会继续追问你的反思和边界。</p>
+</blockquote></main>
+</div>
+<button id="topBtn" type="button" aria-label="返回顶部">&#8593;</button>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+/* 主题 */
+var root=document.documentElement;
+var saved=null; try{saved=localStorage.getItem('bagu-theme')}catch(e){}
+root.dataset.theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+function themeLabel(){
+  var dark=root.dataset.theme==='dark';
+  $('#themeBtn').innerHTML=dark?'&#9681; 浅色':'&#9681; 深色';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.content=dark?'#0e1116':'#f5f6f8';
+}
+themeLabel();
+$('#themeBtn').onclick=function(){
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  try{localStorage.setItem('bagu-theme',root.dataset.theme)}catch(e){}
+  themeLabel();
+};
+/* 移动端目录 */
+var menuBtn=$('#menuBtn'),sidebar=$('#sidebar');
+var mobileQuery=matchMedia('(max-width:960px)');
+function setNav(open){
+  open=mobileQuery.matches&&open;
+  document.body.classList.toggle('nav-open',open);
+  menuBtn.setAttribute('aria-expanded',String(open));
+  menuBtn.setAttribute('aria-label',open?'关闭目录':'打开目录');
+  if(mobileQuery.matches&&!open){sidebar.setAttribute('aria-hidden','true');sidebar.inert=true;}
+  else{sidebar.removeAttribute('aria-hidden');sidebar.inert=false;}
+}
+menuBtn.onclick=function(){setNav(!document.body.classList.contains('nav-open'))};
+$('#backdrop').onclick=function(){setNav(false);menuBtn.focus()};
+$$('#sidebar a').forEach(function(a){a.addEventListener('click',function(){
+  if(mobileQuery.matches)setTimeout(function(){setNav(false)},0);
+})});
+if(mobileQuery.addEventListener)mobileQuery.addEventListener('change',function(){setNav(false)});
+setNav(false);
+/* 小节展开按钮 */
+function setSecsOpen(secs,btn,open){
+  if(!secs)return;
+  secs.classList.toggle('open',open);
+  secs.setAttribute('aria-hidden',String(!open));
+  if(btn){btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',String(open));}
+}
+$$('.twisty').forEach(function(btn){btn.addEventListener('click',function(e){
+  e.preventDefault();
+  var chap=btn.closest('.chap');
+  var secs=document.querySelector('.secs[data-for="'+chap.dataset.ch+'"]');
+  if(secs)setSecsOpen(secs,btn,!secs.classList.contains('open'));
+});});
+/* 滚动定位 */
+var headings=$$('.content h2[id], .content h3[id]');
+var tops=[],activeId=null;
+function computeTops(){tops=headings.map(function(h){return [h.offsetTop,h.id]})}
+function setActive(id){
+  if(id===activeId)return; activeId=id;
+  $$('#sidebar .active').forEach(function(el){el.classList.remove('active')});
+  if(!id)return;
+  var chId=id.split('-')[0];
+  var chap=document.querySelector('.chap[data-ch="'+chId+'"]');
+  var searching=document.body.classList.contains('searching');
+  if(chap){
+    chap.classList.add('active');
+    var part=chap.closest('details.part'); if(part)part.open=true;
+    if(!searching){
+      $$('.secs.open').forEach(function(s){
+        if(s.dataset.for!==chId){s.classList.remove('open');
+          var t=document.querySelector('.chap[data-ch="'+s.dataset.for+'"] .twisty');
+          setSecsOpen(s,t,false);}
+      });
+      var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+      if(secs){var tw=chap.querySelector('.twisty');setSecsOpen(secs,tw,true);}
+    }
+  }
+  var link=document.querySelector('#sidebar .secs a[href="#'+id+'"]');
+  if(link)link.classList.add('active');
+  var target=link||chap;
+  if(target){
+    var sb=$('#sidebar-scroll'),r=target.getBoundingClientRect(),sr=sb.getBoundingClientRect();
+    if(r.top<sr.top+50||r.bottom>sr.bottom-50){
+      /* Keep sidebar navigation from changing the document scroll position. */
+      sb.scrollTop += r.top-sr.top-(sr.height-r.height)/2;
+    }
+  }
+}
+var ticking=false;
+function onScroll(){
+  if(ticking)return; ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var y=window.scrollY+92,id=null,lo=0,hi=tops.length-1;
+    while(lo<=hi){var m=(lo+hi)>>1;
+      if(tops[m][0]<=y){id=tops[m][1];lo=m+1;}else hi=m-1;}
+    setActive(id);
+    var doc=document.documentElement;
+    var p=window.scrollY/(doc.scrollHeight-window.innerHeight||1);
+    $('#progress').style.width=(p*100)+'%';
+    $('#topBtn').classList.toggle('show',window.scrollY>600);
+  });
+}
+computeTops();
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',function(){computeTops();onScroll()});
+window.addEventListener('load',function(){computeTops();onScroll()});
+onScroll();
+$('#topBtn').onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};
+/* 搜索 */
+var box=$('#search');
+box.addEventListener('input',function(){
+  var q=box.value.trim().toLowerCase();
+  var searching=q.length>0;
+  document.body.classList.toggle('searching',searching);
+  $$('.chap').forEach(function(chap){
+    var chId=chap.dataset.ch;
+    var secs=document.querySelector('.secs[data-for="'+chId+'"]');
+    var secHit=false;
+    if(secs){secs.querySelectorAll('li').forEach(function(li){
+      var hit=!searching||li.dataset.text.indexOf(q)>=0;
+      li.classList.toggle('hide',searching&&!hit);
+      if(searching&&hit)secHit=true;
+    });}
+    var chapHit=chap.dataset.text.indexOf(q)>=0;
+    var visible=!searching||chapHit||secHit;
+    chap.classList.toggle('hide',!visible);
+    if(secs){
+      var t=chap.querySelector('.twisty');
+      if(searching)setSecsOpen(secs,t,secHit);
+      else setSecsOpen(secs,t,false);
+    }
+  });
+  $$('details.part').forEach(function(p){
+    var any=p.querySelector('.chap:not(.hide)');
+    p.classList.toggle('hide',searching&&!any);
+    if(searching)p.open=true;
+  });
+  var anyVisible=$('.chap:not(.hide)');
+  $('#emptySearch').classList.toggle('show',searching&&!anyVisible);
+  if(!searching){activeId=null;onScroll();}
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='/'&&document.activeElement!==box){e.preventDefault();box.focus();box.select();}
+  if(e.key==='Escape'&&document.activeElement===box){box.value='';box.dispatchEvent(new Event('input'));box.blur();}
+  else if(e.key==='Escape'&&document.body.classList.contains('nav-open')){setNav(false);menuBtn.focus();}
+});
+})();
+</script>
+</body>
+</html>
